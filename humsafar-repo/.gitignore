@@ -1,0 +1,107 @@
+# ==========================================================
+# Humsafar — Combined .gitignore (Backend: Python/FastAPI, Frontend: Flutter/Dart)
+# ==========================================================
+
+# ---------- Python / FastAPI (backend/) ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+backend/venv/
+backend/.venv/
+
+# Environment variables (NEVER commit secrets)
+.env
+*.env
+!.env.example
+
+# Alembic (keep migration scripts, ignore local db state if any)
+# (no ignore needed for alembic/versions — those ARE tracked)
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# ---------- Flutter / Dart (frontend/) ----------
+frontend/.dart_tool/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/.pub-cache/
+frontend/.pub/
+frontend/build/
+frontend/**/generated_plugin_registrant.dart
+
+# Flutter/Dart/Pub related
+**/doc/api/
+.flutter-versions
+
+# Android related
+frontend/android/**/gradle-wrapper.jar
+frontend/android/.gradle
+frontend/android/captures/
+frontend/android/gradlew
+frontend/android/gradlew.bat
+frontend/android/local.properties
+frontend/android/**/GeneratedPluginRegistrant.java
+frontend/android/key.properties
+frontend/**/*.keystore
+frontend/**/*.jks
+
+# iOS related (kept for completeness even though project is Android-only)
+frontend/ios/**/*.mode1v3
+frontend/ios/**/*.mode2v3
+frontend/ios/**/*.moved-aside
+frontend/ios/**/*.pbxuser
+frontend/ios/**/*.perspectivev3
+frontend/ios/**/Pods/
+frontend/ios/.symlinks/
+frontend/ios/Flutter/Flutter.framework
+frontend/ios/Flutter/Flutter.podspec
+frontend/ios/Flutter/Generated.xcconfig
+frontend/ios/Flutter/app.flx
+frontend/ios/Flutter/app.zip
+frontend/ios/Flutter/flutter_assets/
+frontend/ios/Flutter/flutter_export_environment.sh
+frontend/ios/ServiceDefinitions.json
+frontend/ios/Runner/GeneratedPluginRegistrant.*
+
+# ---------- OS / General ----------
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+.env.local
+
+# ---------- Postman (keep collections, ignore local env secrets) ----------
+*.postman_environment.json
+!*.postman_collection.json
