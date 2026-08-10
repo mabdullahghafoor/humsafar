@@ -1,0 +1,31 @@
+name: humsafar_frontend
+description: Humsafar — Flutter frontend (Guardian + Dependent apps).
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management — see providers/app_mode_provider.dart for a minimal
+  # working example. Chosen over setState/Provider/GetX per the locked
+  # roadmap (Task 0.4).
+  flutter_riverpod: ^2.5.1
+
+  # Routing — declarative, URL-based navigation. Used instead of raw
+  # Navigator.push so Task 1.8's Guardian/Dependent route trees can be
+  # defined declaratively in one place (core/router/app_router.dart).
+  go_router: ^14.2.0
+
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
