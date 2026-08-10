@@ -1,0 +1,85 @@
+{
+  "info": {
+    "name": "Humsafar API",
+    "description": "Humsafar backend API collection. Folders correspond to SDS §8 service modules. Add each new endpoint to its matching folder as it's built.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Health Check - Database",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/db",
+              "host": ["{{base_url}}"],
+              "path": ["health", "db"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Identity & Access",
+      "item": [],
+      "description": "AuthController, KYCVerifier, PermissionManager, LinkageService — Task 1.3 onward"
+    },
+    {
+      "name": "Location & Geofence",
+      "item": [],
+      "description": "LocationIngestor, GeofenceEvaluator, LocationHistoryService, DeviceHealthMonitor — Phase 2"
+    },
+    {
+      "name": "Emergency & Escalation",
+      "item": [],
+      "description": "PanicModeHandler, WellnessCheckScheduler, EscalationEngine, FallDetectionAnalyzer — Phase 3"
+    },
+    {
+      "name": "Communication",
+      "item": [],
+      "description": "MessagingService, CallSignalingService, PriorityVoiceMessageService"
+    },
+    {
+      "name": "Medication & Records",
+      "item": [],
+      "description": "MedicationScheduler, MedicalVaultService, VitalsService, WearableSyncService, AppointmentService"
+    },
+    {
+      "name": "Directory & Marketplace",
+      "item": [],
+      "description": "HealthcareDirectoryService, ProviderDirectoryService, BookingRequestService, ActivityLogService"
+    },
+    {
+      "name": "Security & Surveillance",
+      "item": [],
+      "description": "CameraStreamService, ClipCaptureService, EncryptionService, AuditLogService, RetentionPolicyEnforcer"
+    }
+  ]
+}
