@@ -1,0 +1,1026 @@
+{
+  "info": {
+    "name": "Humsafar API - Task 1.6 Permissions",
+    "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
+    "description": "Run top to bottom in the Collection Runner (Humsafar Local environment). Covers FR-A4: default deny, grant/revoke per module per Secondary, remote alarm never delegable."
+  },
+  "item": [
+    {
+      "name": "Setup",
+      "item": [
+        {
+          "name": "1. Register primary guardian",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pm_p_email}}\",\n  \"phone\": \"{{pm_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                  "const run = r();",
+                  "pm.environment.set('pm_p_email','pmp'+run+'@humsafar-test.com'); pm.environment.set('pm_p_phone','03'+r());",
+                  "pm.environment.set('pm_d_email','pmd'+run+'@humsafar-test.com'); pm.environment.set('pm_d_phone','03'+r());",
+                  "pm.environment.set('pm_s_email','pms'+run+'@humsafar-test.com'); pm.environment.set('pm_s_phone','03'+r());",
+                  "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Login primary",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pm_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('pm_p_token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. Verify primary (CNIC)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/guardians/me/verify-cnic",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "guardians",
+                "me",
+                "verify-cnic"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('verified', () => pm.expect(pm.response.json().verified).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3b. Primary: who am I",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('pm_p_id', pm.response.json().user_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. Register dependent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pm_d_email}}\",\n  \"phone\": \"{{pm_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201', () => pm.response.to.have.status(201));",
+                  "pm.environment.set('pm_d_id', pm.response.json().user_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. Link dependent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/link",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "link"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "6. Invite secondary",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/guardians/invite",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "guardians",
+                "invite"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"{{pm_s_phone}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('pm_inv', pm.response.json().invite_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "7. Register secondary with invite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pm_s_email}}\",\n  \"phone\": \"{{pm_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{pm_inv}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201', () => pm.response.to.have.status(201));",
+                  "pm.environment.set('pm_s_id', pm.response.json().user_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "8. Login secondary",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pm_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('pm_s_token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "9. Verify secondary (CNIC)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_s_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/guardians/me/verify-cnic",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "guardians",
+                "me",
+                "verify-cnic"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('verified', () => pm.expect(pm.response.json().verified).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dashboard and default deny",
+      "item": [
+        {
+          "name": "10. Primary dashboard: default deny",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('every module is false (default deny)', () => { const m = Object.values(pm.response.json().secondaries[0].modules); pm.expect(m.length).to.eql(6); pm.expect(m.every(v => v === false)).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11. Secondary: my permissions (all false)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_s_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('secondary, nothing granted', () => { const b = pm.response.json(); pm.expect(b.guardian_role).to.eql('secondary'); pm.expect(Object.values(b.modules).every(v => v === false)).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12. Primary: my permissions (all true)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('primary has everything', () => pm.expect(Object.values(pm.response.json().modules).every(v => v === true)).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "13. Secondary tries to grant themself (expect 403)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_s_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/live_location",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "live_location"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guardian_id\": \"{{pm_s_id}}\",\n  \"granted\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('403', () => pm.response.to.have.status(403));",
+                  "pm.test('NOT_PRIMARY_GUARDIAN', () => pm.expect(pm.response.json().error.code).to.eql('NOT_PRIMARY_GUARDIAN'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Grant and revoke",
+      "item": [
+        {
+          "name": "14. Grant live_location",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/live_location",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "live_location"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guardian_id\": \"{{pm_s_id}}\",\n  \"granted\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('granted', () => pm.expect(pm.response.json().granted).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "15. Grant camera_viewing",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/camera_viewing",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "camera_viewing"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guardian_id\": \"{{pm_s_id}}\",\n  \"granted\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16. Secondary sees both grants",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_s_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('location and camera on, records off', () => { const m = pm.response.json().modules; pm.expect(m.live_location).to.eql(true); pm.expect(m.camera_viewing).to.eql(true); pm.expect(m.health_records).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17. Revoke live_location",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/live_location",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "live_location"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guardian_id\": \"{{pm_s_id}}\",\n  \"granted\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('revoked', () => pm.expect(pm.response.json().granted).to.eql(false));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18. Secondary: location off, camera still on",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_s_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('only location was revoked', () => { const m = pm.response.json().modules; pm.expect(m.live_location).to.eql(false); pm.expect(m.camera_viewing).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19. Primary dashboard shows the change",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('camera on for the secondary', () => pm.expect(pm.response.json().secondaries[0].modules.camera_viewing).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rejected requests",
+      "item": [
+        {
+          "name": "20. Remote alarm cannot be delegated (expect 422)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/remote_alarm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "remote_alarm"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guardian_id\": \"{{pm_s_id}}\",\n  \"granted\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('422', () => pm.response.to.have.status(422));",
+                  "pm.test('UNKNOWN_MODULE', () => pm.expect(pm.response.json().error.code).to.eql('UNKNOWN_MODULE'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "21. Unknown module (expect 422)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/nonsense",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "nonsense"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guardian_id\": \"{{pm_s_id}}\",\n  \"granted\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('422', () => pm.response.to.have.status(422));",
+                  "pm.test('UNKNOWN_MODULE', () => pm.expect(pm.response.json().error.code).to.eql('UNKNOWN_MODULE'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "22. Cannot restrict the Primary (expect 400)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pm_p_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/dependents/{{pm_d_id}}/permissions/live_location",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dependents",
+                "{{pm_d_id}}",
+                "permissions",
+                "live_location"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guardian_id\": \"{{pm_p_id}}\",\n  \"granted\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400', () => pm.response.to.have.status(400));",
+                  "pm.test('PRIMARY_NOT_GOVERNABLE', () => pm.expect(pm.response.json().error.code).to.eql('PRIMARY_NOT_GOVERNABLE'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
