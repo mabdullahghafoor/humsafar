@@ -11,8 +11,8 @@ Statuses: Done = merged into `dev`.
 | 1.1 | SQLAlchemy models, all 27 tables | Done |
 | 1.2 | Alembic initial migration | Done |
 | 1.3 | Auth: register, login, refresh, me (+ contract `docs/api/auth_contract.md`) | Done |
-| 1.4 | KYC endpoints, mocked provider (+ contract `docs/api/kyc_contract.md`) | In progress |
-| 1.5 | Guardian-Dependent linkage + caps | Next |
+| 1.4 | KYC endpoints, mocked provider (+ contract `docs/api/kyc_contract.md`) | Done |
+| 1.5 | Guardian-Dependent linkage + caps, invitations (+ contract `docs/api/linkage_contract.md`) | Done once PR merged |
 | 1.6 | Permission dashboard | Planned |
 | 1.7 | Postman collection for 1.3 to 1.6 | Planned |
 | ICP-1 | Register, KYC, link, permissions demo with Talha and Sarim | Planned |
@@ -24,4 +24,4 @@ Last known from his tracker (2026-08-12): Tasks 0.4 and 1.8 to 1.11 done in his 
 Not tracked in this file yet. Sarim: please add your task status here.
 
 ## Open decisions and blockers
-See `docs/sds_clarifications.md`. Currently open: `users.full_name` (Talha + Abdullah), SDS 11.1/11.3 KYC auth and Guardian OTP timing (team confirmation).
+See `docs/sds_clarifications.md`. Currently open: `users.full_name` (Talha + Abdullah), SDS 11.1/11.3 KYC auth and Guardian OTP timing (team confirmation), Dependent consent when a Guardian links (item 9), no way to remove a Guardian (item 12).

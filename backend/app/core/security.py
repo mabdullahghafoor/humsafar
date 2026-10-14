@@ -19,6 +19,8 @@ from app.core.errors import AppError
 
 ACCESS = "access"
 REFRESH = "refresh"
+INVITE = "invite"
+INVITE_VALID_DAYS = 7
 
 BCRYPT_ROUNDS = 12
 
@@ -79,6 +81,27 @@ def create_access_token(user_id: uuid.UUID, role: str) -> str:
 def create_refresh_token(user_id: uuid.UUID, role: str) -> str:
     days = get_settings().JWT_REFRESH_TOKEN_EXPIRE_DAYS
     return _create_token(user_id, role, REFRESH, timedelta(days=days))
+
+
+def create_invite_token(dependent_id: uuid.UUID, inviter_id: uuid.UUID, invitee_phone: str) -> tuple[str, datetime]:
+    """
+    Signed, expiring invitation for a Secondary Guardian (FR-B1). The SDS has no
+    invitations table, so the invitation itself is the proof: stateless, bound to the
+    Dependent, the inviting Primary, and the invitee's phone number.
+    """
+    settings = get_settings()
+    now = datetime.now(timezone.utc)
+    expires = now + timedelta(days=INVITE_VALID_DAYS)
+    payload: dict[str, Any] = {
+        "sub": str(dependent_id),
+        "inviter": str(inviter_id),
+        "phone": invitee_phone,
+        "type": INVITE,
+        "iat": now,
+        "exp": expires,
+        "jti": uuid.uuid4().hex,
+    }
+    return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM), expires
 
 
 def decode_token(token: str, expected_type: str) -> dict[str, Any]:

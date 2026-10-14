@@ -23,6 +23,7 @@ Request:
 - `phone`: any common Pakistani format (`03001234567`, `+92 300 1234567`) is normalised to E.164 (`+923001234567`); unique after normalisation.
 - `password`: at least 8 characters, at most 72 bytes (bcrypt limit).
 - A guardian registering independently is a **primary** guardian (FR-A1). `guardian_role` cannot be chosen by the client. Secondary guardians come only via invitation (Task 1.5).
+- `invite_token` (optional, Guardians only, added in Task 1.5): registers the account as a **Secondary** Guardian linked to the inviting Dependent. See `linkage_contract.md`. Without it, a Guardian is Primary.
 - No name field exists: the SDS `users` table has no name column (open decision, see §6).
 
 Response 201:
