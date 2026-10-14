@@ -12,7 +12,7 @@ from fastapi import FastAPI
 
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
-from app.routers import auth, health
+from app.routers import auth, health, kyc
 
 settings = get_settings()
 
@@ -29,6 +29,8 @@ register_error_handlers(app)
 # One router per SDS §8 service module, registered here as each is built.
 app.include_router(health.router)
 app.include_router(auth.router)  # Task 1.3
+app.include_router(kyc.dependents_router)  # Task 1.4
+app.include_router(kyc.guardians_router)  # Task 1.4
 
 # Future (added as each phase is implemented):
 # app.include_router(linkage.router, prefix="/dependents", tags=["Linkage"])    # Task 1.5
