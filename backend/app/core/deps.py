@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.errors import AppError
 from app.core.security import ACCESS, decode_token
-from app.models import User
+from app.models import GuardianProfile, User
 
 # auto_error=False so a missing header returns OUR error envelope, not FastAPI's default.
 bearer_scheme = HTTPBearer(auto_error=False, description="Paste the access_token from /auth/login.")
@@ -50,3 +50,19 @@ def require_role(*roles: str):
         return user
 
     return _checker
+
+
+def require_verified_guardian(user: User = Depends(require_role("guardian")), db: Session = Depends(get_db)) -> User:
+    """
+    FR-A3: a Guardian must be verified (phone OTP and/or CNIC) before using the
+    permission dashboard or any intervention capability. Tasks 1.5+ attach this to
+    those endpoints.
+    """
+    profile = db.get(GuardianProfile, user.user_id)
+    if profile is None or not (profile.phone_verified or profile.cnic_verified):
+        raise AppError(
+            403,
+            "GUARDIAN_NOT_VERIFIED",
+            "Verify your phone number or CNIC before using this feature.",
+        )
+    return user

@@ -28,6 +28,10 @@ class Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    # KYC (Task 1.4). Only the mock provider exists until a real vendor is chosen (SDS 3.3).
+    KYC_PROVIDER: str = "mock"
+    MOCK_OTP_CODE: str = "123456"  # the fixed code the mock accepts; never used by a real provider
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @model_validator(mode="after")
@@ -35,6 +39,8 @@ class Settings(BaseSettings):
         # Never let the placeholder secret reach staging/production.
         if self.ENVIRONMENT != "development" and self.JWT_SECRET_KEY == DEFAULT_JWT_SECRET:
             raise ValueError("JWT_SECRET_KEY must be set to a real secret outside development.")
+        if self.KYC_PROVIDER != "mock":
+            raise ValueError("KYC_PROVIDER must be 'mock'; no real provider is integrated yet.")
         return self
 
 
