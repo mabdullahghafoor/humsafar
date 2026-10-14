@@ -66,3 +66,28 @@ def require_verified_guardian(user: User = Depends(require_role("guardian")), db
             "Verify your phone number or CNIC before using this feature.",
         )
     return user
+
+
+def require_module_access(module: str):
+    """
+    Dependency factory for every endpoint that returns a Dependent's data (FR-A4):
+
+        @router.get("/dependents/{dependent_id}/location")
+        def location(dependent_id: uuid.UUID, user: User = Depends(require_module_access("live_location"))): ...
+
+    The path parameter must be called `dependent_id`. A Primary always passes; a Secondary
+    passes only while the Primary's grant for `module` is on. Checked against the database on
+    every request, so a revoke takes effect on the very next call.
+    """
+    # Imported inside to avoid a circular import (services import deps-free modules only).
+    from app.services import permission_service
+
+    def _checker(
+        dependent_id: uuid.UUID,
+        user: User = Depends(get_current_user),
+        db: Session = Depends(get_db),
+    ) -> User:
+        permission_service.check_module_access(db, user, dependent_id, module)
+        return user
+
+    return _checker

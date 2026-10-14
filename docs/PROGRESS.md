@@ -12,8 +12,8 @@ Statuses: Done = merged into `dev`.
 | 1.2 | Alembic initial migration | Done |
 | 1.3 | Auth: register, login, refresh, me (+ contract `docs/api/auth_contract.md`) | Done |
 | 1.4 | KYC endpoints, mocked provider (+ contract `docs/api/kyc_contract.md`) | Done |
-| 1.5 | Guardian-Dependent linkage + caps, invitations (+ contract `docs/api/linkage_contract.md`) | Done once PR merged |
-| 1.6 | Permission dashboard | Planned |
+| 1.5 | Guardian-Dependent linkage + caps, invitations (+ contract `docs/api/linkage_contract.md`) | Done |
+| 1.6 | Permission dashboard + access gate (+ contract `docs/api/permissions_contract.md`) | In review (PR) |
 | 1.7 | Postman collection for 1.3 to 1.6 | Planned |
 | ICP-1 | Register, KYC, link, permissions demo with Talha and Sarim | Planned |
 
