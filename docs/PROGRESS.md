@@ -13,8 +13,8 @@ Statuses: Done = merged into `dev`.
 | 1.3 | Auth: register, login, refresh, me (+ contract `docs/api/auth_contract.md`) | Done |
 | 1.4 | KYC endpoints, mocked provider (+ contract `docs/api/kyc_contract.md`) | Done |
 | 1.5 | Guardian-Dependent linkage + caps, invitations (+ contract `docs/api/linkage_contract.md`) | Done |
-| 1.6 | Permission dashboard + access gate (+ contract `docs/api/permissions_contract.md`) | In review (PR) |
-| 1.7 | Postman collection for 1.3 to 1.6 | Planned |
+| 1.6 | Permission dashboard + access gate (+ contract `docs/api/permissions_contract.md`) | Done |
+| 1.7 | One consolidated Postman collection with examples + API index (`docs/api/README.md`) | In review (PR) |
 | ICP-1 | Register, KYC, link, permissions demo with Talha and Sarim | Planned |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
