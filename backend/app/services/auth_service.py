@@ -23,6 +23,7 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.models import DependentProfile, GuardianDependentLink, GuardianProfile, User
 from app.schemas.auth import RegisterRequest, UserOut
+from app.services import linkage_service
 
 # What KYC (Task 1.4) must set on dependent_profiles.liveness_status on success.
 KYC_VERIFIED = "verified"
@@ -49,6 +50,13 @@ def register_user(db: Session, data: RegisterRequest) -> User:
     if db.scalar(select(User.user_id).where(User.phone == data.phone)):
         raise AppError(409, "PHONE_ALREADY_REGISTERED", "An account with this phone number already exists.")
 
+    invite = None
+    if data.invite_token:
+        # Task 1.5: accepting an invitation is the only way to become a Secondary (FR-A1).
+        invite = linkage_service.read_invite(db, data.invite_token)
+        if invite["phone"] != data.phone:
+            raise AppError(403, "INVITE_NOT_FOR_YOU", "This invitation was sent to a different phone number.")
+
     user = User(
         email=data.email,
         phone=data.phone,
@@ -59,7 +67,11 @@ def register_user(db: Session, data: RegisterRequest) -> User:
         db.add(user)
         db.flush()  # assigns user.user_id so the profile row can reference it
         if data.role == "guardian":
-            db.add(GuardianProfile(user_id=user.user_id, guardian_role="primary"))
+            db.add(GuardianProfile(user_id=user.user_id, guardian_role="secondary" if invite else "primary"))
+            db.flush()
+            if invite:
+                # Account and link are created together: if the cap is full, neither is.
+                linkage_service.attach_secondary(db, user.user_id, invite["dependent_id"])
         else:
             db.add(DependentProfile(user_id=user.user_id))
         db.commit()
@@ -67,6 +79,9 @@ def register_user(db: Session, data: RegisterRequest) -> User:
         # Two registrations racing past the pre-checks above.
         db.rollback()
         raise AppError(409, "ALREADY_REGISTERED", "An account with these details already exists.")
+    except AppError:
+        db.rollback()
+        raise
 
     db.refresh(user)
     return user

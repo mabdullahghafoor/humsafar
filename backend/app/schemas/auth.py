@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 
 # 03XXXXXXXXX, +923XXXXXXXXX, 923XXXXXXXXX, 00923XXXXXXXXX  (all the same number)
 _PK_MOBILE = re.compile(r"^(?:\+92|0092|92|0)?(3\d{9})$")
@@ -41,6 +41,14 @@ class RegisterRequest(BaseModel):
     phone: str
     password: str
     role: Literal["guardian", "dependent"]
+    # Task 1.5: a Secondary Guardian registers by accepting an invitation (FR-A1/FR-B1).
+    invite_token: str | None = Field(default=None, max_length=2000)
+
+    @model_validator(mode="after")
+    def _invite_only_for_guardians(self) -> "RegisterRequest":
+        if self.invite_token and self.role != "guardian":
+            raise ValueError("Invitations are for Guardian accounts only.")
+        return self
 
     @field_validator("email")
     @classmethod
