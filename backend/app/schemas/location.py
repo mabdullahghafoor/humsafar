@@ -35,6 +35,8 @@ class LocationAck(BaseModel):
     movement_state: MovementState
     next_update_interval_s: int
     duplicate: bool = False  # true when this exact fix was already stored (a safe retry)
+    geofence_status: Literal["no_zones", "inside", "outside"] = "no_zones"  # FR-C2/C3, judged on this fix
+    breach_started: bool = False  # true only on the fix that opened a new geofence breach
 
 
 class LocationPoint(BaseModel):

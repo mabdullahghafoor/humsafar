@@ -16,8 +16,9 @@ Statuses: Done = merged into `dev`.
 | 1.6 | Permission dashboard + access gate (+ contract `docs/api/permissions_contract.md`) | Done |
 | 1.7 | One consolidated Postman collection with examples + API index (`docs/api/README.md`) | Done |
 | ICP-1 | Register, KYC, link, permissions: handled asynchronously (no live demo); waiting for Talha and Sarim replies | In progress |
-| 2.1 | Location ingestion + adaptive frequency, latest + history (+ contract `docs/api/location_contract.md`) | In review (PR) |
-| 2.2 to 2.4 | Geofences, battery/connectivity, BLE spike | Next |
+| 2.1 | Location ingestion + adaptive frequency, latest + history (+ contract `docs/api/location_contract.md`) | Done |
+| 2.2 | Geofence CRUD (max 10 zones) + breach detection (+ contract `docs/api/geofence_contract.md`) | In review (PR) |
+| 2.3, 2.4 | Battery/connectivity, BLE spike | Next |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
 Last known from his tracker (2026-08-12): Tasks 0.4 and 1.8 to 1.11 done in his repo. Talha: please keep this section current. The frontend folder is folded into `frontend/` here at each Integration Checkpoint.
