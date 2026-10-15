@@ -37,6 +37,8 @@ class LocationAck(BaseModel):
     duplicate: bool = False  # true when this exact fix was already stored (a safe retry)
     geofence_status: Literal["no_zones", "inside", "outside"] = "no_zones"  # FR-C2/C3, judged on this fix
     breach_started: bool = False  # true only on the fix that opened a new geofence breach
+    low_battery: bool = False  # a low-battery alert is open (battery <= 15%, FR-L1)
+    low_battery_started: bool = False  # true only on the fix that opened it
 
 
 class LocationPoint(BaseModel):

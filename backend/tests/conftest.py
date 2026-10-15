@@ -14,6 +14,9 @@ If TEST_DATABASE_URL is not set, the database tests are skipped, not failed.
 
 import os
 
+# The background scheduler must never run during tests (tests call the jobs directly).
+os.environ.setdefault("SCHEDULER_ENABLED", "false")
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text

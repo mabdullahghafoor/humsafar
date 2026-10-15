@@ -44,6 +44,17 @@ class Settings(BaseSettings):
     LOCATION_MAX_AGE_S: int = 86400  # reject fixes older than 24 h (offline buffering allowed up to this)
     LOCATION_STALE_AFTER_S: int = 480  # Guardian screen hint: "last fix is old"
 
+    # Device health (Task 2.3, FR-L1 / FR-L2).
+    DEVICE_LOW_BATTERY_PCT: int = 15  # SRS FR-L1: alert Guardians when the battery falls to 15%
+    DEVICE_BATTERY_RECOVER_PCT: int = 20  # the alert closes only above this, so 15/16/15 does not flap
+    DEVICE_BATTERY_DEPLETED_PCT: int = 5  # at or below this when contact is lost: "probably the battery died"
+    DEVICE_OFFLINE_AFTER_S: int = 600  # FR-L2 configured threshold: no fix for 10 minutes = offline
+    LOCATION_INTERVAL_LOW_BATTERY_S: int = 60  # while the battery is low, check in at least this often
+
+    # Background jobs (the offline sweep now; missed doses and escalation timers in Phase 3).
+    SCHEDULER_ENABLED: bool = True
+    SCHEDULER_TICK_S: int = 60
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @model_validator(mode="after")

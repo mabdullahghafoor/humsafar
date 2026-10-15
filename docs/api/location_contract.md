@@ -35,7 +35,7 @@ Request:
 
 Response `200`:
 ```json
-{ "log_id": "0f8c6a52-...", "recorded_at": "2026-10-16T09:30:00Z", "movement_state": "stationary", "next_update_interval_s": 60, "duplicate": false, "geofence_status": "inside", "breach_started": false }
+{ "log_id": "0f8c6a52-...", "recorded_at": "2026-10-16T09:30:00Z", "movement_state": "stationary", "next_update_interval_s": 60, "duplicate": false, "geofence_status": "inside", "breach_started": false, "low_battery": false, "low_battery_started": false }
 ```
 * `duplicate: true` means this exact fix (same time and place) was already stored. Retrying after a lost reply is safe.
 * When sending buffered offline fixes, send them oldest first and use the interval from the last reply.
@@ -60,5 +60,6 @@ Same permission as above. Query: `from`, `to` (ISO times with timezone, both opt
 Errors: `422 INVALID_RANGE` when `from` is later than `to`, plus the permission errors above.
 
 ## Notes
+* While `low_battery` is true the wait is cut to at most 60 s (see `device_health_contract.md`).
 * Only the position and battery are stored. The movement state is calculated on each request and not saved (the locked schema has no column for it).
 * Geofence breach checks run on this POST (Task 2.2), so alerts need no extra call from the phone. `geofence_status` and `breach_started` in the reply come from that check; see `geofence_contract.md`.

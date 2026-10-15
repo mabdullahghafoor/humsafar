@@ -1,4 +1,4 @@
-# Humsafar API reference (Tasks 1.3 to 2.2)
+# Humsafar API reference (Tasks 1.3 to 2.3)
 
 For Talha (Flutter) and Sarim (QA). Base URL (local): `http://127.0.0.1:8000`. Interactive docs: `http://127.0.0.1:8000/docs`.
 All bodies are JSON. The server is Abdullah's `backend/`.
@@ -17,6 +17,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `permissions_contract.md` | dashboard, grant/revoke, the access gate |
 | `location_contract.md` | location ingestion, adaptive interval, latest and history |
 | `geofence_contract.md` | safe zones, breach detection, status |
+| `device_health_contract.md` | battery alert, offline detection, device-health read |
 | `../sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
 ## 3. All endpoints
@@ -47,6 +48,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | PUT `/dependents/{id}/geofences/{geofence_id}` | verified Primary | Change a zone |
 | DELETE `/dependents/{id}/geofences/{geofence_id}` | verified Primary | Remove a zone |
 | GET `/dependents/{id}/geofence-status` | Primary, or Secondary with `live_location` | Inside / outside + open breach |
+| GET `/dependents/{id}/device-health` | Primary, or Secondary with `live_location` | Battery, online/offline, last known location |
 | GET `/health`, `/health/db` | anyone | Liveness checks |
 
 Modules: `live_location`, `health_records`, `communication`, `emergency_alerts`, `camera_viewing`, `medication_management`.
