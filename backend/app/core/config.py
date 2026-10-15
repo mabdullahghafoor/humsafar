@@ -32,6 +32,18 @@ class Settings(BaseSettings):
     KYC_PROVIDER: str = "mock"
     MOCK_OTP_CODE: str = "123456"  # the fixed code the mock accepts; never used by a real provider
 
+    # Location ingestion (Task 2.1, FR-C1). Adaptive polling: the server tells the phone how long
+    # to wait before the next fix. SDS 20: this is the main lever for NFR-02 (battery).
+    LOCATION_INTERVAL_MOVING_S: int = 10  # while moving
+    LOCATION_INTERVAL_STATIONARY_S: int = 60  # standing still
+    LOCATION_INTERVAL_IDLE_S: int = 180  # standing still for a long time
+    LOCATION_IDLE_AFTER_S: int = 600  # how long without moving before "idle"
+    LOCATION_MOVE_THRESHOLD_M: float = 25.0  # smaller shifts are treated as GPS jitter
+    LOCATION_MOVING_SPEED_MPS: float = 0.8  # about 3 km/h, a slow walk
+    LOCATION_MAX_FUTURE_S: int = 300  # reject fixes stamped more than 5 min ahead of the server
+    LOCATION_MAX_AGE_S: int = 86400  # reject fixes older than 24 h (offline buffering allowed up to this)
+    LOCATION_STALE_AFTER_S: int = 480  # Guardian screen hint: "last fix is old"
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @model_validator(mode="after")

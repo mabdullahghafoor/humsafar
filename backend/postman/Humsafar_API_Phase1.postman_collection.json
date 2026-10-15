@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1 (Auth, KYC, Linkage, Permissions)",
+    "name": "Humsafar API - Phase 1-2 (Auth, KYC, Linkage, Permissions, Location)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -6139,6 +6139,1554 @@
         }
       ],
       "description": "Primary grants or revokes each module per Secondary; default deny; remote alarm is never delegable."
+    },
+    {
+      "name": "5 - Location (Task 2.1)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{lc_p_email}}\",\n  \"phone\": \"{{lc_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('lc_p_email','lcp'+run+'@humsafar-test.com'); pm.environment.set('lc_p_phone','03'+r());",
+                      "pm.environment.set('lc_d_email','lcd'+run+'@humsafar-test.com'); pm.environment.set('lc_d_phone','03'+r());",
+                      "pm.environment.set('lc_s_email','lcs'+run+'@humsafar-test.com'); pm.environment.set('lc_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('lc_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{lc_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('lc_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check (FR-A3).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('verified', () => pm.expect(pm.response.json().verified).to.eql(true));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{lc_d_email}}\",\n  \"phone\": \"{{lc_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('lc_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC; the Dependent needs this (plus a Primary link) before a token is issued.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{lc_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('verified', () => pm.expect(pm.response.json().status).to.eql('verified'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Now active: the Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{lc_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('lc_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary by phone.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{lc_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('lc_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins through the invite.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{lc_s_email}}\",\n  \"phone\": \"{{lc_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lc_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{lc_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('lc_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Returns the Secondary's user_id (needed to grant permissions)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('lc_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too (item 14 in sds_clarifications).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Send and read location, adaptive interval",
+          "item": [
+            {
+              "name": "12. Secondary reads location before any grant (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "13. Primary reads location before any fix",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('no fix yet', () => { const b = pm.response.json(); pm.expect(b.location).to.eql(null); pm.expect(b.is_stale).to.eql(true); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{lc_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{lc_d_id}}",
+                        "location"
+                      ]
+                    },
+                    "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"dependent_id\": \"7b1c2e0a-5d44-4f0e-9a39-0c1d2e3f4a5b\",\n  \"location\": null,\n  \"age_seconds\": null,\n  \"is_stale\": true\n}"
+                }
+              ]
+            },
+            {
+              "name": "14. Dependent sends the first fix",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.8607,\n  \"lng\": 67.0011,\n  \"battery_level\": 82,\n  \"speed_mps\": 0.0,\n  \"accuracy_m\": 12\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('first fix = moving, short interval', () => { const b = pm.response.json(); pm.expect(b.movement_state).to.eql('moving'); pm.expect(b.next_update_interval_s).to.eql(10); pm.expect(b.duplicate).to.eql(false); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{lc_d_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{lc_d_id}}",
+                        "location"
+                      ]
+                    },
+                    "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"lat\": 24.8607,\n  \"lng\": 67.0011,\n  \"battery_level\": 82,\n  \"speed_mps\": 0.0,\n  \"accuracy_m\": 12\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"log_id\": \"0f8c6a52-9b1e-4a7d-8c11-3d2f5b6a7e90\",\n  \"recorded_at\": \"2026-10-16T09:30:00Z\",\n  \"movement_state\": \"moving\",\n  \"next_update_interval_s\": 10,\n  \"duplicate\": false\n}"
+                }
+              ]
+            },
+            {
+              "name": "15. Second fix in the same place -> stationary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.8608,\n  \"lng\": 67.0011,\n  \"battery_level\": 82\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('stationary, longer interval', () => { const b = pm.response.json(); pm.expect(b.movement_state).to.eql('stationary'); pm.expect(b.next_update_interval_s).to.eql(60); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{lc_d_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{lc_d_id}}",
+                        "location"
+                      ]
+                    },
+                    "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"lat\": 24.8608,\n  \"lng\": 67.0011,\n  \"battery_level\": 82\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"log_id\": \"0f8c6a52-9b1e-4a7d-8c11-3d2f5b6a7e90\",\n  \"recorded_at\": \"2026-10-16T09:30:00Z\",\n  \"movement_state\": \"stationary\",\n  \"next_update_interval_s\": 60,\n  \"duplicate\": false\n}"
+                }
+              ]
+            },
+            {
+              "name": "16. Retry the same fix (stored once)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.8650,\n  \"lng\": 67.0011,\n  \"recorded_at\": \"{{lc_fix_at}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.environment.set('lc_fix_at', new Date().toISOString());"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('lc_first_log', pm.response.json().log_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. ...and send it again (expect duplicate)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.8650,\n  \"lng\": 67.0011,\n  \"recorded_at\": \"{{lc_fix_at}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('duplicate, same log', () => { const b = pm.response.json(); pm.expect(b.duplicate).to.eql(true); pm.expect(b.log_id).to.eql(pm.environment.get('lc_first_log')); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{lc_d_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{lc_d_id}}",
+                        "location"
+                      ]
+                    },
+                    "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"lat\": 24.8650,\n  \"lng\": 67.0011,\n  \"recorded_at\": \"{{lc_fix_at}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"log_id\": \"0f8c6a52-9b1e-4a7d-8c11-3d2f5b6a7e90\",\n  \"recorded_at\": \"2026-10-16T09:30:00Z\",\n  \"movement_state\": \"moving\",\n  \"next_update_interval_s\": 10,\n  \"duplicate\": true\n}"
+                }
+              ]
+            },
+            {
+              "name": "18. Primary sees the newest fix",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('latest fix, fresh', () => { const b = pm.response.json(); pm.expect(b.location.lat).to.eql(24.865); pm.expect(b.is_stale).to.eql(false); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{lc_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{lc_d_id}}",
+                        "location"
+                      ]
+                    },
+                    "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"dependent_id\": \"7b1c2e0a-5d44-4f0e-9a39-0c1d2e3f4a5b\",\n  \"location\": {\n    \"lat\": 24.865,\n    \"lng\": 67.0011,\n    \"recorded_at\": \"2026-10-16T09:30:00Z\",\n    \"battery_level\": null\n  },\n  \"age_seconds\": 4,\n  \"is_stale\": false\n}"
+                }
+              ]
+            },
+            {
+              "name": "19. Primary grants live_location to the Secondary",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/permissions/live_location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "permissions",
+                    "live_location"
+                  ]
+                },
+                "description": "Primary turns the module on (Task 1.6).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{lc_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('granted', () => pm.expect(pm.response.json().granted).to.eql(true));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "20. Secondary can now read the location",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('has a location', () => pm.expect(pm.response.json().location).to.not.eql(null));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. Location history (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location/history?limit=10",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location",
+                    "history"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Past positions, newest first (FR-C4). **Query:** `from`, `to` (ISO times with timezone), `limit` 1-500 (default 100). Same permission as the live location.\n**Errors:** 422 INVALID_RANGE, 403 MODULE_ACCESS_DENIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('at least 3 fixes, newest first', () => { const b = pm.response.json(); pm.expect(b.count).to.be.at.least(3); const t = b.points.map(p => Date.parse(p.recorded_at)); pm.expect(t).to.eql([...t].sort((a,b)=>b-a)); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{lc_s_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{lc_d_id}}/location/history?limit=10",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{lc_d_id}}",
+                        "location",
+                        "history"
+                      ],
+                      "query": [
+                        {
+                          "key": "limit",
+                          "value": "10"
+                        }
+                      ]
+                    },
+                    "description": "Past positions, newest first (FR-C4). **Query:** `from`, `to` (ISO times with timezone), `limit` 1-500 (default 100). Same permission as the live location.\n**Errors:** 422 INVALID_RANGE, 403 MODULE_ACCESS_DENIED."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"dependent_id\": \"7b1c2e0a-5d44-4f0e-9a39-0c1d2e3f4a5b\",\n  \"count\": 2,\n  \"points\": [\n    {\n      \"lat\": 24.865,\n      \"lng\": 67.0011,\n      \"recorded_at\": \"2026-10-16T09:30:00Z\",\n      \"battery_level\": null\n    },\n    {\n      \"lat\": 24.8608,\n      \"lng\": 67.0011,\n      \"recorded_at\": \"2026-10-16T09:29:10Z\",\n      \"battery_level\": 82\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "22. Primary revokes live_location",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/permissions/live_location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "permissions",
+                    "live_location"
+                  ]
+                },
+                "description": "Revoke: effective on the very next call.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{lc_s_id}}\",\n  \"granted\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. Secondary is blocked again (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests",
+          "item": [
+            {
+              "name": "24. A Guardian cannot send location (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.86,\n  \"lng\": 67.0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Latitude out of range (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 95,\n  \"lng\": 67.0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "26. Timestamp in the future (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{lc_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The Dependent's phone sends one GPS fix.\n\n**Auth:** the Dependent's own token only (a Guardian, or another Dependent, gets 403 FORBIDDEN).\n**Body:** `lat`, `lng` (required); optional `recorded_at` (ISO time WITH timezone, default = now), `battery_level` 0-100, `speed_mps`, `accuracy_m`.\n**Response:** `movement_state` (`moving` | `stationary` | `idle`) and `next_update_interval_s`: **the phone must wait this many seconds before sending the next fix**. `duplicate: true` means this exact fix was already stored (safe to retry).\n**Errors:** 403 FORBIDDEN, 422 VALIDATION_ERROR / TIMESTAMP_IN_FUTURE / TIMESTAMP_TOO_OLD.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.86,\n  \"lng\": 67.0,\n  \"recorded_at\": \"2099-01-01T00:00:00Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('TIMESTAMP_IN_FUTURE', () => pm.expect(pm.response.json().error.code).to.eql('TIMESTAMP_IN_FUTURE'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. No token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{lc_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{lc_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }

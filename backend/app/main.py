@@ -12,7 +12,7 @@ from fastapi import FastAPI
 
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
-from app.routers import auth, health, kyc, linkage, permissions
+from app.routers import auth, health, kyc, linkage, location, permissions
 
 settings = get_settings()
 
@@ -35,8 +35,8 @@ app.include_router(linkage.dependents_router)  # Task 1.5
 app.include_router(linkage.guardians_router)  # Task 1.5
 app.include_router(linkage.invitations_router)  # Task 1.5
 app.include_router(permissions.router)  # Task 1.6
+app.include_router(location.router)  # Task 2.1
 
 # Future (added as each phase is implemented):
-# app.include_router(location.router, prefix="/location", tags=["Location"])    # Phase 2
 # app.include_router(emergency.router, prefix="/emergency", tags=["Emergency"]) # Phase 3
 # ...

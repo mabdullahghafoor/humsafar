@@ -1,6 +1,6 @@
 # Humsafar Progress Tracker
 
-Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-14.
+Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-15.
 Statuses: Done = merged into `dev`.
 
 ## Backend (Abdullah)
@@ -14,8 +14,10 @@ Statuses: Done = merged into `dev`.
 | 1.4 | KYC endpoints, mocked provider (+ contract `docs/api/kyc_contract.md`) | Done |
 | 1.5 | Guardian-Dependent linkage + caps, invitations (+ contract `docs/api/linkage_contract.md`) | Done |
 | 1.6 | Permission dashboard + access gate (+ contract `docs/api/permissions_contract.md`) | Done |
-| 1.7 | One consolidated Postman collection with examples + API index (`docs/api/README.md`) | In review (PR) |
-| ICP-1 | Register, KYC, link, permissions demo with Talha and Sarim | Planned |
+| 1.7 | One consolidated Postman collection with examples + API index (`docs/api/README.md`) | Done |
+| ICP-1 | Register, KYC, link, permissions: handled asynchronously (no live demo); waiting for Talha and Sarim replies | In progress |
+| 2.1 | Location ingestion + adaptive frequency, latest + history (+ contract `docs/api/location_contract.md`) | In review (PR) |
+| 2.2 to 2.4 | Geofences, battery/connectivity, BLE spike | Next |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
 Last known from his tracker (2026-08-12): Tasks 0.4 and 1.8 to 1.11 done in his repo. Talha: please keep this section current. The frontend folder is folded into `frontend/` here at each Integration Checkpoint.
