@@ -14,7 +14,6 @@ The movement state is computed, not stored: SDS 9.2 `location_logs` has no such 
 the locked schema is not changed. All thresholds live in Settings so they can be tuned.
 """
 
-import math
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -23,7 +22,9 @@ from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.core.errors import AppError
+from app.core.geo import haversine_m  # noqa: F401  (re-exported: tests import it from here)
 from app.models import LocationLog, User
+from app.services import geofence_service
 from app.schemas.location import (
     LatestLocationOut,
     LocationAck,
@@ -34,16 +35,6 @@ from app.schemas.location import (
 
 MOVING, STATIONARY, IDLE = "moving", "stationary", "idle"
 LOOKBACK_ROWS = 200  # enough to cover the idle window even at the fastest polling rate
-
-
-def haversine_m(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
-    """Great-circle distance in metres."""
-    r = 6371000.0
-    p1, p2 = math.radians(lat1), math.radians(lat2)
-    dphi = p2 - p1
-    dlmb = math.radians(lng2 - lng1)
-    a = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
-    return 2 * r * math.asin(min(1.0, math.sqrt(a)))
 
 
 def interval_for(state: str) -> int:
@@ -120,12 +111,15 @@ def ingest(db: Session, user: User, dependent_id: uuid.UUID, req: LocationUpdate
     state = classify_movement(req.lat, req.lng, at, [(r[0], r[1], r[2]) for r in rows], req.speed_mps, req.accuracy_m)
 
     if existing is not None:
+        fence, started = geofence_service.check_new_fix(db, dependent_id, existing, req.accuracy_m)
         return LocationAck(
             log_id=existing.log_id,
             recorded_at=existing.recorded_at,
             movement_state=state,
             next_update_interval_s=interval_for(state),
             duplicate=True,
+            geofence_status=fence,
+            breach_started=False,  # a retry never reports a new breach
         )
 
     log = LocationLog(
@@ -134,11 +128,15 @@ def ingest(db: Session, user: User, dependent_id: uuid.UUID, req: LocationUpdate
     db.add(log)
     db.commit()
     db.refresh(log)
+    # FR-C2/C3: judge the fix against the safe zones (opens/closes a breach event when it changes).
+    fence, started = geofence_service.check_new_fix(db, dependent_id, log, req.accuracy_m)
     return LocationAck(
         log_id=log.log_id,
         recorded_at=log.recorded_at,
         movement_state=state,
         next_update_interval_s=interval_for(state),
+        geofence_status=fence,
+        breach_started=started,
     )
 
 

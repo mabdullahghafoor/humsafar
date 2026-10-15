@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1-2 (Auth, KYC, Linkage, Permissions, Location)",
+    "name": "Humsafar API - Phase 1-2 (Auth, KYC, Linkage, Permissions, Location, Geofences)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -7669,6 +7669,1644 @@
                   ]
                 },
                 "description": "Latest known position. **Auth:** Primary always; a Secondary only while `live_location` is granted (and verified).\n`location` is null until the first fix. `is_stale` is true when there is no fix or the newest is older than 8 minutes.\n**Errors:** 403 MODULE_ACCESS_DENIED / NOT_LINKED_TO_DEPENDENT / GUARDIAN_NOT_VERIFIED."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6 - Geofences (Task 2.2)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{gf_p_email}}\",\n  \"phone\": \"{{gf_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('gf_p_email','gfp'+run+'@humsafar-test.com'); pm.environment.set('gf_p_phone','03'+r());",
+                      "pm.environment.set('gf_d_email','gfd'+run+'@humsafar-test.com'); pm.environment.set('gf_d_phone','03'+r());",
+                      "pm.environment.set('gf_s_email','gfs'+run+'@humsafar-test.com'); pm.environment.set('gf_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('gf_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{gf_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('gf_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{gf_d_email}}\",\n  \"phone\": \"{{gf_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('gf_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{gf_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{gf_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('gf_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{gf_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('gf_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{gf_s_email}}\",\n  \"phone\": \"{{gf_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{gf_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{gf_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('gf_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('gf_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Grant live_location to the Secondary",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/permissions/live_location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "permissions",
+                    "live_location"
+                  ]
+                },
+                "description": "So the Secondary can view (not change) zones.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{gf_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Zones, breach and recovery",
+          "item": [
+            {
+              "name": "13. Primary creates the Home zone",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Home\",\n  \"lat\": 24.8607,\n  \"lng\": 67.0011,\n  \"radius_m\": 300\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('gf_zone_home', pm.response.json().geofence_id);",
+                      "pm.test('zone saved', () => pm.expect(pm.response.json().name).to.eql('Home'));"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "201 Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{gf_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{gf_d_id}}",
+                        "geofences"
+                      ]
+                    },
+                    "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Home\",\n  \"lat\": 24.8607,\n  \"lng\": 67.0011,\n  \"radius_m\": 300\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"geofence_id\": \"5d2f1c7e-8a3b-4c19-b6e0-12ab34cd56ef\",\n  \"dependent_id\": \"7b1c2e0a-5d44-4f0e-9a39-0c1d2e3f4a5b\",\n  \"name\": \"Home\",\n  \"lat\": 24.8607,\n  \"lng\": 67.0011,\n  \"radius_m\": 300.0,\n  \"created_by\": \"11111111-2222-3333-4444-555555555555\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "14. Primary adds a second zone (relative's house)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Relative\",\n  \"lat\": 24.9107,\n  \"lng\": 67.0011,\n  \"radius_m\": 300\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('gf_zone_rel', pm.response.json().geofence_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "15. Secondary sees both zones",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "Primary always; a Secondary only with the `live_location` permission."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('2 zones', () => { const b = pm.response.json(); pm.expect(b.count).to.eql(2); pm.expect(b.max_zones).to.eql(10); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{gf_s_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{gf_d_id}}",
+                        "geofences"
+                      ]
+                    },
+                    "description": "Primary always; a Secondary only with the `live_location` permission."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"dependent_id\": \"7b1c2e0a-5d44-4f0e-9a39-0c1d2e3f4a5b\",\n  \"count\": 1,\n  \"max_zones\": 10,\n  \"geofences\": [\n    {\n      \"geofence_id\": \"5d2f1c7e-8a3b-4c19-b6e0-12ab34cd56ef\",\n      \"dependent_id\": \"7b1c2e0a-5d44-4f0e-9a39-0c1d2e3f4a5b\",\n      \"name\": \"Home\",\n      \"lat\": 24.8607,\n      \"lng\": 67.0011,\n      \"radius_m\": 300.0,\n      \"created_by\": \"11111111-2222-3333-4444-555555555555\"\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "16. Secondary cannot create a zone (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Nope\",\n  \"lat\": 24.86,\n  \"lng\": 67.0,\n  \"radius_m\": 200\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('NOT_PRIMARY_GUARDIAN', () => pm.expect(pm.response.json().error.code).to.eql('NOT_PRIMARY_GUARDIAN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. Status before any location",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofence-status",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofence-status"
+                  ]
+                },
+                "description": "Where the Dependent is relative to the zones, from their newest fix. `status`: `inside`, `outside`, `no_zones`, or `unknown` (no fix yet, or the newest is older than 8 minutes). `breach_open` is true while an unresolved breach exists."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('unknown', () => pm.expect(pm.response.json().status).to.eql('unknown'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "18. Dependent's phone: at home (inside)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "The location endpoint now also reports the geofence verdict for this fix: `geofence_status` and `breach_started`.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.8607,\n  \"lng\": 67.0011\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('inside, no breach', () => { const b = pm.response.json(); pm.expect(b.geofence_status).to.eql('inside'); pm.expect(b.breach_started).to.eql(false); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "19. Dependent leaves both zones (breach starts)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Outside ALL zones: a breach is opened once. `breach_started` is true only on this fix.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.8857,\n  \"lng\": 67.0011\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// 24.8857 is about 2.8 km from Home and 2.8 km from the Relative zone"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('outside, breach started', () => { const b = pm.response.json(); pm.expect(b.geofence_status).to.eql('outside'); pm.expect(b.breach_started).to.eql(true); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{gf_d_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{gf_d_id}}/location",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{gf_d_id}}",
+                        "location"
+                      ]
+                    },
+                    "description": "Outside ALL zones: a breach is opened once. `breach_started` is true only on this fix.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"lat\": 24.8857,\n  \"lng\": 67.0011\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"log_id\": \"0f8c6a52-9b1e-4a7d-8c11-3d2f5b6a7e90\",\n  \"recorded_at\": \"2026-10-16T09:30:00Z\",\n  \"movement_state\": \"moving\",\n  \"next_update_interval_s\": 10,\n  \"duplicate\": false,\n  \"geofence_status\": \"outside\",\n  \"breach_started\": true\n}"
+                }
+              ]
+            },
+            {
+              "name": "20. Still outside (no second alert)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Staying outside does not raise another breach.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.8860,\n  \"lng\": 67.0011\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('outside, not a new breach', () => { const b = pm.response.json(); pm.expect(b.geofence_status).to.eql('outside'); pm.expect(b.breach_started).to.eql(false); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. Primary sees the open breach",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofence-status",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofence-status"
+                  ]
+                },
+                "description": "Primary always; a Secondary only with the `live_location` permission."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('outside with an open breach', () => { const b = pm.response.json(); pm.expect(b.status).to.eql('outside'); pm.expect(b.breach_open).to.eql(true); pm.expect(b.breach_event_id).to.not.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{gf_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofence-status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{gf_d_id}}",
+                        "geofence-status"
+                      ]
+                    },
+                    "description": "Primary always; a Secondary only with the `live_location` permission."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"dependent_id\": \"7b1c2e0a-5d44-4f0e-9a39-0c1d2e3f4a5b\",\n  \"status\": \"outside\",\n  \"inside_zone_ids\": [],\n  \"breach_open\": true,\n  \"breach_event_id\": \"9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d\",\n  \"breach_since\": \"2026-10-16T09:30:00Z\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "22. Dependent walks into the Relative's zone",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/location",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "location"
+                  ]
+                },
+                "description": "Inside ANY zone means safe, and the open breach is closed.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lat\": 24.9107,\n  \"lng\": 67.0011\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('inside', () => pm.expect(pm.response.json().geofence_status).to.eql('inside'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. Breach is closed",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofence-status",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofence-status"
+                  ]
+                },
+                "description": "Primary always; a Secondary only with the `live_location` permission."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('inside, breach closed', () => { const b = pm.response.json(); pm.expect(b.status).to.eql('inside'); pm.expect(b.breach_open).to.eql(false); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. Primary changes the Home zone",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences/{{gf_zone_home}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences",
+                    "{{gf_zone_home}}"
+                  ]
+                },
+                "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Home (bigger)\",\n  \"lat\": 24.8607,\n  \"lng\": 67.0011,\n  \"radius_m\": 500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('updated', () => { const b = pm.response.json(); pm.expect(b.name).to.eql('Home (bigger)'); pm.expect(b.radius_m).to.eql(500); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Primary deletes the Relative zone",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences/{{gf_zone_rel}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences",
+                    "{{gf_zone_rel}}"
+                  ]
+                },
+                "description": "Primary only. Returns 204 with no body."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('204', () => pm.response.to.have.status(204));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "26. Deleting it again (expect 404)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences/{{gf_zone_rel}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences",
+                    "{{gf_zone_rel}}"
+                  ]
+                },
+                "description": "The zone no longer exists."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('GEOFENCE_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('GEOFENCE_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. Only Home is left",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "Primary always; a Secondary only with the `live_location` permission."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('1 zone', () => pm.expect(pm.response.json().count).to.eql(1));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests",
+          "item": [
+            {
+              "name": "28. Radius too small (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Tiny\",\n  \"lat\": 24.86,\n  \"lng\": 67.0,\n  \"radius_m\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "29. Blank name (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"   \",\n  \"lat\": 24.86,\n  \"lng\": 67.0,\n  \"radius_m\": 200\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "30. Dependent cannot create zones (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gf_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "**Auth:** the Dependent's verified Primary Guardian only (a Secondary gets 403 NOT_PRIMARY_GUARDIAN, even with live_location).\n**Body:** `name` (1-100 chars), `lat`, `lng`, `radius_m` (50 to 50,000 metres).\n**Rules:** up to 10 zones per Dependent. Being inside ANY zone is safe; a breach needs the Dependent to be outside ALL zones.\n**Errors:** 409 GEOFENCE_LIMIT_REACHED, 404 GEOFENCE_NOT_FOUND, 403 NOT_PRIMARY_GUARDIAN, 422 VALIDATION_ERROR.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Nope\",\n  \"lat\": 24.86,\n  \"lng\": 67.0,\n  \"radius_m\": 200\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "31. No token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{gf_d_id}}/geofences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{gf_d_id}}",
+                    "geofences"
+                  ]
+                },
+                "description": "Primary always; a Secondary only with the `live_location` permission."
               },
               "event": [
                 {
