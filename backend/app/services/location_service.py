@@ -24,7 +24,7 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.core.geo import haversine_m  # noqa: F401  (re-exported: tests import it from here)
 from app.models import LocationLog, User
-from app.services import geofence_service
+from app.services import device_health_service, geofence_service
 from app.schemas.location import (
     LatestLocationOut,
     LocationAck,
@@ -44,6 +44,14 @@ def interval_for(state: str) -> int:
         STATIONARY: s.LOCATION_INTERVAL_STATIONARY_S,
         IDLE: s.LOCATION_INTERVAL_IDLE_S,
     }[state]
+
+
+def _wait_for(state: str, low_battery: bool) -> int:
+    """Seconds the phone should wait. While the battery is low, check in at least this often so the
+    position saved before a shutdown is as fresh as possible (FR-L1.3)."""
+    s = get_settings()
+    wait = interval_for(state)
+    return min(wait, s.LOCATION_INTERVAL_LOW_BATTERY_S) if low_battery else wait
 
 
 def classify_movement(
@@ -111,15 +119,18 @@ def ingest(db: Session, user: User, dependent_id: uuid.UUID, req: LocationUpdate
     state = classify_movement(req.lat, req.lng, at, [(r[0], r[1], r[2]) for r in rows], req.speed_mps, req.accuracy_m)
 
     if existing is not None:
-        fence, started = geofence_service.check_new_fix(db, dependent_id, existing, req.accuracy_m)
+        fence, _ = geofence_service.check_new_fix(db, dependent_id, existing, req.accuracy_m)
+        low, _ = device_health_service.on_new_fix(db, dependent_id, existing)
         return LocationAck(
             log_id=existing.log_id,
             recorded_at=existing.recorded_at,
             movement_state=state,
-            next_update_interval_s=interval_for(state),
+            next_update_interval_s=_wait_for(state, low),
             duplicate=True,
             geofence_status=fence,
             breach_started=False,  # a retry never reports a new breach
+            low_battery=low,
+            low_battery_started=False,
         )
 
     log = LocationLog(
@@ -130,13 +141,17 @@ def ingest(db: Session, user: User, dependent_id: uuid.UUID, req: LocationUpdate
     db.refresh(log)
     # FR-C2/C3: judge the fix against the safe zones (opens/closes a breach event when it changes).
     fence, started = geofence_service.check_new_fix(db, dependent_id, log, req.accuracy_m)
+    # FR-L1/L2: battery alert, and a new fix proves the phone is back online.
+    low, low_started = device_health_service.on_new_fix(db, dependent_id, log)
     return LocationAck(
         log_id=log.log_id,
         recorded_at=log.recorded_at,
         movement_state=state,
-        next_update_interval_s=interval_for(state),
+        next_update_interval_s=_wait_for(state, low),
         geofence_status=fence,
         breach_started=started,
+        low_battery=low,
+        low_battery_started=low_started,
     )
 
 
