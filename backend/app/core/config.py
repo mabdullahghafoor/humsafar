@@ -56,6 +56,13 @@ class Settings(BaseSettings):
     PUSH_PROVIDER: str = "mock"
     NOTIFY_RESOLVED_WINDOW_S: int = 86400  # "all clear" messages are sent for events resolved in the last day
 
+    # Task 3.2: medication (FR-F1). Dose times are written in this local time zone.
+    MEDICATION_TIMEZONE: str = "Asia/Karachi"
+    MEDICATION_REMIND_BEFORE_S: int = 900  # standard reminder this long before the dose time
+    MEDICATION_WINDOW_S: int = 1800  # a dose still unconfirmed this long after its time counts as missed (Task 3.3)
+    MEDICATION_CONFIRM_TOKEN_S: int = 120  # step 2 of the confirmation must follow step 1 within this time
+    MEDICATION_MAX_ACTIVE_SCHEDULES: int = 30  # per Dependent
+
     SCHEDULER_ENABLED: bool = True
     SCHEDULER_TICK_S: int = 60
 

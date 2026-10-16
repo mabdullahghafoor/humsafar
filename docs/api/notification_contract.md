@@ -41,7 +41,7 @@ Query (all optional): `priority=critical|standard`, `unacknowledged=true`, `limi
 * Newest first. For the next (older) page, pass the reply's `next_before` as `before`. `null` means no more.
 * `unacknowledged_critical` counts **all** your waiting critical alerts, not just this page: use it for the badge.
 * All-clear messages have `priority: "standard"` and `data.resolved: true`.
-* `type` values so far: `geofence_breach`, `low_battery`, `device_offline`. Coming: `panic`, `missed_dose`, `wellness_check`, `fall`.
+* `type` values so far: `geofence_breach`, `low_battery`, `device_offline`, `medication_reminder` and `medication_due` (sent to the **Dependent**, see `medication_contract.md`). Coming: `panic`, `missed_dose`, `wellness_check`, `fall`.
 * `title` and `body` are English text from the server. For other languages, translate on the app side using `type` (and `data.resolved`).
 
 ### POST `/notifications/{notification_id}/acknowledge`
