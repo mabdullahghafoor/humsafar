@@ -63,14 +63,18 @@ def check(condition: bool, ok_msg: str, fail_msg: str) -> None:
         failures.append(fail_msg)
 
 
+# Tables added AFTER the SDS freeze, each recorded in docs/sds_clarifications.md.
+APPROVED_EXTRA_TABLES = {"push_tokens"}  # item 29 (Task 3.1)
+
+
 def main() -> None:
     tables = Base.metadata.tables
 
     print("1. Table count and names")
     check(len(SDS_SCHEMA) == 27, "SDS reference list has 27 tables", "reference list is not 27")
-    check(len(tables) == 27, f"models define {len(tables)} tables", f"models define {len(tables)} tables, expected 27")
+    check(len(tables) == 27 + len(APPROVED_EXTRA_TABLES), f"models define {len(tables)} tables (27 SDS + {len(APPROVED_EXTRA_TABLES)} approved)", f"models define {len(tables)} tables, expected {27 + len(APPROVED_EXTRA_TABLES)}")
     missing = sorted(set(SDS_SCHEMA) - set(tables))
-    extra = sorted(set(tables) - set(SDS_SCHEMA))
+    extra = sorted(set(tables) - set(SDS_SCHEMA) - APPROVED_EXTRA_TABLES)
     check(not missing, "no SDS table is missing", f"missing tables: {missing}")
     check(not extra, "no extra tables beyond the SDS", f"extra tables: {extra}")
 

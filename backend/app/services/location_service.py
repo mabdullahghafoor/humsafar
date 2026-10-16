@@ -24,7 +24,7 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.core.geo import haversine_m  # noqa: F401  (re-exported: tests import it from here)
 from app.models import LocationLog, User
-from app.services import device_health_service, geofence_service
+from app.services import device_health_service, geofence_service, notification_service
 from app.schemas.location import (
     LatestLocationOut,
     LocationAck,
@@ -121,6 +121,7 @@ def ingest(db: Session, user: User, dependent_id: uuid.UUID, req: LocationUpdate
     if existing is not None:
         fence, _ = geofence_service.check_new_fix(db, dependent_id, existing, req.accuracy_m)
         low, _ = device_health_service.on_new_fix(db, dependent_id, existing)
+        notification_service.dispatch_events_safely(db, dependent_id)
         return LocationAck(
             log_id=existing.log_id,
             recorded_at=existing.recorded_at,
@@ -143,6 +144,8 @@ def ingest(db: Session, user: User, dependent_id: uuid.UUID, req: LocationUpdate
     fence, started = geofence_service.check_new_fix(db, dependent_id, log, req.accuracy_m)
     # FR-L1/L2: battery alert, and a new fix proves the phone is back online.
     low, low_started = device_health_service.on_new_fix(db, dependent_id, log)
+    # FR-M1: tell the Guardians now, not at the next scheduler tick.
+    notification_service.dispatch_events_safely(db, dependent_id)
     return LocationAck(
         log_id=log.log_id,
         recorded_at=log.recorded_at,

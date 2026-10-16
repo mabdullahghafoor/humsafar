@@ -6,7 +6,7 @@ populated whenever `app.models` is imported. Alembic (Task 1.2) relies on
 this to autogenerate the initial migration.
 """
 
-from app.models.communication import CallLog, Message, Notification
+from app.models.communication import CallLog, Message, Notification, PushToken
 from app.models.directory import (
     ActivityLog,
     BookingRequest,
@@ -59,6 +59,7 @@ __all__ = [
     "MedicationSchedule",
     "Message",
     "Notification",
+    "PushToken",
     "PermissionGrant",
     "User",
     "VitalReading",
