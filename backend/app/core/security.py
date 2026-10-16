@@ -20,6 +20,7 @@ from app.core.errors import AppError
 ACCESS = "access"
 REFRESH = "refresh"
 INVITE = "invite"
+MED_CONFIRM = "med_confirm"
 INVITE_VALID_DAYS = 7
 
 BCRYPT_ROUNDS = 12
@@ -102,6 +103,21 @@ def create_invite_token(dependent_id: uuid.UUID, inviter_id: uuid.UUID, invitee_
         "jti": uuid.uuid4().hex,
     }
     return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM), expires
+
+
+def create_confirm_token(user_id: uuid.UUID, confirmation_id: uuid.UUID, lifetime_s: int) -> str:
+    """Step 1 of the two-step dose confirmation (FR-F1): a short-lived proof tied to ONE dose and ONE person."""
+    settings = get_settings()
+    now = datetime.now(timezone.utc)
+    payload: dict[str, Any] = {
+        "sub": str(user_id),
+        "dose": str(confirmation_id),
+        "type": MED_CONFIRM,
+        "iat": now,
+        "exp": now + timedelta(seconds=lifetime_s),
+        "jti": uuid.uuid4().hex,
+    }
+    return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
 def decode_token(token: str, expected_type: str) -> dict[str, Any]:

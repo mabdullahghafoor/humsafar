@@ -20,7 +20,8 @@ Statuses: Done = merged into `dev`.
 | 2.2 | Geofence CRUD (max 10 zones) + breach detection (+ contract `docs/api/geofence_contract.md`) | Done |
 | 2.3 | Battery alert (15%), offline detection (10 min), device-health read, background job runner (+ contract `docs/api/device_health_contract.md`) | Done |
 | 2.5-prep | `users.full_name` (migration 0002) + guide `docs/RUNNING_THE_BACKEND.md` for Talha | Done |
-| 3.1 | Notification service: critical / standard tiers, inbox, acknowledgment, push tokens, mock push (+ contract `docs/api/notification_contract.md`) | In review (PR) |
+| 3.1 | Notification service: critical / standard tiers, inbox, acknowledgment, push tokens, mock push (+ contract `docs/api/notification_contract.md`) | Done |
+| 3.2 | Medication schedules, reminders (standard before, critical at dose time), two-step dose confirmation (+ contract `docs/api/medication_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`

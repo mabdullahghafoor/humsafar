@@ -7,6 +7,7 @@ Traces to: FR-F1, FR-D1, FR-G1..G4, FR-H1, FR-H2.
 """
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     Column,
     DateTime,
@@ -35,6 +36,9 @@ class MedicationSchedule(Base):
     time_of_day = Column(Time, nullable=False)  # one row per dose time
     frequency = Column(String(50), nullable=False)  # e.g. daily, weekly
     created_by = fk_col("users.user_id")
+    # Task 3.2 (clarification 33): a removed schedule is switched off, not deleted, so the dose history stays.
+    active = Column(Boolean, nullable=False, server_default=text("true"))
+    created_at = ts_col()
 
 
 class MedicationConfirmation(Base):

@@ -19,6 +19,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `geofence_contract.md` | safe zones, breach detection, status |
 | `device_health_contract.md` | battery alert, offline detection, device-health read |
 | `notification_contract.md` | alerts (critical / standard), acknowledgment, push tokens |
+| `medication_contract.md` | medicine schedules, reminders, two-step dose confirmation |
 | `../sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
 ## 3. All endpoints
@@ -52,6 +53,11 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | GET `/dependents/{id}/device-health` | Primary, or Secondary with `live_location` | Battery, online/offline, last known location |
 | GET `/notifications` | logged in | My alerts (critical / standard), unacknowledged count, paging |
 | POST `/notifications/{id}/acknowledge` | logged in (owner) | Acknowledge an alert (idempotent) |
+| POST / GET `/dependents/{id}/medications` | Guardian with `medication_management` (GET: or the Dependent) | Create / list medicine schedules |
+| PUT / DELETE `/dependents/{id}/medications/{schedule_id}` | Guardian with `medication_management` | Change / switch off a schedule |
+| GET `/dependents/{id}/medication-doses` | Guardian with `medication_management`, or the Dependent | Dose history and upcoming doses |
+| POST `/medications/{schedule_id}/confirm-request` | Dependent | Step 1 of the two-step dose confirmation |
+| POST `/medications/{schedule_id}/confirm` | Dependent | Step 2: mark the dose taken |
 | PUT `/devices/push-token` | logged in | Register this phone's Firebase token |
 | DELETE `/devices/push-token?token=` | logged in | Forget the token (logout) |
 | GET `/health`, `/health/db` | anyone | Liveness checks |
@@ -65,11 +71,11 @@ Every error has the same shape; branch on `error.code`, never on `message`:
 ```
 | Status | Codes |
 |---|---|
-| 400 | `INVITE_EXPIRED`, `INVITE_INVALID`, `OTP_INVALID`, `PRIMARY_NOT_GOVERNABLE` |
+| 400 | `CONFIRM_TOKEN_EXPIRED`, `CONFIRM_TOKEN_INVALID`, `INVITE_EXPIRED`, `INVITE_INVALID`, `OTP_INVALID`, `PRIMARY_NOT_GOVERNABLE` |
 | 401 | `NOT_AUTHENTICATED`, `INVALID_CREDENTIALS`, `TOKEN_EXPIRED` (call refresh, retry once), `TOKEN_INVALID`, `TOKEN_WRONG_TYPE` |
 | 403 | `ACCOUNT_NOT_ACTIVATED`, `FORBIDDEN`, `GUARDIAN_NOT_VERIFIED`, `INVITE_NOT_FOR_YOU`, `MODULE_ACCESS_DENIED`, `NOT_LINKED_TO_DEPENDENT`, `NOT_PRIMARY_GUARDIAN`, `PRIMARY_CANNOT_ACCEPT_INVITE`, `SECONDARY_CANNOT_LINK` |
-| 404 | `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND` |
-| 409 | `ALREADY_LINKED`, `ALREADY_REGISTERED`, `ALREADY_VERIFIED`, `CNIC_ALREADY_REGISTERED`, `EMAIL_ALREADY_REGISTERED`, `GEOFENCE_LIMIT_REACHED`, `GUARDIAN_CAP_REACHED`, `INVITEE_NOT_ELIGIBLE`, `PHONE_ALREADY_REGISTERED`, `PRIMARY_ALREADY_EXISTS` |
+| 404 | `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `MEDICATION_NOT_FOUND`, `NO_DOSE_DUE`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND` |
+| 409 | `ALREADY_LINKED`, `ALREADY_REGISTERED`, `ALREADY_VERIFIED`, `CNIC_ALREADY_REGISTERED`, `DOSE_ALREADY_CONFIRMED`, `EMAIL_ALREADY_REGISTERED`, `GEOFENCE_LIMIT_REACHED`, `GUARDIAN_CAP_REACHED`, `INVITEE_NOT_ELIGIBLE`, `MEDICATION_LIMIT_REACHED`, `PHONE_ALREADY_REGISTERED`, `PRIMARY_ALREADY_EXISTS` |
 | 422 | `VALIDATION_ERROR` (`details.fields` lists each bad field), `UNKNOWN_MODULE`, `TIMESTAMP_IN_FUTURE`, `TIMESTAMP_TOO_OLD`, `INVALID_RANGE` |
 | 500 | `INTERNAL_ERROR` |
 
