@@ -38,6 +38,7 @@ def user_to_out(db: Session, user: User) -> UserOut:
         user_id=user.user_id,
         email=user.email,
         phone=user.phone,
+        full_name=user.full_name,
         role=user.role,
         guardian_role=guardian_role,
         created_at=user.created_at,
@@ -60,6 +61,7 @@ def register_user(db: Session, data: RegisterRequest) -> User:
     user = User(
         email=data.email,
         phone=data.phone,
+        full_name=data.full_name,
         password_hash=security.hash_password(data.password),
         role=data.role,
     )

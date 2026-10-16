@@ -49,6 +49,8 @@ class User(Base):
     user_id = uuid_pk()
     email = Column(String(255), nullable=False, unique=True, index=True)
     phone = Column(String(20), nullable=False, unique=True)
+    # Added after the SDS freeze (clarification 27): the register screen asks for a name.
+    full_name = Column(String(100), nullable=False, server_default="")
     password_hash = Column(String(255), nullable=False)
     role = Column(String(20), nullable=False)
     created_at = ts_col()

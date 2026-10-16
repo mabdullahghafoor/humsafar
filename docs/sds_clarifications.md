@@ -4,7 +4,7 @@ The SRS/SDS baselines are locked. This file records every place where implementa
 
 | # | Found in | Issue | What we did | Needs decision |
 |---|---|---|---|---|
-| 1 | SDS 9.2 `users` | No name column, so the apps cannot store a person's name. | Task 1.3 register takes email, phone, password, role only. | Abdullah + Talha: add `full_name`? (Before the register screen is final.) |
+| 1 | SDS 9.2 `users` | No name column, so the apps cannot store a person's name. | Task 1.3 register takes email, phone, password, role only. | **Settled by item 27.** |
 | 2 | SDS 9.2 `messages` | No text body column (only `content_url`), but FR-E1 includes text messages. | Not needed until Phase 4. | Decide before Phase 4. |
 | 3 | SDS 11.1 vs 11.3 | `POST /dependents/{id}/kyc-verify` is marked JWT, but 11.3 says Dependents get no token until KYC succeeds. | Endpoint kept as specified; the Dependent authenticates with their password in the body. | Confirm with the supervisor/team that this is acceptable. |
 | 4 | SDS 11.3 vs FR-A3 | 11.3 says Guardian OTP happens before first token issuance; FR-A3 says verification must happen before the permission dashboard or interventions. | Followed FR-A3 (the requirement): Guardians can log in, and are blocked from gated features until verified (`GUARDIAN_NOT_VERIFIED`). | Confirm. |
@@ -30,4 +30,4 @@ The SRS/SDS baselines are locked. This file records every place where implementa
 | 24 | FR-L2 "configured threshold" | Who configures it is not stated. | One server-wide setting (`DEVICE_OFFLINE_AFTER_S`, 10 min) and low-battery levels 15% (alert) / 20% (reset); not per Dependent or per Guardian. | Decide if Guardians should set it per Dependent (needs a column or table). |
 | 25 | FR-L1/L2 and FR-A4 | "Notify linked Guardians" is not tied to a permission module. Reading device health is gated by `live_location` (it shows the last known position). | Reading needs `live_location`. Task 3.1 must decide which Guardians are notified (proposal: the Primary always, and a Secondary only with `emergency_alerts`, as in item 16). | Decide in Task 3.1. |
 | 26 | SDS 8 (no scheduler) | A silent phone sends nothing, so offline detection needs a timer. | Added a small in-app job runner (`app/core/scheduler.py`, every 60 s). It runs inside the API process; with several processes the Dependent-row lock keeps alerts unique. A real queue (Celery/Redis, SDS 20) can replace it later without changing the jobs. | None. |
-
+| 27 | SDS 9.2 `users` | (Item 1) no name column. | Talha confirmed (16 Oct). Added `users.full_name` (migration 0002, text up to 100). Register now requires it (2 to 100 characters) and every `user` object returns it. Old rows get an empty name. | None. |

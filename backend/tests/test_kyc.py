@@ -17,7 +17,7 @@ GOOD_CNIC = "42101-1234567-1"
 
 
 def register(client, email, phone, role):
-    r = client.post("/auth/register", json={"email": email, "phone": phone, "password": PASSWORD, "role": role})
+    r = client.post("/auth/register", json={"email": email, "phone": phone, "password": PASSWORD, "full_name": "Test User", "role": role})
     assert r.status_code == 201, r.text
     return r.json()
 

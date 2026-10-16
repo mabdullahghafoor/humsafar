@@ -13,6 +13,7 @@ GOOD = {
     "email": "Ali.Khan@Example-Mail.com",
     "phone": "0300 1234567",
     "password": "correct-horse-9",
+    "full_name": "Ali Khan",
     "role": "guardian",
 }
 
@@ -69,6 +70,26 @@ def test_register_dependent_creates_dependent_profile(client, db):
     assert db.get(DependentProfile, __import__("uuid").UUID(r.json()["user_id"])) is not None
 
 
+def test_full_name_is_saved_cleaned_and_returned(client, db):
+    r = register(client, full_name="  Ali    Khan  ")
+    assert r.status_code == 201, r.text
+    assert r.json()["full_name"] == "Ali Khan"  # trimmed, spaces collapsed
+    assert db.query(User).one().full_name == "Ali Khan"
+    tokens = login(client).json()
+    assert tokens["user"]["full_name"] == "Ali Khan"
+    me = client.get("/auth/me", headers={"Authorization": "Bearer " + tokens["access_token"]})
+    assert me.json()["full_name"] == "Ali Khan"
+
+
+def test_full_name_is_required_and_validated(client):
+    body = {k: v for k, v in GOOD.items() if k != "full_name"}
+    missing = client.post("/auth/register", json=body)
+    assert_envelope(missing, 422, "VALIDATION_ERROR")
+    assert "full_name" in {d["field"] for d in missing.json()["error"]["details"]["fields"]}
+    for bad in ["A", "   ", "x" * 101]:
+        assert_envelope(register(client, full_name=bad), 422, "VALIDATION_ERROR")
+
+
 def test_password_is_hashed_not_stored_plain(client, db):
     register(client)
     user = db.query(User).one()
@@ -101,7 +122,7 @@ def test_validation_errors_use_envelope_with_field_names(client):
     )
     assert_envelope(r, 422, "VALIDATION_ERROR")
     fields = {f["field"] for f in r.json()["error"]["details"]["fields"]}
-    assert {"email", "phone", "password", "role"} <= fields
+    assert {"email", "phone", "password", "role", "full_name"} <= fields
 
 
 def test_cannot_register_as_admin_or_pick_secondary(client):

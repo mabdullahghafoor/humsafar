@@ -16,7 +16,7 @@ Branch on `error.code`, never on `message`.
 ### POST /auth/register  → 201
 Request:
 ```json
-{ "email": "ali@example.com", "phone": "03001234567", "password": "min-8-chars", "role": "guardian" }
+{ "email": "ali@example.com", "phone": "03001234567", "password": "min-8-chars", "full_name": "Ali Khan", "role": "guardian" }
 ```
 - `role`: `"guardian"` or `"dependent"` only.
 - `email`: stored lower-case; unique case-insensitively.
@@ -24,11 +24,11 @@ Request:
 - `password`: at least 8 characters, at most 72 bytes (bcrypt limit).
 - A guardian registering independently is a **primary** guardian (FR-A1). `guardian_role` cannot be chosen by the client. Secondary guardians come only via invitation (Task 1.5).
 - `invite_token` (optional, Guardians only, added in Task 1.5): registers the account as a **Secondary** Guardian linked to the inviting Dependent. See `linkage_contract.md`. Without it, a Guardian is Primary.
-- No name field exists: the SDS `users` table has no name column (open decision, see §6).
+- `full_name` (required, added in Task 2.5 prep): 2 to 100 characters. Extra spaces are trimmed and collapsed. Returned in every `user` object (register, login, `/auth/me`).
 
 Response 201:
 ```json
-{ "user_id": "uuid", "email": "ali@example.com", "phone": "+923001234567",
+{ "user_id": "uuid", "email": "ali@example.com", "phone": "+923001234567", "full_name": "Ali Khan",
   "role": "guardian", "guardian_role": "primary", "created_at": "2026-10-13T23:54:10+05:00" }
 ```
 `guardian_role` is `null` for dependents. Registration does **not** return tokens; call `/auth/login`.
@@ -41,7 +41,7 @@ Request: `{ "email": "...", "password": "..." }`
 Response 200:
 ```json
 { "access_token": "jwt", "refresh_token": "jwt", "token_type": "bearer",
-  "expires_in": 900, "user": { "user_id": "...", "email": "...", "phone": "...", "role": "...", "guardian_role": "...", "created_at": "..." } }
+  "expires_in": 900, "user": { "user_id": "...", "email": "...", "phone": "...", "full_name": "...", "role": "...", "guardian_role": "...", "created_at": "..." } }
 ```
 Errors:
 - 401 `INVALID_CREDENTIALS` — wrong password OR unknown email (deliberately identical).
@@ -78,5 +78,5 @@ Algorithm HS256. Tokens are stateless: there is no server-side revocation or log
 - Refresh rotation without revocation. Revocation and auth rate limiting are deferred to hardening (SDS 17).
 
 ## 6. Open decisions needing Talha + Abdullah
-- Does `users` get a `full_name` column? (SDS 9 has none; the register screen likely wants a name.) Must be settled before this contract is final.
+- ~~Does `users` get a `full_name` column?~~ Settled: yes (clarification item 27).
 - `messages` has no text body column (affects Phase 4, not 1.3).
