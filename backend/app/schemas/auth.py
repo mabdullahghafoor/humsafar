@@ -40,6 +40,7 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     phone: str
     password: str
+    full_name: str = Field(min_length=2, max_length=100)
     role: Literal["guardian", "dependent"]
     # Task 1.5: a Secondary Guardian registers by accepting an invitation (FR-A1/FR-B1).
     invite_token: str | None = Field(default=None, max_length=2000)
@@ -54,6 +55,14 @@ class RegisterRequest(BaseModel):
     @classmethod
     def _lower_email(cls, v: str) -> str:
         return v.strip().lower()
+
+    @field_validator("full_name")
+    @classmethod
+    def _clean_name(cls, v: str) -> str:
+        v = " ".join(v.split())  # trim and collapse spaces
+        if len(v) < 2:
+            raise ValueError("Enter your full name (at least 2 characters).")
+        return v
 
     @field_validator("phone")
     @classmethod
@@ -88,6 +97,7 @@ class UserOut(BaseModel):
     user_id: UUID
     email: str
     phone: str
+    full_name: str
     role: Literal["guardian", "dependent"]
     # Only set for guardians: 'primary' | 'secondary' (FR-A1, fixed at account level).
     guardian_role: str | None = None

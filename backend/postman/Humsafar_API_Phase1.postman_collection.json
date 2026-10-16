@@ -30,7 +30,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"phone\": \"{{test_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"phone\": \"{{test_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -61,7 +61,8 @@
                   "pm.test('201 Created', () => pm.response.to.have.status(201));",
                   "const b = pm.response.json();",
                   "pm.test('guardian_role is primary', () => pm.expect(b.guardian_role).to.eql('primary'));",
-                  "pm.test('no password in response', () => pm.expect(JSON.stringify(b)).to.not.include('password'));"
+                  "pm.test('no password in response', () => pm.expect(JSON.stringify(b)).to.not.include('password'));",
+                  "pm.test(\"full_name is returned\", function () { if (pm.response.code === 201) { pm.expect(pm.response.json().full_name).to.eql(\"Test User\"); } });"
                 ]
               }
             }
@@ -133,7 +134,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"phone\": \"{{test_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"phone\": \"{{test_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -221,7 +222,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"nope\",\n  \"phone\": \"12\",\n  \"password\": \"short\",\n  \"role\": \"admin\"\n}",
+              "raw": "{\n  \"email\": \"nope\",\n  \"phone\": \"12\",\n  \"password\": \"short\",\n  \"full_name\": \"Test User\",\n  \"role\": \"admin\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -817,7 +818,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{kyc_guardian_email}}\",\n  \"phone\": \"{{kyc_guardian_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "raw": "{\n  \"email\": \"{{kyc_guardian_email}}\",\n  \"phone\": \"{{kyc_guardian_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1511,7 +1512,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{kyc_dep_email}}\",\n  \"phone\": \"{{kyc_dep_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "raw": "{\n  \"email\": \"{{kyc_dep_email}}\",\n  \"phone\": \"{{kyc_dep_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2074,7 +2075,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lk_p_email}}\",\n  \"phone\": \"{{lk_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "raw": "{\n  \"email\": \"{{lk_p_email}}\",\n  \"phone\": \"{{lk_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2439,7 +2440,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lk_d_email}}\",\n  \"phone\": \"{{lk_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "raw": "{\n  \"email\": \"{{lk_d_email}}\",\n  \"phone\": \"{{lk_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2676,7 +2677,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lk_o_email}}\",\n  \"phone\": \"{{lk_o_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "raw": "{\n  \"email\": \"{{lk_o_email}}\",\n  \"phone\": \"{{lk_o_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3126,7 +3127,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lk_s1_email}}\",\n  \"phone\": \"{{lk_s1_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lk_inv1}}\"\n}",
+                  "raw": "{\n  \"email\": \"{{lk_s1_email}}\",\n  \"phone\": \"{{lk_s1_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lk_inv1}}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3214,7 +3215,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"thief{{lk_s3_phone}}@humsafar-test.com\",\n  \"phone\": \"{{lk_s3_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lk_inv1}}\"\n}",
+                  "raw": "{\n  \"email\": \"thief{{lk_s3_phone}}@humsafar-test.com\",\n  \"phone\": \"{{lk_s3_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lk_inv1}}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3661,7 +3662,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lk_s2_email}}\",\n  \"phone\": \"{{lk_s2_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lk_inv2}}\"\n}",
+                  "raw": "{\n  \"email\": \"{{lk_s2_email}}\",\n  \"phone\": \"{{lk_s2_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lk_inv2}}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -4113,7 +4114,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{pm_p_email}}\",\n  \"phone\": \"{{pm_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "raw": "{\n  \"email\": \"{{pm_p_email}}\",\n  \"phone\": \"{{pm_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -4470,7 +4471,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{pm_d_email}}\",\n  \"phone\": \"{{pm_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "raw": "{\n  \"email\": \"{{pm_d_email}}\",\n  \"phone\": \"{{pm_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -4729,7 +4730,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{pm_s_email}}\",\n  \"phone\": \"{{pm_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{pm_inv}}\"\n}",
+                  "raw": "{\n  \"email\": \"{{pm_s_email}}\",\n  \"phone\": \"{{pm_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{pm_inv}}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -6169,7 +6170,7 @@
                 "description": "Create the Guardian who will be Primary.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lc_p_email}}\",\n  \"phone\": \"{{lc_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "raw": "{\n  \"email\": \"{{lc_p_email}}\",\n  \"phone\": \"{{lc_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -6323,7 +6324,7 @@
                 "description": "Create the Dependent account.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lc_d_email}}\",\n  \"phone\": \"{{lc_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "raw": "{\n  \"email\": \"{{lc_d_email}}\",\n  \"phone\": \"{{lc_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -6546,7 +6547,7 @@
                 "description": "Secondary joins through the invite.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{lc_s_email}}\",\n  \"phone\": \"{{lc_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lc_inv}}\"\n}",
+                  "raw": "{\n  \"email\": \"{{lc_s_email}}\",\n  \"phone\": \"{{lc_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{lc_inv}}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -7717,7 +7718,7 @@
                 "description": "Create the Guardian who will be Primary.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{gf_p_email}}\",\n  \"phone\": \"{{gf_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "raw": "{\n  \"email\": \"{{gf_p_email}}\",\n  \"phone\": \"{{gf_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -7870,7 +7871,7 @@
                 "description": "Create the Dependent account.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{gf_d_email}}\",\n  \"phone\": \"{{gf_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "raw": "{\n  \"email\": \"{{gf_d_email}}\",\n  \"phone\": \"{{gf_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -8092,7 +8093,7 @@
                 "description": "Secondary joins.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{gf_s_email}}\",\n  \"phone\": \"{{gf_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{gf_inv}}\"\n}",
+                  "raw": "{\n  \"email\": \"{{gf_s_email}}\",\n  \"phone\": \"{{gf_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{gf_inv}}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -9355,7 +9356,7 @@
                 "description": "Create the Guardian who will be Primary.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{dv_p_email}}\",\n  \"phone\": \"{{dv_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+                  "raw": "{\n  \"email\": \"{{dv_p_email}}\",\n  \"phone\": \"{{dv_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -9508,7 +9509,7 @@
                 "description": "Create the Dependent account.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{dv_d_email}}\",\n  \"phone\": \"{{dv_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"dependent\"\n}",
+                  "raw": "{\n  \"email\": \"{{dv_d_email}}\",\n  \"phone\": \"{{dv_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -9730,7 +9731,7 @@
                 "description": "Secondary joins.",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{dv_s_email}}\",\n  \"phone\": \"{{dv_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{dv_inv}}\"\n}",
+                  "raw": "{\n  \"email\": \"{{dv_s_email}}\",\n  \"phone\": \"{{dv_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{dv_inv}}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"

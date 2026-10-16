@@ -33,7 +33,7 @@ def assert_error(resp, status, code):
 
 
 def register(client, email, phone, role="guardian", invite_token=None):
-    body = {"email": email, "phone": phone, "password": PASSWORD, "role": role}
+    body = {"email": email, "phone": phone, "password": PASSWORD, "full_name": "Test User", "role": role}
     if invite_token:
         body["invite_token"] = invite_token
     return client.post("/auth/register", json=body)

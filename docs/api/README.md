@@ -77,4 +77,4 @@ Every error has the same shape; branch on `error.code`, never on `message`:
 
 ## 6. Mock behaviour you will notice
 - KYC and OTP are mocked. A CNIC ending in `0` fails, ending in `9` stays pending, any other ending passes. A liveness photo starting with `FAIL` fails. In development, `verify-phone/request` returns the code as `dev_otp`.
-- There is no `full_name` anywhere yet (open decision, `sds_clarifications.md`).
+- `full_name` is required at register and returned in every `user` object (clarification item 27).
