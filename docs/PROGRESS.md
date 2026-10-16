@@ -19,7 +19,8 @@ Statuses: Done = merged into `dev`.
 | 2.1 | Location ingestion + adaptive frequency, latest + history (+ contract `docs/api/location_contract.md`) | Done |
 | 2.2 | Geofence CRUD (max 10 zones) + breach detection (+ contract `docs/api/geofence_contract.md`) | Done |
 | 2.3 | Battery alert (15%), offline detection (10 min), device-health read, background job runner (+ contract `docs/api/device_health_contract.md`) | Done |
-| 2.5-prep | `users.full_name` (migration 0002) + guide `docs/RUNNING_THE_BACKEND.md` for Talha | In review (PR) |
+| 2.5-prep | `users.full_name` (migration 0002) + guide `docs/RUNNING_THE_BACKEND.md` for Talha | Done |
+| 3.1 | Notification service: critical / standard tiers, inbox, acknowledgment, push tokens, mock push (+ contract `docs/api/notification_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
@@ -29,4 +30,4 @@ Last known from his tracker (2026-08-12): Tasks 0.4 and 1.8 to 1.11 done in his 
 Not tracked in this file yet. Sarim: please add your task status here.
 
 ## Open decisions and blockers
-See `docs/sds_clarifications.md`. Currently open: `users.full_name` (Talha + Abdullah), SDS 11.1/11.3 KYC auth and Guardian OTP timing (team confirmation), Dependent consent when a Guardian links (item 9), no way to remove a Guardian (item 12).
+See `docs/sds_clarifications.md`. Currently open: Firebase project for real push (Talha, Task 3.14, item 29), SDS 11.1/11.3 KYC auth and Guardian OTP timing (team confirmation), Dependent consent when a Guardian links (item 9), no way to remove a Guardian (item 12).

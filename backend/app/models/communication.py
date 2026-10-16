@@ -66,4 +66,26 @@ class Notification(Base):
     __table_args__ = (
         CheckConstraint(in_list("priority", PRIORITY_TIERS), name="priority_valid"),
         Index("ix_notifications_user_sent", "user_id", "sent_at"),
+        # Task 3.1 (clarification 28): one notification per person per event, even if two
+        # processes dispatch at the same moment.
+        Index(
+            "uq_notifications_user_dedupe",
+            "user_id",
+            text("(payload ->> 'dedupe_key')"),
+            unique=True,
+            postgresql_where=text("(payload ->> 'dedupe_key') IS NOT NULL"),
+        ),
     )
+
+
+class PushToken(Base):
+    """Task 3.1 (clarification 29): the phone's Firebase (FCM) token, so the server can push to it."""
+
+    __tablename__ = "push_tokens"
+
+    token_id = uuid_pk()
+    user_id = fk_col("users.user_id", index=True)
+    token = Column(Text, nullable=False, unique=True)
+    platform = Column(String(20), nullable=False, server_default=text("'android'"))
+    created_at = ts_col()
+    last_seen_at = ts_col()

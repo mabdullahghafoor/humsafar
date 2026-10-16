@@ -52,6 +52,10 @@ class Settings(BaseSettings):
     LOCATION_INTERVAL_LOW_BATTERY_S: int = 60  # while the battery is low, check in at least this often
 
     # Background jobs (the offline sweep now; missed doses and escalation timers in Phase 3).
+    # Task 3.1: notifications. Only the mock push provider exists until Firebase is set up (Talha's 3.14).
+    PUSH_PROVIDER: str = "mock"
+    NOTIFY_RESOLVED_WINDOW_S: int = 86400  # "all clear" messages are sent for events resolved in the last day
+
     SCHEDULER_ENABLED: bool = True
     SCHEDULER_TICK_S: int = 60
 
