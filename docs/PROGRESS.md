@@ -23,7 +23,8 @@ Statuses: Done = merged into `dev`.
 | 3.1 | Notification service: critical / standard tiers, inbox, acknowledgment, push tokens, mock push (+ contract `docs/api/notification_contract.md`) | Done |
 | 3.2 | Medication schedules, reminders (standard before, critical at dose time), two-step dose confirmation (+ contract `docs/api/medication_contract.md`) | Done |
 | 3.3 | Missed-dose detection, critical alert to the Primary, Guardian options: extend time or escalate to Secondaries, late confirmation closes the alert (section in `medication_contract.md`) | Done |
-| 3.4 | Guardian wellness check: up to 3 daily "Are you OK?" prompts, grace period, device-activity cross-check, alert to the Primary if unanswered (+ contract `docs/api/wellness_contract.md`) | In review (PR) |
+| 3.4 | Guardian wellness check: up to 3 daily "Are you OK?" prompts, grace period, device-activity cross-check, alert to the Primary if unanswered (+ contract `docs/api/wellness_contract.md`) | Done |
+| 3.5 | Escalation chain: Primary, then Secondary, then external-contact level, by timers; Guardian acknowledge stops it (+ contract `docs/api/escalation_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`

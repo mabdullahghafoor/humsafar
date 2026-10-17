@@ -73,6 +73,11 @@ class EscalationEvent(Base):
     # Task 3.3 (clarification 39): what the event is about, e.g. the missed dose. No foreign key: it points at
     # different tables depending on trigger_type. NULL for events about the Dependent as a whole.
     reference_id = Column(UUID(as_uuid=True), nullable=True)
+    # Task 3.5 (clarification 53): when the event moved to its current tier (the escalation timer starts here),
+    # and who acknowledged it (a Guardian opened the alert), which stops the chain.
+    tier_changed_at = ts_col()
+    acknowledged_at = Column(DateTime(timezone=True), nullable=True)
+    acknowledged_by = Column(UUID(as_uuid=True), nullable=True)
 
     __table_args__ = (
         CheckConstraint(in_list("tier", ESCALATION_TIERS), name="tier_valid"),
