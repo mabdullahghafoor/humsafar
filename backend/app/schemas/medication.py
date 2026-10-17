@@ -110,7 +110,8 @@ class DoseOut(BaseModel):
     scheduled_for: datetime
     status: DoseStatus
     confirmed_at: datetime | None
-    window_ends_at: datetime  # after this, an unconfirmed dose is "missed" (Task 3.3)
+    window_ends_at: datetime  # after this, an unconfirmed dose is "missed" (later if a Guardian gave more time)
+    open_alert_tier: Literal["primary", "secondary", "external_contact"] | None = None  # set while a missed-dose alert is open
 
 
 class DoseListOut(BaseModel):
@@ -140,3 +141,14 @@ class ConfirmOut(BaseModel):
     status: DoseStatus
     confirmed_at: datetime
     already_confirmed: bool
+
+
+class ExtendIn(BaseModel):
+    minutes: int = Field(default=30, ge=5, le=120, description="How many minutes of extra time to give.")
+
+
+class EscalateOut(BaseModel):
+    confirmation_id: UUID
+    event_id: UUID
+    tier: Literal["primary", "secondary", "external_contact"]
+    notified: int  # how many people were just alerted (0 if no Secondary is allowed to see alerts)

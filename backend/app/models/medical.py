@@ -50,6 +50,8 @@ class MedicationConfirmation(Base):
     confirmed_at = Column(DateTime(timezone=True), nullable=True)
     # NOT NULL: safety-critical (SDS 9.4)
     status = Column(String(20), nullable=False, server_default=text("'pending'"))
+    # Task 3.3 (clarification 40): a Guardian can give more time; this is then the new deadline.
+    extended_until = Column(DateTime(timezone=True), nullable=True)
 
     __table_args__ = (
         # One confirmation row per scheduled dose instance.

@@ -8,6 +8,8 @@ Added:     GET    /dependents/{id}/medications             list schedules (Depen
            DELETE /dependents/{id}/medications/{schedule_id}    switch a schedule off (history is kept)
            GET    /dependents/{id}/medication-doses        dose history and upcoming doses
            POST   /medications/{schedule_id}/confirm-request    step 1 of 2 (Dependent)
+Task 3.3:  POST /dependents/{id}/medication-doses/{confirmation_id}/extend     give more time (Guardian)
+           POST /dependents/{id}/medication-doses/{confirmation_id}/escalate  alert the Secondaries now (Guardian)
 """
 
 import uuid
@@ -25,6 +27,9 @@ from app.schemas.medication import (
     ConfirmRequestIn,
     ConfirmRequestOut,
     DoseListOut,
+    DoseOut,
+    EscalateOut,
+    ExtendIn,
     DoseStatus,
     MedicationIn,
     MedicationListOut,
@@ -84,6 +89,26 @@ def list_doses(
 ):
     """Default range: 24 hours back to 24 hours ahead."""
     return medication_service.list_doses(db, user, dependent_id, from_, to, status)
+
+
+@router.post("/dependents/{dependent_id}/medication-doses/{confirmation_id}/extend", response_model=DoseOut)
+def extend_dose(
+    dependent_id: uuid.UUID,
+    confirmation_id: uuid.UUID,
+    body: ExtendIn | None = None,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """FR-D1 option 1 (Guardian): give more time. A missed dose goes back to pending and its alert closes."""
+    return medication_service.extend(db, user, dependent_id, confirmation_id, (body or ExtendIn()).minutes)
+
+
+@router.post("/dependents/{dependent_id}/medication-doses/{confirmation_id}/escalate", response_model=EscalateOut)
+def escalate_dose(
+    dependent_id: uuid.UUID, confirmation_id: uuid.UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)
+):
+    """FR-D1 option 2 (Guardian): move the missed-dose alert up to the Secondary Guardians now."""
+    return medication_service.escalate(db, user, dependent_id, confirmation_id)
 
 
 @router.post("/medications/{schedule_id}/confirm-request", response_model=ConfirmRequestOut)

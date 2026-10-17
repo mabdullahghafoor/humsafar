@@ -7,7 +7,7 @@ For Talha (Guardian medicine screens, Dependent "take your medicine" screen) and
 2. Times are **local clock times** in the server time zone (`timezone` in the reply, now `Asia/Karachi`). Send `"08:00"`, not a UTC time.
 3. **15 minutes before** each dose the server prepares a **dose** and sends the Dependent a **standard reminder**. **At the dose time** it sends a **critical** "time to take it" alert (only if not yet confirmed).
 4. The Dependent confirms in **two steps** (so a wrong tap is not a "taken"): step 1 asks, step 2 sends the proof token.
-5. A dose has a `status`: `pending`, `taken` or `missed`. **`missed` is set in Task 3.3** (then the Guardian is alerted). Until then an unconfirmed dose stays `pending`; `window_ends_at` is when it will count as missed (30 min after the time).
+5. A dose has a `status`: `pending`, `taken` or `missed`. When `window_ends_at` passes (30 min after the time) an unconfirmed dose becomes **`missed`** and the Primary Guardian gets a critical alert (see "Missed dose" below).
 6. Removing a schedule only **switches it off**; old doses stay for the adherence chart.
 
 ## Who may do what
@@ -49,9 +49,10 @@ Switches it off. Repeating is fine.
 Default range: 24 hours back to 24 hours ahead (ISO timestamps; at most 31 days). `status` = `pending|taken|missed`.
 ```json
 { "items": [ { "confirmation_id": "8c2d4e60-...", "schedule_id": "5a1c7e20-...", "drug_name": "Metformin", "dosage": "500 mg",
-               "scheduled_for": "2026-10-17T03:00:00Z", "status": "pending", "confirmed_at": null, "window_ends_at": "2026-10-17T03:30:00Z" } ] }
+               "scheduled_for": "2026-10-17T03:00:00Z", "status": "pending", "confirmed_at": null, "window_ends_at": "2026-10-17T03:30:00Z",
+               "open_alert_tier": null } ] }
 ```
-A dose appears here from 15 minutes before its time (when the server prepares it, within about a minute).
+A dose appears here from 15 minutes before its time (when the server prepares it, within about a minute). `open_alert_tier` is `null`, or `primary` / `secondary` while a missed-dose alert for this dose is open (use it to show "alert sent to Secondary").
 
 ## Two-step confirmation (Dependent only)
 
@@ -73,7 +74,7 @@ Errors: `404 NO_DOSE_DUE` (nothing waiting; the dose may not be prepared yet), `
 ```
 * **Safe to repeat** (bad network): the second call returns `already_confirmed: true` and the **first** `confirmed_at`.
 * The token lives 2 minutes and works for one dose and one person. Errors: `400 CONFIRM_TOKEN_EXPIRED` (start again from step 1), `400 CONFIRM_TOKEN_INVALID`.
-* A dose that is already past its window can still be confirmed (the person took it late); it is recorded as `taken`.
+* A dose that is already past its window can still be confirmed (the person took it late); it is recorded as `taken`, and it **closes the missed-dose alert** (see below).
 
 ## Notifications the Dependent receives (see `notification_contract.md`)
 | `type` | `priority` | When | `data` |
@@ -82,3 +83,45 @@ Errors: `404 NO_DOSE_DUE` (nothing waiting; the dose may not be prepared yet), `
 | `medication_due` | `critical` | At the dose time, until the window ends, if not confirmed | same |
 
 Tapping either should open the step 1 screen for `data.schedule_id`.
+
+## Missed dose (Task 3.3, FR-D1)
+
+**What happens.** Every minute the server looks for doses that are still `pending` after `window_ends_at`. Each one becomes `missed` and opens **one** alert at the **Primary** level. The Primary gets a **critical** notification right away (`type: "missed_dose"`). Secondaries are **not** told yet (clarification 30). The Dependent is not sent a second alert (they already had the reminder and the "time to take it" alert).
+
+The Primary's notification (see `notification_contract.md`):
+```json
+{ "type": "missed_dose", "priority": "critical", "title": "Missed medication",
+  "body": "Test User has not taken Metformin (500 mg) due at 08:00.",
+  "dependent_id": "7b1c2e0a-...", "event_id": "9e2f4a10-...",
+  "data": { "tier": "primary", "schedule_id": "5a1c...", "confirmation_id": "8c2d...", "scheduled_for": "2026-10-17T03:00:00Z", "drug_name": "Metformin", "dosage": "500 mg" } }
+```
+Open the dose screen with `data.confirmation_id`, and show the two options below.
+
+The alert is **not** raised when the schedule was switched off, or when the miss is found more than 6 hours late (for example the server was down). Those doses are still marked `missed` for the adherence chart.
+
+### Option 1: give more time. POST `/dependents/{id}/medication-doses/{confirmation_id}/extend`
+Guardian (Primary, or a Secondary with `medication_management`). Body optional: `{ "minutes": 30 }` (5 to 120, default 30). Returns the dose (same shape as the dose list).
+* New deadline = `minutes` **after the current deadline**, or after **now** if the deadline has passed.
+* A `missed` dose goes back to `pending` and its alert **closes**: everyone who was told gets a **standard** all-clear ("Test User was given more time for Metformin (500 mg)").
+* The Dependent gets a **critical** alert (`type: "medication_extended"`): "Please take Metformin (500 mg) by 08:40, then confirm in the app." Same `data` as the reminder, so tapping it opens step 1.
+* If the new deadline also passes without a confirmation, the dose is missed **again** and a **new** alert is raised.
+* Errors: `404 DOSE_NOT_FOUND`, `409 DOSE_ALREADY_CONFIRMED`, `422 VALIDATION_ERROR` (minutes out of range), plus the usual 401/403.
+
+### Option 2: escalate now. POST `/dependents/{id}/medication-doses/{confirmation_id}/escalate`
+Same Guardians as above. No body.
+```json
+{ "confirmation_id": "8c2d4e60-...", "event_id": "9e2f4a10-...", "tier": "secondary", "notified": 1 }
+```
+* Moves the open alert from the Primary level to the **Secondary** level. Each Secondary who is verified **and** has the `emergency_alerts` permission gets the critical `missed_dose` alert (`data.tier: "secondary"`). `notified` says how many people that was. **0 means no Secondary is allowed to see alerts**: show that to the Guardian.
+* The automatic timers and the external-contact step come with the escalation engine (Tasks 3.5 and 3.8); for now escalation is this manual button.
+* Errors: `409 NO_OPEN_ALERT` (the dose has no open alert, for example it was never missed or was already closed), `409 ALREADY_ESCALATED`, `404 DOSE_NOT_FOUND`.
+
+### Taking it late
+If the Dependent confirms a `missed` dose (step 1 and 2 as before), the dose becomes `taken`, the alert closes, and everyone who was told gets a **standard** all-clear: "Test User took Metformin (500 mg) late."
+
+### Trying a missed dose by hand (for the demo)
+The automatic Postman folder cannot wait 30 minutes, so test the real miss like this: start the server with a 60-second window, create a schedule for 2 minutes from now, wait about 4 minutes, then read the Primary's `GET /notifications`.
+```
+$env:MEDICATION_WINDOW_S="60"
+uvicorn app.main:app --reload
+```
