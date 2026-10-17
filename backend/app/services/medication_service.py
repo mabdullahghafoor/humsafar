@@ -573,6 +573,7 @@ def escalate(db: Session, user: User, dependent_id: uuid.UUID, confirmation_id: 
         db.rollback()
         raise AppError(409, "ALREADY_ESCALATED", "This alert has already been escalated.")
     ev.tier = "secondary"
+    ev.tier_changed_at = datetime.now(timezone.utc)  # the Secondary timer (Task 3.5) starts now
     _audit(db, user, "medication_alert_escalated", "escalation_event", ev.event_id)
     db.commit()
     notification_service.dispatch_events(db, dependent_id)
