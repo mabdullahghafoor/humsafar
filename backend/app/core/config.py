@@ -62,6 +62,7 @@ class Settings(BaseSettings):
     MEDICATION_WINDOW_S: int = 1800  # a dose still unconfirmed this long after its time counts as missed (Task 3.3)
     MEDICATION_CONFIRM_TOKEN_S: int = 120  # step 2 of the confirmation must follow step 1 within this time
     MEDICATION_MAX_ACTIVE_SCHEDULES: int = 30  # per Dependent
+    MEDICATION_MISSED_ALERT_MAX_AGE_S: int = 21600  # a dose found missed after more than 6 h (e.g. server was down) is marked, not alerted
 
     SCHEDULER_ENABLED: bool = True
     SCHEDULER_TICK_S: int = 60

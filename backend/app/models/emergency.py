@@ -15,6 +15,7 @@ from sqlalchemy import (
     Time,
     text,
 )
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.core.database import Base
 from app.models._common import fk_col, in_list, ts_col, uuid_pk
@@ -59,10 +60,20 @@ class EscalationEvent(Base):
     status = Column(String(20), nullable=False, server_default=text("'open'"))
     created_at = ts_col()
     resolved_at = Column(DateTime(timezone=True), nullable=True)
+    # Task 3.3 (clarification 39): what the event is about, e.g. the missed dose. No foreign key: it points at
+    # different tables depending on trigger_type. NULL for events about the Dependent as a whole.
+    reference_id = Column(UUID(as_uuid=True), nullable=True)
 
     __table_args__ = (
         CheckConstraint(in_list("tier", ESCALATION_TIERS), name="tier_valid"),
         Index("ix_escalation_events_dependent_status", "dependent_id", "status"),
+        Index(
+            "uq_open_event_per_reference",
+            "reference_id",
+            "trigger_type",
+            unique=True,
+            postgresql_where=text("status = 'open' AND reference_id IS NOT NULL"),
+        ),
     )
 
 

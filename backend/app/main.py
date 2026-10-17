@@ -23,6 +23,7 @@ settings = get_settings()
 
 # Background jobs (Task 2.3). Each runs every SCHEDULER_TICK_S seconds; see app/core/scheduler.py.
 scheduler.register("device_offline_sweep", device_health_service.sweep_offline)
+scheduler.register("medication_missed_sweep", medication_service.sweep_missed)  # Task 3.3 (before the dispatch, so alerts go out the same minute)
 scheduler.register("notification_dispatch", notification_service.dispatch_events)  # Task 3.1 (after the sweep)
 scheduler.register("medication_tick", medication_service.tick)  # Task 3.2
 

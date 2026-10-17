@@ -13,7 +13,7 @@ For Talha (Task 3.14: Guardian alert UI + Firebase) and for every later Phase 3 
 | Situation | Told |
 |---|---|
 | Geofence breach, low battery, phone offline, possible fall | The **Primary** Guardian, plus each **Secondary** who is verified **and** has the `emergency_alerts` permission |
-| Missed dose, missed wellness check (escalation chain) | First the Primary only. After the timeout, the permitted Secondaries (Task 3.5 moves the alert to the next step) |
+| Missed dose, missed wellness check (escalation chain) | First the Primary only. Then the permitted Secondaries: for a missed dose when a Guardian taps "escalate" (Task 3.3); automatically after a timeout in Task 3.5 |
 | Panic Mode (Task 3.6) | **Every** linked Guardian, whatever their permissions (the one deliberate exception) |
 | The Dependent | Never told about their own alert (they use the Dependent Mode screens) |
 
@@ -41,7 +41,7 @@ Query (all optional): `priority=critical|standard`, `unacknowledged=true`, `limi
 * Newest first. For the next (older) page, pass the reply's `next_before` as `before`. `null` means no more.
 * `unacknowledged_critical` counts **all** your waiting critical alerts, not just this page: use it for the badge.
 * All-clear messages have `priority: "standard"` and `data.resolved: true`.
-* `type` values so far: `geofence_breach`, `low_battery`, `device_offline`, `medication_reminder` and `medication_due` (sent to the **Dependent**, see `medication_contract.md`). Coming: `panic`, `missed_dose`, `wellness_check`, `fall`.
+* `type` values so far: `geofence_breach`, `low_battery`, `device_offline`, `medication_reminder`, `medication_due` and `medication_extended` (sent to the **Dependent**), and `missed_dose` (sent to Guardians, with `data.confirmation_id`; see `medication_contract.md`). Coming: `panic`, `missed_dose`, `wellness_check`, `fall`.
 * `title` and `body` are English text from the server. For other languages, translate on the app side using `type` (and `data.resolved`).
 
 ### POST `/notifications/{notification_id}/acknowledge`

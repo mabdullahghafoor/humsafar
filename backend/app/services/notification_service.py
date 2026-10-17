@@ -21,6 +21,7 @@ import logging
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
@@ -30,6 +31,8 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.models import (
     EscalationEvent,
+    MedicationConfirmation,
+    MedicationSchedule,
     GuardianDependentLink,
     GuardianProfile,
     Notification,
@@ -66,7 +69,8 @@ EVENT_RULES: dict[str, Rule] = {
     "device_offline": Rule("Connection lost", "{name}'s phone has gone offline.", LINKED_PERMITTED,
                            "Back online", "{name}'s phone is back online."),
     "fall": Rule("Possible fall", "{name} may have fallen.", LINKED_PERMITTED),
-    "missed_dose": Rule("Missed medication", "{name} has not confirmed a medication dose.", BY_TIER),
+    "missed_dose": Rule("Missed medication", "{name} has not taken {drug} ({dosage}) due at {time}.", BY_TIER,
+                        "Missed dose closed", "{name} {outcome}."),
     "wellness_check": Rule("Wellness check not answered", "{name} has not answered the wellness check.", BY_TIER),
     "panic": Rule("PANIC ALERT", "{name} pressed the panic button and needs help now.", ALL_LINKED),
 }
@@ -167,14 +171,45 @@ def _display_name(db: Session, dependent_id: uuid.UUID) -> str:
     return (user.full_name or "").strip() or "Your dependent" if user else "Your dependent"
 
 
+class _Safe(dict):
+    def __missing__(self, key):  # a missing detail becomes empty text, never an error
+        return ""
+
+
+def _event_details(db: Session, ev: EscalationEvent) -> tuple[dict, dict]:
+    """(words for the message text, extra data for the app). Only events with a reference have any."""
+    if ev.trigger_type == "missed_dose" and ev.reference_id:
+        row = db.execute(
+            select(MedicationConfirmation, MedicationSchedule)
+            .join(MedicationSchedule, MedicationSchedule.schedule_id == MedicationConfirmation.schedule_id)
+            .where(MedicationConfirmation.confirmation_id == ev.reference_id)
+        ).first()
+        if row:
+            c, s = row
+            local = c.scheduled_for.astimezone(ZoneInfo(get_settings().MEDICATION_TIMEZONE))
+            outcome = (
+                f"took {s.drug_name} ({s.dosage}) late" if c.status == "taken"
+                else f"was given more time for {s.drug_name} ({s.dosage})" if c.status == "pending"
+                else f"missed {s.drug_name} ({s.dosage})"
+            )
+            words = {"drug": s.drug_name, "dosage": s.dosage, "time": f"{local:%H:%M}", "outcome": outcome}
+            extra = {
+                "schedule_id": str(s.schedule_id), "confirmation_id": str(c.confirmation_id),
+                "scheduled_for": c.scheduled_for.isoformat(), "drug_name": s.drug_name, "dosage": s.dosage,
+            }
+            return words, extra
+    return {}, {}
+
+
 def _notify_event(db: Session, ev: EscalationEvent, rule: Rule) -> int:
     name = _display_name(db, ev.dependent_id)
+    words, more = _event_details(db, ev)
     sent = 0
     for uid in recipients(db, ev.dependent_id, rule.audience, ev.tier):
         n = notify(
-            db, uid, ev.trigger_type, CRITICAL, rule.title, rule.body.format(name=name),
+            db, uid, ev.trigger_type, CRITICAL, rule.title, rule.body.format_map(_Safe(name=name, **words)),
             dependent_id=ev.dependent_id, event_id=ev.event_id, dedupe_key=f"{ev.event_id}:{ev.tier}:open",
-            extra={"tier": ev.tier},
+            extra={"tier": ev.tier, **more},
         )
         sent += n is not None
     return sent
@@ -183,6 +218,7 @@ def _notify_event(db: Session, ev: EscalationEvent, rule: Rule) -> int:
 def _notify_resolved(db: Session, ev: EscalationEvent, rule: Rule) -> int:
     """A standard-tier "all clear", only to people who were told about the problem."""
     name = _display_name(db, ev.dependent_id)
+    words, more = _event_details(db, ev)
     told = db.scalars(
         select(Notification.user_id).where(
             Notification.payload["event_id"].astext == str(ev.event_id), Notification.payload["dedupe_key"].astext.like("%:open")
@@ -191,9 +227,9 @@ def _notify_resolved(db: Session, ev: EscalationEvent, rule: Rule) -> int:
     sent = 0
     for uid in set(told):
         n = notify(
-            db, uid, ev.trigger_type, STANDARD, rule.resolved_title, rule.resolved_body.format(name=name),
+            db, uid, ev.trigger_type, STANDARD, rule.resolved_title, rule.resolved_body.format_map(_Safe(name=name, **words)),
             dependent_id=ev.dependent_id, event_id=ev.event_id, dedupe_key=f"{ev.event_id}:resolved",
-            extra={"resolved": True},
+            extra={"resolved": True, **more},
         )
         sent += n is not None
     return sent

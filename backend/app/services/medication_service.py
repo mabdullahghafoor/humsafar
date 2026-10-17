@@ -23,20 +23,21 @@ from datetime import date, datetime, timedelta, timezone
 from datetime import time as dtime
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import delete, select, update
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.core.errors import AppError
 from app.core.security import MED_CONFIRM, create_confirm_token, decode_token
-from app.models import AuditLog, DependentProfile, MedicationConfirmation, MedicationSchedule, User
+from app.models import AuditLog, DependentProfile, EscalationEvent, MedicationConfirmation, MedicationSchedule, Notification, User
 from app.schemas.medication import (
     DAYS,
     ConfirmOut,
     ConfirmRequestOut,
     DoseListOut,
     DoseOut,
+    EscalateOut,
     MedicationIn,
     MedicationListOut,
     MedicationOut,
@@ -78,6 +79,11 @@ def occurrence(day: date, t: dtime) -> datetime:
 
 def window_end(due: datetime) -> datetime:
     return due + timedelta(seconds=get_settings().MEDICATION_WINDOW_S)
+
+
+def deadline(c: MedicationConfirmation) -> datetime:
+    """When this dose counts as missed: the normal window, or later if a Guardian gave more time."""
+    return c.extended_until or window_end(c.scheduled_for)
 
 
 # ------------------------------------------------------------------ access
@@ -237,7 +243,7 @@ def deactivate(db: Session, user: User, dependent_id: uuid.UUID, schedule_id: uu
 
 # ------------------------------------------------------------------ doses
 
-def _dose_out(c: MedicationConfirmation, s: MedicationSchedule) -> DoseOut:
+def _dose_out(c: MedicationConfirmation, s: MedicationSchedule, alert_tier: str | None = None) -> DoseOut:
     return DoseOut(
         confirmation_id=c.confirmation_id,
         schedule_id=c.schedule_id,
@@ -246,7 +252,8 @@ def _dose_out(c: MedicationConfirmation, s: MedicationSchedule) -> DoseOut:
         scheduled_for=c.scheduled_for,
         status=c.status,
         confirmed_at=c.confirmed_at,
-        window_ends_at=window_end(c.scheduled_for),
+        window_ends_at=deadline(c),
+        open_alert_tier=alert_tier,
     )
 
 
@@ -279,7 +286,16 @@ def list_doses(
     if status:
         q = q.where(MedicationConfirmation.status == status)
     rows = db.execute(q.order_by(MedicationConfirmation.scheduled_for).limit(limit)).all()
-    return DoseListOut(items=[_dose_out(c, s) for c, s in rows])
+    tiers = dict(
+        db.execute(
+            select(EscalationEvent.reference_id, EscalationEvent.tier).where(
+                EscalationEvent.reference_id.in_([c.confirmation_id for c, _ in rows]),
+                EscalationEvent.trigger_type == "missed_dose",
+                EscalationEvent.status == "open",
+            )
+        ).all()
+    )
+    return DoseListOut(items=[_dose_out(c, s, tiers.get(c.confirmation_id)) for c, s in rows])
 
 
 def _find_dose(
@@ -349,7 +365,10 @@ def confirm(
     ).scalar()
     if won is not None:
         _audit(db, user, "medication_dose_confirmed", "medication_confirmation", dose_id)
+        _close_missed_alert(db, dose_id, now)  # a late "taken" closes the Guardians' alert (clarification 38)
     db.commit()
+    if won is not None:
+        notification_service.dispatch_events_safely(db, user.user_id)  # sends the "all clear" at once
     db.expire_all()
     c = db.get(MedicationConfirmation, dose_id)
     return ConfirmOut(
@@ -416,7 +435,7 @@ def tick(db: Session, now: datetime | None = None) -> int:
                     "Medicine soon", f"{sch.drug_name} ({sch.dosage}) is due at {due.astimezone(tz()):%H:%M}.",
                     dependent_id=sch.dependent_id, dedupe_key=f"med-remind:{key}", extra=extra,
                 )
-            elif now <= window_end(due):
+            elif now <= deadline(dose):
                 n = notification_service.notify(
                     db, sch.dependent_id, "medication_due", notification_service.CRITICAL,
                     "Time for your medicine", f"Take {sch.drug_name} ({sch.dosage}) now, then confirm in the app.",
@@ -426,3 +445,140 @@ def tick(db: Session, now: datetime | None = None) -> int:
                 n = None
             sent += 1 if n else 0
     return sent
+
+
+# ------------------------------------------------------------------ missed doses (Task 3.3, FR-D1)
+
+def _close_missed_alert(db: Session, dose_id: uuid.UUID, now: datetime) -> None:
+    """Resolve the open missed-dose alert of one dose, if any. Does not commit."""
+    db.execute(
+        update(EscalationEvent)
+        .where(
+            EscalationEvent.reference_id == dose_id,
+            EscalationEvent.trigger_type == "missed_dose",
+            EscalationEvent.status == "open",
+        )
+        .values(status="resolved", resolved_at=now)
+    )
+
+
+def sweep_missed(db: Session, now: datetime | None = None) -> int:
+    """
+    Background job (every minute). A dose still `pending` after its deadline becomes `missed`, and an open
+    `missed_dose` alert (tier primary) is created for it; notification_service tells the Primary Guardian.
+    Returns how many alerts were opened.
+      * Only one process can win the pending -> missed change, so there is one alert per missed dose.
+      * A schedule that was switched off, or a dose found missed long after the fact (server was down,
+        MEDICATION_MISSED_ALERT_MAX_AGE_S), is marked missed WITHOUT an alert.
+    """
+    s = get_settings()
+    now = now or datetime.now(timezone.utc)
+    limit = func.coalesce(
+        MedicationConfirmation.extended_until,
+        MedicationConfirmation.scheduled_for + timedelta(seconds=s.MEDICATION_WINDOW_S),
+    )
+    due = db.execute(
+        select(MedicationConfirmation.confirmation_id, MedicationSchedule.dependent_id, MedicationSchedule.active, limit)
+        .join(MedicationSchedule, MedicationSchedule.schedule_id == MedicationConfirmation.schedule_id)
+        .where(MedicationConfirmation.status == PENDING, limit < now)
+    ).all()
+    opened = 0
+    for cid, dep_id, active, end in due:
+        won = db.execute(
+            update(MedicationConfirmation)
+            .where(MedicationConfirmation.confirmation_id == cid, MedicationConfirmation.status == PENDING, limit < now)
+            .values(status=MISSED)
+            .returning(MedicationConfirmation.confirmation_id)
+        ).scalar()
+        if won is not None and active and end >= now - timedelta(seconds=s.MEDICATION_MISSED_ALERT_MAX_AGE_S):
+            res = db.execute(
+                pg_insert(EscalationEvent)
+                .values(dependent_id=dep_id, trigger_type="missed_dose", tier="primary", status="open", reference_id=cid)
+                .on_conflict_do_nothing()
+                .returning(EscalationEvent.event_id)
+            ).scalar()
+            opened += res is not None
+        db.commit()
+    return opened
+
+
+def _dose_for_guardian(db: Session, dependent_id: uuid.UUID, confirmation_id: uuid.UUID):
+    row = db.execute(
+        select(MedicationConfirmation, MedicationSchedule)
+        .join(MedicationSchedule, MedicationSchedule.schedule_id == MedicationConfirmation.schedule_id)
+        .where(MedicationConfirmation.confirmation_id == confirmation_id, MedicationSchedule.dependent_id == dependent_id)
+        .with_for_update(of=MedicationConfirmation)
+    ).first()
+    if row is None:
+        raise AppError(404, "DOSE_NOT_FOUND", "Dose not found.")
+    return row
+
+
+def extend(db: Session, user: User, dependent_id: uuid.UUID, confirmation_id: uuid.UUID, minutes: int) -> DoseOut:
+    """
+    FR-D1 option 1: give the Dependent more time. The new deadline is `minutes` after the current deadline, or
+    after now if that has passed. A missed dose goes back to pending and its alert closes (the Guardians get an
+    all-clear); the Dependent gets a critical "please take it" alert. Missing it again raises a new alert.
+    """
+    permission_service.check_module_access(db, user, dependent_id, MODULE)
+    linkage_service._lock_dependent(db, dependent_id)
+    c, sch = _dose_for_guardian(db, dependent_id, confirmation_id)
+    if c.status == TAKEN:
+        db.rollback()
+        raise AppError(409, "DOSE_ALREADY_CONFIRMED", "This dose is already marked as taken.")
+    now = datetime.now(timezone.utc)
+    c.extended_until = max(deadline(c), now) + timedelta(minutes=minutes)
+    c.status = PENDING
+    _close_missed_alert(db, c.confirmation_id, now)
+    _audit(db, user, "medication_dose_extended", "medication_confirmation", c.confirmation_id)
+    db.commit()
+    db.refresh(c)
+    local = c.extended_until.astimezone(tz())
+    notification_service.notify(
+        db, sch.dependent_id, "medication_extended", notification_service.CRITICAL,
+        "More time for your medicine",
+        f"Please take {sch.drug_name} ({sch.dosage}) by {local:%H:%M}, then confirm in the app.",
+        dependent_id=sch.dependent_id, dedupe_key=f"med-extend:{c.confirmation_id}:{c.extended_until.isoformat()}",
+        extra={
+            "schedule_id": str(sch.schedule_id), "confirmation_id": str(c.confirmation_id),
+            "scheduled_for": c.scheduled_for.isoformat(), "drug_name": sch.drug_name, "dosage": sch.dosage,
+        },
+    )
+    notification_service.dispatch_events_safely(db, dependent_id)
+    return _dose_out(c, sch)
+
+
+def escalate(db: Session, user: User, dependent_id: uuid.UUID, confirmation_id: uuid.UUID) -> EscalateOut:
+    """
+    FR-D1 option 2: trigger further escalation now, without waiting. Moves the open missed-dose alert from the
+    Primary to the Secondary level and alerts the Secondaries who may see alerts. (The automatic timeouts and
+    the external-contact step come with the escalation engine, Task 3.5 and 3.8.)
+    """
+    permission_service.check_module_access(db, user, dependent_id, MODULE)
+    linkage_service._lock_dependent(db, dependent_id)
+    _dose_for_guardian(db, dependent_id, confirmation_id)
+    ev = db.scalar(
+        select(EscalationEvent)
+        .where(
+            EscalationEvent.reference_id == confirmation_id,
+            EscalationEvent.trigger_type == "missed_dose",
+            EscalationEvent.status == "open",
+        )
+        .with_for_update()
+    )
+    if ev is None:
+        db.rollback()
+        raise AppError(409, "NO_OPEN_ALERT", "There is no open missed-dose alert for this dose.")
+    if ev.tier != "primary":
+        db.rollback()
+        raise AppError(409, "ALREADY_ESCALATED", "This alert has already been escalated.")
+    ev.tier = "secondary"
+    _audit(db, user, "medication_alert_escalated", "escalation_event", ev.event_id)
+    db.commit()
+    notification_service.dispatch_events(db, dependent_id)
+    told = db.scalar(
+        select(func.count()).select_from(Notification).where(
+            Notification.payload["dedupe_key"].astext == f"{ev.event_id}:secondary:open"
+        )
+    )
+    return EscalateOut(confirmation_id=confirmation_id, event_id=ev.event_id, tier="secondary", notified=told or 0)

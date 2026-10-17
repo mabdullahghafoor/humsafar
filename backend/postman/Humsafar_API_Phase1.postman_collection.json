@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1-3 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication)",
+    "name": "Humsafar API - Phase 1-3 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -13810,6 +13810,1518 @@
                     "dependents",
                     "{{md_d_id}}",
                     "medications"
+                  ]
+                },
+                "description": "Login required."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "10 - Missed dose (Task 3.3)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{ms_p_email}}\",\n  \"phone\": \"{{ms_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('ms_p_email','msp'+run+'@humsafar-test.com'); pm.environment.set('ms_p_phone','03'+r());",
+                      "pm.environment.set('ms_d_email','msd'+run+'@humsafar-test.com'); pm.environment.set('ms_d_phone','03'+r());",
+                      "pm.environment.set('ms_s_email','mss'+run+'@humsafar-test.com'); pm.environment.set('ms_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('ms_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{ms_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('ms_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{ms_d_email}}\",\n  \"phone\": \"{{ms_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('ms_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{ms_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{ms_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('ms_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{ms_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('ms_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{ms_s_email}}\",\n  \"phone\": \"{{ms_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{ms_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{ms_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('ms_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('ms_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Grant medication_management to the Secondary",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/permissions/medication_management",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "permissions",
+                    "medication_management"
+                  ]
+                },
+                "description": "So the Secondary may extend doses too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{ms_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "13. Grant emergency_alerts to the Secondary",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/permissions/emergency_alerts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "permissions",
+                    "emergency_alerts"
+                  ]
+                },
+                "description": "A Secondary is only alerted about a missed dose after escalation, and only with this grant.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{ms_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Extend, escalate and confirm",
+          "item": [
+            {
+              "name": "14. Primary creates a schedule (due in about 5 minutes)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medications"
+                  ]
+                },
+                "description": "Sets the time to about 5 minutes from now so the whole flow can run. To test a REAL missed dose by hand: see docs/api/medication_contract.md (section 'Trying a missed dose by hand').",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"drug_name\": \"Metformin\",\n  \"dosage\": \"500 mg\",\n  \"times\": [\"{{ms_time}}\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const t = new Date(Date.now() + 5*60*1000 + 5*3600*1000); // Karachi is UTC+5",
+                      "pm.environment.set('ms_time', t.toISOString().substring(11,16));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('ms_sched', pm.response.json().items[0].schedule_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "15. Wait about 70 seconds for the server job",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses"
+                  ]
+                },
+                "description": "Pauses about 70 s so the job can prepare the dose."
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Wait for the server's background job (it runs every 60 seconds). The Postman run pauses here for about 70 seconds.",
+                      "setTimeout(() => {}, 70000);"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const d = pm.response.json().items.find(x => x.schedule_id === pm.environment.get('ms_sched'));",
+                      "pm.test('dose prepared, pending, no alert', () => { pm.expect(d).to.not.eql(undefined); pm.expect(d.status).to.eql('pending'); pm.expect(d.open_alert_tier).to.eql(null); });",
+                      "pm.environment.set('ms_dose', d.confirmation_id); pm.environment.set('ms_end', d.window_ends_at);"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ms_d_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{ms_d_id}}",
+                        "medication-doses"
+                      ]
+                    },
+                    "description": "Pauses about 70 s so the job can prepare the dose."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"items\": [\n    {\n      \"confirmation_id\": \"8c2d4e60-9f1a-4b3c-a5d7-6e8f0a1b2c3d\",\n      \"schedule_id\": \"5a1c7e20-3b4d-4e6f-8a90-1b2c3d4e5f60\",\n      \"drug_name\": \"Metformin\",\n      \"dosage\": \"500 mg\",\n      \"scheduled_for\": \"2026-10-17T03:00:00Z\",\n      \"status\": \"pending\",\n      \"confirmed_at\": null,\n      \"window_ends_at\": \"2026-10-17T03:40:00Z\",\n      \"open_alert_tier\": null\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "16. Escalate with no missed-dose alert (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/escalate",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "escalate"
+                  ]
+                },
+                "description": "Escalation only works while a missed-dose alert is open."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('NO_OPEN_ALERT', () => pm.expect(pm.response.json().error.code).to.eql('NO_OPEN_ALERT'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. Primary gives 10 more minutes",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
+                  ]
+                },
+                "description": "FR-D1 option 1. `minutes` 5 to 120 (default 30). The new deadline is `minutes` AFTER the current deadline (or after now if it has passed). A missed dose goes back to pending and its alert closes. The Dependent gets a critical 'more time' alert.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"minutes\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const b = pm.response.json();",
+                      "pm.test('deadline moved by 10 minutes', () => pm.expect(new Date(b.window_ends_at).getTime() - new Date(pm.environment.get('ms_end')).getTime()).to.eql(10*60*1000));",
+                      "pm.test('still pending', () => pm.expect(b.status).to.eql('pending'));"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ms_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{ms_d_id}}",
+                        "medication-doses",
+                        "{{ms_dose}}",
+                        "extend"
+                      ]
+                    },
+                    "description": "FR-D1 option 1. `minutes` 5 to 120 (default 30). The new deadline is `minutes` AFTER the current deadline (or after now if it has passed). A missed dose goes back to pending and its alert closes. The Dependent gets a critical 'more time' alert.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"minutes\": 10\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"confirmation_id\": \"8c2d4e60-9f1a-4b3c-a5d7-6e8f0a1b2c3d\",\n  \"schedule_id\": \"5a1c7e20-3b4d-4e6f-8a90-1b2c3d4e5f60\",\n  \"drug_name\": \"Metformin\",\n  \"dosage\": \"500 mg\",\n  \"scheduled_for\": \"2026-10-17T03:00:00Z\",\n  \"status\": \"pending\",\n  \"confirmed_at\": null,\n  \"window_ends_at\": \"2026-10-17T03:40:00Z\",\n  \"open_alert_tier\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "18. Dependent got the 'more time' alert",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/notifications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": "A critical alert to the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('there', () => pm.expect(pm.response.json().items.some(n => n.type === 'medication_extended' && n.priority === 'critical')).to.eql(true));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "19. Secondary (granted) can extend too",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
+                  ]
+                },
+                "description": "A Secondary with `medication_management` may also give more time. No body = 30 minutes."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "20. Step 1: Dependent asks to confirm",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/medications/{{ms_sched}}/confirm-request",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "medications",
+                    "{{ms_sched}}",
+                    "confirm-request"
+                  ]
+                },
+                "description": "Same two-step confirmation as Task 3.2.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('ms_ctoken', pm.response.json().confirm_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. Step 2: confirm",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/medications/{{ms_sched}}/confirm",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "medications",
+                    "{{ms_sched}}",
+                    "confirm"
+                  ]
+                },
+                "description": "Marks the dose taken.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"confirm_token\": \"{{ms_ctoken}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('taken', () => pm.expect(pm.response.json().status).to.eql('taken'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "22. Cannot extend a taken dose (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
+                  ]
+                },
+                "description": "Nothing left to extend."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('DOSE_ALREADY_CONFIRMED', () => pm.expect(pm.response.json().error.code).to.eql('DOSE_ALREADY_CONFIRMED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests",
+          "item": [
+            {
+              "name": "23. Too few minutes (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
+                  ]
+                },
+                "description": "5 to 120 minutes.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"minutes\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. Too many minutes (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
+                  ]
+                },
+                "description": "5 to 120 minutes.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"minutes\": 500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Dependent cannot extend (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
+                  ]
+                },
+                "description": "Only Guardians."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "26. Dependent cannot escalate (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/escalate",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "escalate"
+                  ]
+                },
+                "description": "Only Guardians."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. Unknown dose (expect 404)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/00000000-0000-0000-0000-000000000000/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "00000000-0000-0000-0000-000000000000",
+                    "extend"
+                  ]
+                },
+                "description": "No such dose for this Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('DOSE_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('DOSE_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "28. Revoke the Secondary's medication access",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/permissions/medication_management",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "permissions",
+                    "medication_management"
+                  ]
+                },
+                "description": "Revoke first.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{ms_s_id}}\",\n  \"granted\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "29. Secondary without the grant (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{ms_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
+                  ]
+                },
+                "description": "Default deny."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "30. No token (expect 401)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{ms_d_id}}/medication-doses/{{ms_dose}}/extend",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{ms_d_id}}",
+                    "medication-doses",
+                    "{{ms_dose}}",
+                    "extend"
                   ]
                 },
                 "description": "Login required."
