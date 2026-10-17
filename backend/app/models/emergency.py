@@ -6,6 +6,7 @@ Traces to: FR-D1, FR-D4, FR-D5, FR-R1.
 """
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     Column,
     DateTime,
@@ -13,6 +14,7 @@ from sqlalchemy import (
     Integer,
     String,
     Time,
+    UniqueConstraint,
     text,
 )
 from sqlalchemy.dialects.postgresql import UUID
@@ -33,6 +35,9 @@ class WellnessCheckSchedule(Base):
     dependent_id = fk_col("dependent_profiles.user_id", index=True)
     time_window = Column(Time, nullable=False)  # e.g. 08:00 (one row per window)
     grace_period_min = Column(Integer, nullable=False, server_default=text("30"))
+    # Task 3.4 (clarification 45): switching a check off keeps its history; created_at stops "late" first prompts.
+    active = Column(Boolean, nullable=False, server_default=text("true"))
+    created_at = ts_col()
 
     __table_args__ = (
         CheckConstraint("grace_period_min > 0", name="grace_positive"),
@@ -48,6 +53,11 @@ class WellnessCheckResponse(Base):
     responded_at = Column(DateTime(timezone=True), nullable=True)
     # NOT NULL: safety-critical (SDS 9.4)
     status = Column(String(20), nullable=False, server_default=text("'pending'"))
+
+    __table_args__ = (
+        # Task 3.4: one prompt per check per time, even if two processes run the job at once.
+        UniqueConstraint("wc_id", "prompted_at", name="uq_wellness_prompt"),
+    )
 
 
 class EscalationEvent(Base):

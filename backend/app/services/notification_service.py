@@ -39,6 +39,8 @@ from app.models import (
     PermissionGrant,
     PushToken,
     User,
+    WellnessCheckResponse,
+    WellnessCheckSchedule,
 )
 from app.schemas.notification import NotificationList, NotificationOut
 from app.services import push_service
@@ -71,7 +73,9 @@ EVENT_RULES: dict[str, Rule] = {
     "fall": Rule("Possible fall", "{name} may have fallen.", LINKED_PERMITTED),
     "missed_dose": Rule("Missed medication", "{name} has not taken {drug} ({dosage}) due at {time}.", BY_TIER,
                         "Missed dose closed", "{name} {outcome}."),
-    "wellness_check": Rule("Wellness check not answered", "{name} has not answered the wellness check.", BY_TIER),
+    "wellness_check": Rule("Wellness check not answered",
+                           "{name} has not answered the {time} wellness check, and their phone shows no recent activity.", BY_TIER,
+                           "Wellness check answered", "{name} has confirmed they are OK."),
     "panic": Rule("PANIC ALERT", "{name} pressed the panic button and needs help now.", ALL_LINKED),
 }
 
@@ -198,6 +202,18 @@ def _event_details(db: Session, ev: EscalationEvent) -> tuple[dict, dict]:
                 "scheduled_for": c.scheduled_for.isoformat(), "drug_name": s.drug_name, "dosage": s.dosage,
             }
             return words, extra
+    if ev.trigger_type == "wellness_check" and ev.reference_id:
+        row = db.execute(
+            select(WellnessCheckResponse, WellnessCheckSchedule)
+            .join(WellnessCheckSchedule, WellnessCheckSchedule.wc_id == WellnessCheckResponse.wc_id)
+            .where(WellnessCheckResponse.response_id == ev.reference_id)
+        ).first()
+        if row:
+            r, w = row
+            local = r.prompted_at.astimezone(ZoneInfo(get_settings().WELLNESS_TIMEZONE))
+            return {"time": f"{local:%H:%M}"}, {
+                "response_id": str(r.response_id), "wc_id": str(w.wc_id), "prompted_at": r.prompted_at.isoformat(),
+            }
     return {}, {}
 
 

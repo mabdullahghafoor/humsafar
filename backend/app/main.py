@@ -16,16 +16,18 @@ from fastapi import FastAPI
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core import scheduler
-from app.routers import auth, device_health, geofence, health, kyc, linkage, location, medication, notifications, permissions
-from app.services import device_health_service, medication_service, notification_service
+from app.routers import auth, device_health, geofence, health, kyc, linkage, location, medication, notifications, permissions, wellness
+from app.services import device_health_service, medication_service, notification_service, wellness_service
 
 settings = get_settings()
 
 # Background jobs (Task 2.3). Each runs every SCHEDULER_TICK_S seconds; see app/core/scheduler.py.
 scheduler.register("device_offline_sweep", device_health_service.sweep_offline)
 scheduler.register("medication_missed_sweep", medication_service.sweep_missed)  # Task 3.3 (before the dispatch, so alerts go out the same minute)
+scheduler.register("wellness_sweep", wellness_service.sweep)  # Task 3.4 (before the dispatch)
 scheduler.register("notification_dispatch", notification_service.dispatch_events)  # Task 3.1 (after the sweep)
 scheduler.register("medication_tick", medication_service.tick)  # Task 3.2
+scheduler.register("wellness_tick", wellness_service.tick)  # Task 3.4
 
 
 @asynccontextmanager
@@ -63,6 +65,7 @@ app.include_router(geofence.router)  # Task 2.2
 app.include_router(device_health.router)  # Task 2.3
 app.include_router(notifications.router)  # Task 3.1
 app.include_router(medication.router)  # Task 3.2
+app.include_router(wellness.router)  # Task 3.4
 
 # Future (added as each phase is implemented):
 # app.include_router(emergency.router, prefix="/emergency", tags=["Emergency"]) # Phase 3
