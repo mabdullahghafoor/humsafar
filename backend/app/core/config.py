@@ -64,6 +64,12 @@ class Settings(BaseSettings):
     MEDICATION_MAX_ACTIVE_SCHEDULES: int = 30  # per Dependent
     MEDICATION_MISSED_ALERT_MAX_AGE_S: int = 21600  # a dose found missed after more than 6 h (e.g. server was down) is marked, not alerted
 
+    # Task 3.4: wellness check (FR-D4). Check times are local clock times in this time zone.
+    WELLNESS_TIMEZONE: str = "Asia/Karachi"
+    WELLNESS_MAX_WINDOWS: int = 3  # active checks per Dependent (SRS: "up to three per day")
+    WELLNESS_ACTIVITY_WINDOW_S: int = 1800  # "recent device activity" = a location fix in the last 30 minutes
+    WELLNESS_ALERT_MAX_AGE_S: int = 21600  # a check found unanswered more than 6 h after its deadline is closed, not alerted
+
     SCHEDULER_ENABLED: bool = True
     SCHEDULER_TICK_S: int = 60
 
