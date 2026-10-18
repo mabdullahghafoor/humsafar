@@ -7,7 +7,7 @@ For Talha (Guardian alert screens) and Sarim (test cases for the escalation chai
 2. If the Primary does not **open** it within **5 minutes**, the server moves it to **secondary**: Secondary Guardians who have `emergency_alerts` get the same alert (`data.tier` = `secondary`).
 3. If nobody opens it within 5 more minutes, it moves to **external_contact**. (Sending the SMS to the external contact is Task 3.8.)
 4. "Open" means the Guardian tapped the notification (`POST /notifications/{id}/acknowledge`) or called `POST /escalations/{event_id}/acknowledge`. That **stops the chain**.
-5. A level with nobody to tell is skipped. Panic tells all Guardians at once, so it goes straight to `external_contact`.
+5. A level with nobody to tell is skipped. Panic tells all Guardians at once, so it goes straight to `external_contact` (and nobody is sent the panic alert a second time).
 6. The event closes when the problem is solved (dose taken, "I am OK", ...). Everyone who was told gets a standard all-clear.
 
 Geofence, battery and offline alerts do not climb the chain.
