@@ -68,7 +68,7 @@ The server sends a Firebase message with a `notification` (title, body) and this
 ```
 * `priority: "critical"` should open a **high-importance Android channel** (sound, heads-up). `standard` uses a normal channel.
 * When the app opens from a push, call `GET /notifications` (the push may have been missed) and show the alert, then `acknowledge` when the person confirms it.
-* **Until Firebase is connected the server uses a mock sender** (it only records the message). The tokens, inbox and acknowledgment work for real now. Talha: please create the Firebase project and send Abdullah the service-account key when you start 3.14 (see `sds_clarifications.md` item 29).
+* **Until Firebase is connected the server uses a mock sender** (it only records the message). The tokens, inbox and acknowledgment work for real now. Talha: please create the Firebase project and send Abdullah the service-account key when you start 3.14 (see `../backend/sds_clarifications.md` item 29).
 
 ## Timing
 * Alerts that come from a phone upload (geofence breach, low battery, all-clear) are created **inside that upload request**, so Guardians are told in seconds.

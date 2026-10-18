@@ -63,7 +63,7 @@ def check(condition: bool, ok_msg: str, fail_msg: str) -> None:
         failures.append(fail_msg)
 
 
-# Tables added AFTER the SDS freeze, each recorded in docs/sds_clarifications.md.
+# Tables added AFTER the SDS freeze, each recorded in docs/backend/sds_clarifications.md.
 APPROVED_EXTRA_TABLES = {"push_tokens"}  # item 29 (Task 3.1)
 
 
