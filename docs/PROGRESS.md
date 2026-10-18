@@ -26,7 +26,8 @@ Statuses: Done = merged into `dev`.
 | 3.4 | Guardian wellness check: up to 3 daily "Are you OK?" prompts, grace period, device-activity cross-check, alert to the Primary if unanswered (+ contract `docs/api/wellness_contract.md`) | Done |
 | 3.5 | Escalation chain: Primary, then Secondary, then external-contact level, by timers; Guardian acknowledge stops it (+ contract `docs/api/escalation_contract.md`) | Done |
 | 3.6 | Panic Mode: Dependent button tells every linked Guardian at once, permissions ignored; one open panic at a time; close by Dependent or Primary (+ contract `docs/api/panic_contract.md`) | Done |
-| 3.7 | Remote Alarm Override: Primary Guardian only, loud alarm on the Dependent's phone, start / status / stop (+ contract `docs/api/alarm_contract.md`) | In review (PR) |
+| 3.7 | Remote Alarm Override: Primary Guardian only, loud alarm on the Dependent's phone, start / status / stop (+ contract `docs/api/alarm_contract.md`) | Done |
+| 3.8 | External Emergency Contact fallback: ONE contact per Dependent, mock SMS when an alert reaches the last escalation level, retries, all-clear (+ contract `docs/api/emergency_contact_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`

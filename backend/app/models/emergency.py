@@ -78,6 +78,12 @@ class EscalationEvent(Base):
     tier_changed_at = ts_col()
     acknowledged_at = Column(DateTime(timezone=True), nullable=True)
     acknowledged_by = Column(UUID(as_uuid=True), nullable=True)
+    # Task 3.8 (clarification 69): the external-contact SMS. result: sending | sent | failed | no_contact (NULL = not yet).
+    external_result = Column(String(20), nullable=True)
+    external_attempts = Column(Integer, nullable=False, server_default=text("0"))
+    external_attempted_at = Column(DateTime(timezone=True), nullable=True)
+    external_notified_at = Column(DateTime(timezone=True), nullable=True)
+    external_cleared_at = Column(DateTime(timezone=True), nullable=True)
 
     __table_args__ = (
         CheckConstraint(in_list("tier", ESCALATION_TIERS), name="tier_valid"),
@@ -99,3 +105,8 @@ class EmergencyContact(Base):
     dependent_id = fk_col("dependent_profiles.user_id", index=True)
     name = Column(String(100), nullable=False)
     phone = Column(String(20), nullable=False)
+
+    __table_args__ = (
+        # Task 3.8 (FR-R1: "designate ONE external emergency contact"): one row per Dependent.
+        UniqueConstraint("dependent_id", name="uq_emergency_contact_dependent"),
+    )
