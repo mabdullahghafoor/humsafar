@@ -70,6 +70,9 @@ class Settings(BaseSettings):
     WELLNESS_ACTIVITY_WINDOW_S: int = 1800  # "recent device activity" = a location fix in the last 30 minutes
     ESCALATION_PRIMARY_TIMEOUT_S: int = 300  # Task 3.5: Primary has 5 min to open the alert before the Secondaries are told
     ESCALATION_SECONDARY_TIMEOUT_S: int = 300  # then Secondaries have 5 more min before the external contact
+    SMS_PROVIDER: str = "mock"  # Task 3.8: a real gateway is one new class in sms_service.py
+    SMS_MAX_ATTEMPTS: int = 3  # tries for one external-contact SMS
+    SMS_RETRY_S: int = 60  # wait between tries
     ALARM_DEFAULT_S: int = 60  # Task 3.7: how long the Dependent's phone sounds the alarm unless told otherwise
     ALARM_MIN_S: int = 10
     ALARM_MAX_S: int = 300

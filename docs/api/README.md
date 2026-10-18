@@ -24,6 +24,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `escalation_contract.md` | the escalation chain: Primary, Secondary, external contact; timers; acknowledge |
 | `panic_contract.md` | Panic Mode: the big button, who is told, closing it |
 | `alarm_contract.md` | Remote Alarm Override: Primary-only loud alarm on the Dependent's phone |
+| `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `../sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
 ## 3. All endpoints
@@ -78,6 +79,9 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | POST `/dependents/{id}/alarm` | **Primary Guardian only** (not delegable) | Sound the alarm on the Dependent's phone (10 to 300 s) |
 | GET `/dependents/{id}/alarm` | The Primary, or the Dependent's phone | Is an alarm sounding? |
 | POST `/dependents/{id}/alarm/stop` | The Primary, or the Dependent | Stop the alarm |
+| PUT `/dependents/{id}/emergency-contact` | **Primary Guardian only** | Set / replace the ONE external emergency contact |
+| GET `/dependents/{id}/emergency-contact` | The Primary, or a Secondary with `emergency_alerts` | Read it |
+| DELETE `/dependents/{id}/emergency-contact` | **Primary Guardian only** | Remove it |
 | PUT `/devices/push-token` | logged in | Register this phone's Firebase token |
 | DELETE `/devices/push-token?token=` | logged in | Forget the token (logout) |
 | GET `/health`, `/health/db` | anyone | Liveness checks |
@@ -94,7 +98,7 @@ Every error has the same shape; branch on `error.code`, never on `message`:
 | 400 | `CONFIRM_TOKEN_EXPIRED`, `CONFIRM_TOKEN_INVALID`, `INVITE_EXPIRED`, `INVITE_INVALID`, `OTP_INVALID`, `PRIMARY_NOT_GOVERNABLE` |
 | 401 | `NOT_AUTHENTICATED`, `INVALID_CREDENTIALS`, `TOKEN_EXPIRED` (call refresh, retry once), `TOKEN_INVALID`, `TOKEN_WRONG_TYPE` |
 | 403 | `ACCOUNT_NOT_ACTIVATED`, `FORBIDDEN`, `GUARDIAN_NOT_VERIFIED`, `INVITE_NOT_FOR_YOU`, `MODULE_ACCESS_DENIED`, `NOT_LINKED_TO_DEPENDENT`, `NOT_PRIMARY_GUARDIAN`, `PRIMARY_CANNOT_ACCEPT_INVITE`, `SECONDARY_CANNOT_LINK` |
-| 404 | `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `DOSE_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `MEDICATION_NOT_FOUND`, `NO_DOSE_DUE`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND`, `ESCALATION_NOT_FOUND`, `WELLNESS_CHECK_NOT_FOUND` |
+| 404 | `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `DOSE_NOT_FOUND`, `EMERGENCY_CONTACT_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `MEDICATION_NOT_FOUND`, `NO_DOSE_DUE`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND`, `ESCALATION_NOT_FOUND`, `WELLNESS_CHECK_NOT_FOUND` |
 | 409 | `ALREADY_ESCALATED`, `ALREADY_LINKED`, `ALREADY_REGISTERED`, `ALREADY_VERIFIED`, `CNIC_ALREADY_REGISTERED`, `DOSE_ALREADY_CONFIRMED`, `EMAIL_ALREADY_REGISTERED`, `GEOFENCE_LIMIT_REACHED`, `GUARDIAN_CAP_REACHED`, `INVITEE_NOT_ELIGIBLE`, `MEDICATION_LIMIT_REACHED`, `NO_ACTIVE_ALARM`, `NO_ACTIVE_PANIC`, `NO_OPEN_ALERT`, `SCHEDULE_ALREADY_EXISTS`, `WELLNESS_LIMIT_REACHED`, `WELLNESS_TIME_EXISTS`, `PHONE_ALREADY_REGISTERED`, `PRIMARY_ALREADY_EXISTS` |
 | 422 | `VALIDATION_ERROR` (`details.fields` lists each bad field), `UNKNOWN_MODULE`, `TIMESTAMP_IN_FUTURE`, `TIMESTAMP_TOO_OLD`, `INVALID_RANGE` |
 | 500 | `INTERNAL_ERROR` |

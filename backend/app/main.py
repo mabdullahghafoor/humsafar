@@ -16,8 +16,8 @@ from fastapi import FastAPI
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core import scheduler
-from app.routers import alarm, auth, device_health, escalation, geofence, health, kyc, linkage, location, medication, notifications, panic, permissions, wellness
-from app.services import device_health_service, escalation_service, medication_service, notification_service, wellness_service
+from app.routers import alarm, auth, device_health, emergency_contact, escalation, geofence, health, kyc, linkage, location, medication, notifications, panic, permissions, wellness
+from app.services import device_health_service, escalation_service, external_contact_service, medication_service, notification_service, wellness_service
 
 settings = get_settings()
 
@@ -26,6 +26,7 @@ scheduler.register("device_offline_sweep", device_health_service.sweep_offline)
 scheduler.register("medication_missed_sweep", medication_service.sweep_missed)  # Task 3.3 (before the dispatch, so alerts go out the same minute)
 scheduler.register("wellness_sweep", wellness_service.sweep)  # Task 3.4 (before the dispatch)
 scheduler.register("escalation_sweep", escalation_service.sweep)  # Task 3.5 (after the other sweeps, before the dispatch)
+scheduler.register("external_contact_sweep", external_contact_service.sweep)  # Task 3.8 (after the escalation sweep)
 scheduler.register("notification_dispatch", notification_service.dispatch_events)  # Task 3.1 (after the sweep)
 scheduler.register("medication_tick", medication_service.tick)  # Task 3.2
 scheduler.register("wellness_tick", wellness_service.tick)  # Task 3.4
@@ -68,6 +69,7 @@ app.include_router(notifications.router)  # Task 3.1
 app.include_router(medication.router)  # Task 3.2
 app.include_router(wellness.router)  # Task 3.4
 app.include_router(escalation.router)  # Task 3.5
+app.include_router(emergency_contact.router)  # Task 3.8
 app.include_router(panic.router)  # Task 3.6
 app.include_router(alarm.router)  # Task 3.7
 

@@ -5,7 +5,7 @@ For Talha (Guardian alert screens) and Sarim (test cases for the escalation chai
 ## The idea in 6 lines
 1. An alert that needs a person (missed dose, unanswered wellness check, panic) is an **event**. It starts at the **primary** level: the Primary Guardian gets a critical notification.
 2. If the Primary does not **open** it within **5 minutes**, the server moves it to **secondary**: Secondary Guardians who have `emergency_alerts` get the same alert (`data.tier` = `secondary`).
-3. If nobody opens it within 5 more minutes, it moves to **external_contact**. (Sending the SMS to the external contact is Task 3.8.)
+3. If nobody opens it within 5 more minutes, it moves to **external_contact**. (Then the server texts the external contact, Task 3.8: see `emergency_contact_contract.md`.)
 4. "Open" means the Guardian tapped the notification (`POST /notifications/{id}/acknowledge`) or called `POST /escalations/{event_id}/acknowledge`. That **stops the chain**.
 5. A level with nobody to tell is skipped. Panic tells all Guardians at once, so it goes straight to `external_contact` (and nobody is sent the panic alert a second time).
 6. The event closes when the problem is solved (dose taken, "I am OK", ...). Everyone who was told gets a standard all-clear.
@@ -29,3 +29,6 @@ A Guardian who was told says "I have seen it". Acknowledges all of the caller's 
 
 ## Trying it by hand
 Start the server with short timers: `$env:ESCALATION_PRIMARY_TIMEOUT_S="60"; $env:ESCALATION_SECONDARY_TIMEOUT_S="60"; uvicorn app.main:app --reload`. Make a missed dose or wellness check alert (see their contracts). Do not open it: after about 1 minute the event shows `secondary`, after about 1 more minute `external_contact`. The job runs once a minute, so each step can take up to a minute extra.
+
+## The last level: external contact (Task 3.8)
+When an alert reaches `external_contact`, the server sends ONE SMS to the Dependent's emergency contact and tells the Primary Guardian. See `emergency_contact_contract.md`.
