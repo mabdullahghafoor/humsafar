@@ -29,7 +29,7 @@ class _CnicMixin(BaseModel):
 
 class DependentKycRequest(_CnicMixin):
     # No JWT can exist for an un-activated Dependent (SDS 11.3), so the Dependent
-    # re-proves who they are with their password. See docs/sds_clarifications.md.
+    # re-proves who they are with their password. See docs/backend/sds_clarifications.md.
     password: str = Field(min_length=1, max_length=128)
     # Base64 photo from the liveness capture. Not stored (the SDS has no column for it).
     liveness_image: str = Field(min_length=1, max_length=3_000_000)

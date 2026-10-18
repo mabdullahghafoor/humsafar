@@ -42,7 +42,7 @@ Every Dependent this Guardian is linked to (FR-B4 "switch between Dependents"):
 [ { "dependent_id": "uuid", "email": "...", "phone": "+92...", "my_role": "primary",
     "kyc_status": "verified", "account_active": true, "linked_at": "..." } ]
 ```
-`kyc_status`: `pending` | `verified` | `failed`. There is no name field (see `sds_clarifications.md`).
+`kyc_status`: `pending` | `verified` | `failed`. There is no name field (see `../backend/sds_clarifications.md`).
 
 ### GET /dependents/{id}/guardians → 200
 Everyone linked to this Dependent, Primary first. Only Guardians linked to that Dependent may call it (else 403 `NOT_LINKED_TO_DEPENDENT`).
@@ -51,7 +51,7 @@ Everyone linked to this Dependent, Primary first. Only Guardians linked to that 
 ```
 
 ## 3. How the Dependent's ID reaches the Guardian
-The SDS does not say. The Dependent receives their `user_id` from `/auth/register`; the Dependent app should show it (text or QR) so the Primary can enter or scan it. Talha: please plan this screen. See the open security note in `sds_clarifications.md` (item 9).
+The SDS does not say. The Dependent receives their `user_id` from `/auth/register`; the Dependent app should show it (text or QR) so the Primary can enter or scan it. Talha: please plan this screen. See the open security note in `../backend/sds_clarifications.md` (item 9).
 
 ## 4. Typical demo flow (ICP-1)
 1. Guardian registers, logs in, verifies (CNIC or OTP).

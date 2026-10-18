@@ -57,6 +57,6 @@ No liveness photo for Guardians (FR-A3). The Guardian's CNIC number is not store
 | OTP | always `123456` (configurable via `MOCK_OTP_CODE`) |
 
 ## 5. Added or deviating (flagged)
-- `POST /dependents/{id}/kyc-verify` is the SDS 11.1 endpoint, but the SDS marks it "JWT" while 11.3 says Dependents get no token before verification. We authenticate by password in the body. See `docs/sds_clarifications.md`.
+- `POST /dependents/{id}/kyc-verify` is the SDS 11.1 endpoint, but the SDS marks it "JWT" while 11.3 says Dependents get no token before verification. We authenticate by password in the body. See `docs/backend/sds_clarifications.md`.
 - All `/guardians/me/*` endpoints are additions; the SDS lists no Guardian verification endpoint.
 - Rate limiting on these endpoints (SDS 17) is deferred to hardening.

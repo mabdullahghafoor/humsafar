@@ -25,7 +25,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `panic_contract.md` | Panic Mode: the big button, who is told, closing it |
 | `alarm_contract.md` | Remote Alarm Override: Primary-only loud alarm on the Dependent's phone |
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
-| `../sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
+| `../backend/sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
 ## 3. All endpoints
 | Method and path | Who | Purpose |
