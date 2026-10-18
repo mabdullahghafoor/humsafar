@@ -76,7 +76,8 @@ EVENT_RULES: dict[str, Rule] = {
     "wellness_check": Rule("Wellness check not answered",
                            "{name} has not answered the {time} wellness check, and their phone shows no recent activity.", BY_TIER,
                            "Wellness check answered", "{name} has confirmed they are OK."),
-    "panic": Rule("PANIC ALERT", "{name} pressed the panic button and needs help now.", ALL_LINKED),
+    "panic": Rule("PANIC ALERT", "{name} pressed the panic button and needs help now.", ALL_LINKED,
+                  "Panic alert closed", "The panic alert for {name} has been closed."),
 }
 
 
@@ -221,10 +222,12 @@ def _notify_event(db: Session, ev: EscalationEvent, rule: Rule) -> int:
     name = _display_name(db, ev.dependent_id)
     words, more = _event_details(db, ev)
     sent = 0
+    # Everyone is told at once (panic): moving up the escalation chain must not tell them all a second time.
+    key = f"{ev.event_id}:all:open" if rule.audience == ALL_LINKED else f"{ev.event_id}:{ev.tier}:open"
     for uid in recipients(db, ev.dependent_id, rule.audience, ev.tier):
         n = notify(
             db, uid, ev.trigger_type, CRITICAL, rule.title, rule.body.format_map(_Safe(name=name, **words)),
-            dependent_id=ev.dependent_id, event_id=ev.event_id, dedupe_key=f"{ev.event_id}:{ev.tier}:open",
+            dependent_id=ev.dependent_id, event_id=ev.event_id, dedupe_key=key,
             extra={"tier": ev.tier, **more},
         )
         sent += n is not None
