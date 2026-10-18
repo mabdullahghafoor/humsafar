@@ -16,7 +16,7 @@ from fastapi import FastAPI
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core import scheduler
-from app.routers import auth, device_health, escalation, geofence, health, kyc, linkage, location, medication, notifications, panic, permissions, wellness
+from app.routers import alarm, auth, device_health, escalation, geofence, health, kyc, linkage, location, medication, notifications, panic, permissions, wellness
 from app.services import device_health_service, escalation_service, medication_service, notification_service, wellness_service
 
 settings = get_settings()
@@ -69,6 +69,7 @@ app.include_router(medication.router)  # Task 3.2
 app.include_router(wellness.router)  # Task 3.4
 app.include_router(escalation.router)  # Task 3.5
 app.include_router(panic.router)  # Task 3.6
+app.include_router(alarm.router)  # Task 3.7
 
 # Future (added as each phase is implemented):
 # app.include_router(emergency.router, prefix="/emergency", tags=["Emergency"]) # Phase 3
