@@ -1,0 +1,9 @@
+# Who must review changes to which folders.
+# GitHub automatically asks the owner to review any pull request that touches these paths.
+
+/docs/README.md     @jawadsarim
+/docs/reference/    @jawadsarim
+/docs/design/       @jawadsarim
+/docs/qa/           @jawadsarim
+/docs/diagrams/     @jawadsarim
+/docs/reports/      @jawadsarim
