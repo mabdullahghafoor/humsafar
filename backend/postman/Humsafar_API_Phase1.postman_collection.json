@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1-3 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact)",
+    "name": "Humsafar API - Phase 1-4 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -22325,6 +22325,1514 @@
                     "dependents",
                     "{{ec_d_id}}",
                     "emergency-contact"
+                  ]
+                },
+                "description": "Login required."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "16 - Messaging (Task 4.2)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{mg_p_email}}\",\n  \"phone\": \"{{mg_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('mg_p_email','mgp'+run+'@humsafar-test.com'); pm.environment.set('mg_p_phone','03'+r());",
+                      "pm.environment.set('mg_d_email','mgd'+run+'@humsafar-test.com'); pm.environment.set('mg_d_phone','03'+r());",
+                      "pm.environment.set('mg_s_email','mgs'+run+'@humsafar-test.com'); pm.environment.set('mg_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('mg_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{mg_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('mg_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{mg_d_email}}\",\n  \"phone\": \"{{mg_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('mg_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{mg_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{mg_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{mg_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{mg_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{mg_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{mg_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('mg_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{mg_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{mg_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{mg_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('mg_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{mg_s_email}}\",\n  \"phone\": \"{{mg_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{mg_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{mg_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('mg_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('mg_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Get the Primary's id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "We need the Primary's user id to write to them."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('mg_p_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Send, read, history",
+          "item": [
+            {
+              "name": "13. Primary sends a message",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "Text, 1 to 2000 characters. Spaces at both ends are removed. The Dependent gets a standard notification.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"  Did you eat?  \",\n  \"client_id\": \"{{$guid}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('trimmed and standard', () => { pm.expect(j.body).to.eql('Did you eat?'); pm.expect(j.priority).to.eql('standard'); pm.expect(j.from_me).to.eql(true); pm.expect(j.already_sent).to.eql(false); pm.expect(j.read_at).to.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "201 Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{mg_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/messages",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "messages"
+                      ]
+                    },
+                    "description": "Text, 1 to 2000 characters. Spaces at both ends are removed. The Dependent gets a standard notification.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"  Did you eat?  \",\n  \"client_id\": \"{{$guid}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"message_id\": \"7c1e9a52-3b4d-4f60-8a1e-5d2c9b7f0e11\",\n  \"sender_id\": \"00000000-0000-0000-0000-000000000001\",\n  \"receiver_id\": \"00000000-0000-0000-0000-000000000002\",\n  \"type\": \"text\",\n  \"body\": \"Did you eat?\",\n  \"content_url\": null,\n  \"priority\": \"standard\",\n  \"sent_at\": \"2026-10-19T16:00:00Z\",\n  \"read_at\": null,\n  \"from_me\": true,\n  \"already_sent\": false\n}"
+                }
+              ]
+            },
+            {
+              "name": "14. Dependent replies",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "A Dependent writes to a linked Guardian.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_p_id}}\",\n  \"body\": \"Yes, thanks\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "15. Dependent got a message notification",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/notifications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": "type = message, standard."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const it = pm.response.json().items.filter(i => i.type === 'message');",
+                      "pm.test('one message notification', () => { pm.expect(it.length).to.eql(1); pm.expect(it[0].priority).to.eql('standard'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "16. Send again with the SAME client_id (safe retry)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "Run this twice: the first time 201, a repeat gives 200 and already_sent = true. Nothing is sent twice.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"Retry me\",\n  \"client_id\": \"5f3a1c70-2d4b-4e86-9c11-0a7b6d8e2f45\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201 first time or 200 on repeat', () => pm.expect([200, 201]).to.include(pm.response.code));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. Same client_id again: 200, already sent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"Retry me\",\n  \"client_id\": \"5f3a1c70-2d4b-4e86-9c11-0a7b6d8e2f45\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('already sent', () => pm.expect(pm.response.json().already_sent).to.eql(true));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "18. Conversations (Dependent)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/conversations",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "conversations"
+                  ]
+                },
+                "description": "Most recent first, with unread count."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('2 unread from the Primary', () => { pm.expect(j.items.length).to.eql(1); pm.expect(j.items[0].unread_count).to.eql(2); pm.expect(j.total_unread).to.eql(2); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "19. History with the Primary (Dependent)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages?with_user_id={{mg_p_id}}&limit=2",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_user_id",
+                      "value": "{{mg_p_id}}"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "2"
+                    }
+                  ]
+                },
+                "description": "Newest first. If next_before is not null, pass it as ?before=."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('2 items and more to load', () => { pm.expect(j.items.length).to.eql(2); pm.expect(j.next_before).to.not.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "20. Mark as read (Dependent)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/read",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "read"
+                  ]
+                },
+                "description": "Marks every message from that person as read. Safe to repeat.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"with_user_id\": \"{{mg_p_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('2 marked', () => pm.expect(pm.response.json().marked_read).to.eql(2));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. The Primary sees the read time",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages?with_user_id={{mg_d_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_user_id",
+                      "value": "{{mg_d_id}}"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const m = pm.response.json().items.find(i => i.body === 'Did you eat?');",
+                      "pm.test('read_at is set', () => pm.expect(m.read_at).to.not.eql(null));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "22. Secondary has no access yet (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "A Secondary needs the communication permission from the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"Hi\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. Give the Secondary communication",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{mg_d_id}}/permissions/communication",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{mg_d_id}}",
+                    "permissions",
+                    "communication"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{mg_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. Secondary can now send",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"Hi from the Secondary\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Take it away again",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{mg_d_id}}/permissions/communication",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{mg_d_id}}",
+                    "permissions",
+                    "communication"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{mg_s_id}}\",\n  \"granted\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "26. Secondary cannot read the history now (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages?with_user_id={{mg_d_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_user_id",
+                      "value": "{{mg_d_id}}"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests",
+          "item": [
+            {
+              "name": "27. Empty text (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"   \"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "28. Guardian to Guardian (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "Only a Guardian and a linked Dependent can talk.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_s_id}}\",\n  \"body\": \"Hi\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('NOT_LINKED_TO_DEPENDENT', () => pm.expect(pm.response.json().error.code).to.eql('NOT_LINKED_TO_DEPENDENT'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "29. Same client_id, different text (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"receiver_id\": \"{{mg_d_id}}\",\n  \"body\": \"A different text\",\n  \"client_id\": \"5f3a1c70-2d4b-4e86-9c11-0a7b6d8e2f45\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('CLIENT_ID_REUSED', () => pm.expect(pm.response.json().error.code).to.eql('CLIENT_ID_REUSED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "30. Bad limit (expect 422)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{mg_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages?with_user_id={{mg_d_id}}&limit=0",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_user_id",
+                      "value": "{{mg_d_id}}"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "31. No token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/messages/conversations",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "conversations"
                   ]
                 },
                 "description": "Login required."

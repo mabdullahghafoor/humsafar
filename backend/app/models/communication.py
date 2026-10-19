@@ -5,7 +5,7 @@ Traces to: FR-E1, FR-E2, FR-E4, FR-E5, FR-M1, FR-M2.
 """
 
 from sqlalchemy import CheckConstraint, Column, DateTime, Index, Integer, String, Text, text
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 
 from app.core.database import Base
 from app.models._common import fk_col, in_list, ts_col, uuid_pk
@@ -27,11 +27,20 @@ class Message(Base):
     content_url = Column(Text, nullable=True)
     priority = Column(String(20), nullable=False, server_default=text("'standard'"))
     sent_at = ts_col()
+    # Task 4.2 (clarification 76): the SDS has no text column, so the text of a text message lives in `body`.
+    body = Column(Text, nullable=True)
+    # When the receiver opened the conversation. NULL = unread.
+    read_at = Column(DateTime(timezone=True), nullable=True)
+    # Chosen by the app for each message, so a retry on a bad network does not send it twice.
+    client_id = Column(UUID(as_uuid=True), nullable=True)
 
     __table_args__ = (
         CheckConstraint(in_list("type", MESSAGE_TYPES), name="type_valid"),
         CheckConstraint(in_list("priority", PRIORITY_TIERS), name="priority_valid"),
+        CheckConstraint("type <> 'text' OR body IS NOT NULL", name="text_has_body"),
+        CheckConstraint("body IS NULL OR char_length(body) BETWEEN 1 AND 2000", name="body_length"),
         Index("ix_messages_receiver_sent", "receiver_id", "sent_at"),
+        Index("uq_messages_sender_client", "sender_id", "client_id", unique=True, postgresql_where=text("client_id IS NOT NULL")),
     )
 
 
