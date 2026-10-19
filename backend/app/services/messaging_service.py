@@ -19,11 +19,30 @@ from sqlalchemy.orm import Session
 from app.core.errors import AppError
 from app.models import Message, User
 from app.schemas.message import ConversationList, ConversationOut, MessageIn, MessageList, MessageOut, ReadIn, ReadOut
+from app.core.config import get_settings
 from app.services import notification_service as ns
-from app.services import permission_service
+from app.services import permission_service, storage_service
 
 MODULE = "communication"
 PREVIEW = 80
+
+# Audio types the phone's recorder can produce, with the first bytes that prove it (we do not trust the file name).
+def _sniff(data: bytes) -> str | None:
+    if data[4:8] == b"ftyp":
+        return ".m4a"  # MP4 / M4A / 3GP (AAC)
+    if data[:3] == b"ID3" or data[:2] in (b"\xff\xfb", b"\xff\xf3", b"\xff\xf2"):
+        return ".mp3"
+    if data[:2] in (b"\xff\xf1", b"\xff\xf9"):
+        return ".aac"
+    if data[:4] == b"OggS":
+        return ".ogg"
+    if data[:4] == b"\x1aE\xdf\xa3":
+        return ".webm"
+    if data[:4] == b"RIFF" and data[8:12] == b"WAVE":
+        return ".wav"
+    if data[:6] == b"#!AMR\n" or data[:9] == b"#!AMR-WB\n":
+        return ".amr"
+    return None
 
 
 def _pair(db: Session, me: User, other_id: uuid.UUID) -> tuple[User, uuid.UUID]:
@@ -39,7 +58,7 @@ def _pair(db: Session, me: User, other_id: uuid.UUID) -> tuple[User, uuid.UUID]:
 def _out(m: Message, me: User, *, already: bool = False) -> MessageOut:
     return MessageOut(
         message_id=m.message_id, sender_id=m.sender_id, receiver_id=m.receiver_id, type=m.type, body=m.body,
-        content_url=m.content_url, priority=m.priority, sent_at=m.sent_at, read_at=m.read_at,
+        content_url=f"/messages/{m.message_id}/audio" if m.type == "priority_voice" else None, duration_s=m.duration_s, priority=m.priority, sent_at=m.sent_at, read_at=m.read_at,
         from_me=m.sender_id == me.user_id, already_sent=already,
     )
 
@@ -133,3 +152,60 @@ def mark_read(db: Session, me: User, data: ReadIn) -> ReadOut:
     )
     db.commit()
     return ReadOut(marked_read=res.rowcount)
+
+
+# ------------------------------------------------------------ priority voice messages (Task 4.3, FR-E4)
+
+def send_voice(db: Session, me: User, receiver_id: uuid.UUID, duration_s: int, data: bytes, client_id: uuid.UUID | None) -> MessageOut:
+    if me.role != "guardian":
+        raise AppError(403, "FORBIDDEN", "Only a Guardian can send a priority voice message.")
+    other, dep_id = _pair(db, me, receiver_id)
+    if not 1 <= duration_s <= get_settings().VOICE_MAX_S:
+        raise AppError(422, "VALIDATION_ERROR", f"The voice message must be 1 to {get_settings().VOICE_MAX_S} seconds.")
+    if not data:
+        raise AppError(422, "VALIDATION_ERROR", "The audio file is empty.")
+    if len(data) > get_settings().VOICE_MAX_BYTES:
+        raise AppError(413, "AUDIO_TOO_LARGE", f"The audio file is too big (limit {get_settings().VOICE_MAX_BYTES // 1_000_000} MB).")
+    ext = _sniff(data)
+    if ext is None:
+        raise AppError(415, "UNSUPPORTED_AUDIO", "This is not a supported audio file (m4a/aac, mp3, ogg, webm, wav, amr).")
+    store = storage_service.get_storage()
+    key = store.save(data, ext)
+    stmt = (
+        pg_insert(Message)
+        .values(message_id=uuid.uuid4(), sender_id=me.user_id, receiver_id=other.user_id, type="priority_voice",
+                content_url=key, duration_s=duration_s, priority="critical", client_id=client_id)
+    )
+    if client_id is not None:
+        stmt = stmt.on_conflict_do_nothing(index_elements=["sender_id", "client_id"], index_where=text("client_id IS NOT NULL"))
+    new_id = db.execute(stmt.returning(Message.message_id)).scalar()
+    db.commit()
+    if new_id is None:  # lost a race with an identical retry: drop our copy of the file, answer with the first message
+        store.delete(key)
+        old = db.scalar(select(Message).where(Message.sender_id == me.user_id, Message.client_id == client_id))
+        return _repeat(old, me, other.user_id, "priority_voice", duration_s)
+    row = db.get(Message, new_id)
+    ns.notify(
+        db, other.user_id, "voice_message", ns.CRITICAL, f"Voice message from {(me.full_name or '').strip() or 'your Guardian'}",
+        f"{duration_s} second voice message", dependent_id=dep_id, dedupe_key=f"message:{row.message_id}",
+        extra={"message_id": str(row.message_id), "from_user_id": str(me.user_id), "duration_s": duration_s},
+    )
+    return _out(row, me)
+
+
+def _repeat(old: Message, me: User, receiver_id: uuid.UUID, type_: str, duration_s: int) -> MessageOut:
+    if old.receiver_id != receiver_id or old.type != type_ or old.duration_s != duration_s:
+        raise AppError(409, "CLIENT_ID_REUSED", "This client_id was already used for a different message.")
+    return _out(old, me, already=True)
+
+
+def audio_file(db: Session, me: User, message_id: uuid.UUID):
+    """The saved audio of a voice message, for its sender or receiver (and only while they may still talk)."""
+    m = db.get(Message, message_id)
+    if m is None or m.type != "priority_voice" or me.user_id not in (m.sender_id, m.receiver_id):
+        raise AppError(404, "MESSAGE_NOT_FOUND", "Voice message not found.")
+    _pair(db, me, m.receiver_id if m.sender_id == me.user_id else m.sender_id)
+    path = storage_service.get_storage().path(m.content_url)
+    if path is None:
+        raise AppError(404, "AUDIO_NOT_FOUND", "The audio file is no longer available.")
+    return path

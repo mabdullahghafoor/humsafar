@@ -73,6 +73,9 @@ class Settings(BaseSettings):
     SMS_PROVIDER: str = "mock"  # Task 3.8: a real gateway is one new class in sms_service.py
     SMS_MAX_ATTEMPTS: int = 3  # tries for one external-contact SMS
     SMS_RETRY_S: int = 60  # wait between tries
+    VOICE_STORAGE_DIR: str = ""  # Task 4.3: where voice audio is saved. Empty = ~/humsafar_uploads/voice (outside the repo, so audio is never committed). Cloud storage = one new class in storage_service.py
+    VOICE_MAX_BYTES: int = 2_000_000  # about 2 MB
+    VOICE_MAX_S: int = 120  # longest voice message
     ALARM_DEFAULT_S: int = 60  # Task 3.7: how long the Dependent's phone sounds the alarm unless told otherwise
     ALARM_MIN_S: int = 10
     ALARM_MAX_S: int = 300

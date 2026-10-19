@@ -29,7 +29,8 @@ Statuses: Done = merged into `dev`.
 | 3.7 | Remote Alarm Override: Primary Guardian only, loud alarm on the Dependent's phone, start / status / stop (+ contract `docs/api/alarm_contract.md`) | Done |
 | 3.8 | External Emergency Contact fallback: ONE contact per Dependent, mock SMS when an alert reaches the last escalation level, retries, all-clear (+ contract `docs/api/emergency_contact_contract.md`) | Done |
 | 4.1 | Call technology decision: hosted SDK, ZegoCloud (clarification 75) | Done |
-| 4.2 | Text messaging: send, history, conversations, read receipts, safe retry, permission `communication` (+ contract `docs/api/messaging_contract.md`) | In review (PR) |
+| 4.2 | Text messaging: send, history, conversations, read receipts, safe retry, permission `communication` (+ contract `docs/api/messaging_contract.md`) | Done |
+| 4.3 | Priority voice messages: Guardian uploads audio, critical notification, download, safe retry (section in `messaging_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`

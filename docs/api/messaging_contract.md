@@ -1,4 +1,4 @@
-# Messaging contract (Task 4.2, FR-E1)
+# Messaging contract (Task 4.2 text, Task 4.3 voice; FR-E1, FR-E4)
 
 For Talha (chat screens) and Sarim (QA cases). Text messages between a Guardian and a linked Dependent.
 
@@ -35,5 +35,37 @@ Body: `{ "with_user_id": "<id>" }`. Reply: `{ "marked_read": 2 }`. Safe to repea
 | `CLIENT_ID_REUSED` | 409 | same `client_id`, different message |
 | `VALIDATION_ERROR` | 422 | empty / too long text, bad id, bad `limit` |
 
+## Priority voice messages (Task 4.3, FR-E4)
+One-way urgent audio from a **Guardian** to a linked Dependent. Same rules as text (linked, Primary always, Secondary needs `communication`, each Guardian has their own thread). A Dependent cannot send one (`403 FORBIDDEN`).
+
+* The message is always **critical**: the receiver gets a critical `voice_message` notification (`data.message_id`, `data.from_user_id`, `data.duration_s`) and a high-priority push. It can be acknowledged like any critical notification (`POST /notifications/{id}/acknowledge`).
+* It shows in `GET /messages` and `GET /messages/conversations` like text: `type` = `priority_voice`, `body` = null, `duration_s`, and `content_url` = `/messages/{message_id}/audio`. Read receipts (`POST /messages/read`) work the same.
+
+### POST `/messages/voice`  (multipart form, not JSON)
+| Field | Rule |
+|---|---|
+| `receiver_id` | the linked Dependent |
+| `duration_s` | 1 to 120 (the app sends the length it recorded) |
+| `audio` | the recorded file, up to 2 MB: m4a/aac, mp3, ogg, webm, wav or amr. The server checks the real file header, not the name or `Content-Type` |
+| `client_id` | optional, same safe-retry rule as text (retry = `200` + `already_sent`, no second file, no second notification) |
+
+Reply `201`: the message (`type: "priority_voice"`, `priority: "critical"`, `duration_s`, `content_url`).
+
+### GET `/messages/{message_id}/audio`
+The audio bytes. Needs the login token (send the header; a plain audio player URL will not work, download first or use a player that sets headers). Only the sender and the receiver, and only while they may still talk (a Secondary who loses `communication` can no longer download).
+
+### Voice errors
+| Code | Status | When |
+|---|---|---|
+| `FORBIDDEN` | 403 | a Dependent tries to send |
+| `UNSUPPORTED_AUDIO` | 415 | not a supported audio file |
+| `AUDIO_TOO_LARGE` | 413 | over 2 MB |
+| `VALIDATION_ERROR` | 422 | no audio part, empty file, `duration_s` outside 1 to 120 |
+| `MESSAGE_NOT_FOUND` | 404 | unknown id, a text message, or not your message |
+| `AUDIO_NOT_FOUND` | 404 | the file is gone from the server |
+Plus the text errors above (`MODULE_ACCESS_DENIED`, `CLIENT_ID_REUSED`, ...).
+
+Where files live: server setting `VOICE_STORAGE_DIR` (default `~/humsafar_uploads/voice`, outside the repo). Moving to a cloud bucket later is one new class in `storage_service.py`; the API does not change.
+
 ## Not in this task
-Voice messages (4.3) use the same table and the same endpoints for history and read receipts: `type` = `priority_voice` and `content_url` instead of `body`. Calls are 4.4.
+Calls are Task 4.4.

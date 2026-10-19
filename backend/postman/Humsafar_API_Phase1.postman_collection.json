@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1-4 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging)",
+    "name": "Humsafar API - Phase 1-4 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging, Voice messages)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -23833,6 +23833,1263 @@
                   "path": [
                     "messages",
                     "conversations"
+                  ]
+                },
+                "description": "Login required."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "17 - Voice messages (Task 4.3)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{vm_p_email}}\",\n  \"phone\": \"{{vm_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('vm_p_email','vmp'+run+'@humsafar-test.com'); pm.environment.set('vm_p_phone','03'+r());",
+                      "pm.environment.set('vm_d_email','vmd'+run+'@humsafar-test.com'); pm.environment.set('vm_d_phone','03'+r());",
+                      "pm.environment.set('vm_s_email','vms'+run+'@humsafar-test.com'); pm.environment.set('vm_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('vm_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{vm_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('vm_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{vm_d_email}}\",\n  \"phone\": \"{{vm_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('vm_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{vm_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{vm_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{vm_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{vm_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{vm_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{vm_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('vm_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{vm_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{vm_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{vm_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('vm_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{vm_s_email}}\",\n  \"phone\": \"{{vm_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{vm_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{vm_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('vm_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('vm_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Get the Primary's id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('vm_p_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Send, download, history",
+          "item": [
+            {
+              "name": "13. Primary sends a voice message",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarVoiceBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/voice",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "voice"
+                  ]
+                },
+                "description": "Multipart form: receiver_id, duration_s (1 to 120), audio (file, up to 2 MB: m4a/aac, mp3, ogg, webm, wav, amr), optional client_id. In the app you attach the recorded file; this request carries a tiny test MP3 header instead. Always CRITICAL priority. Guardian only.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"receiver_id\"\r\n\r\n{{vm_d_id}}\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"duration_s\"\r\n\r\n7\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\n6d2e8b14-3f5a-4c97-a0d1-8b7e5c3f9a20\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"audio\"; filename=\"note.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\nID3 tiny test audio bytes for Postman only, 0123456789 0123456789\r\n--HumsafarVoiceBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('critical voice', () => { pm.expect(j.type).to.eql('priority_voice'); pm.expect(j.priority).to.eql('critical'); pm.expect(j.duration_s).to.eql(7); pm.expect(j.content_url).to.eql('/messages/' + j.message_id + '/audio'); });",
+                      "pm.environment.set('vm_msg', j.message_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "14. Dependent got a CRITICAL voice_message notification",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/notifications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": "type = voice_message, priority = critical (push is high priority)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const it = pm.response.json().items.filter(i => i.type === 'voice_message');",
+                      "pm.test('one critical voice notification', () => { pm.expect(it.length).to.eql(1); pm.expect(it[0].priority).to.eql('critical'); pm.expect(it[0].data.message_id).to.eql(pm.environment.get('vm_msg')); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "15. Dependent downloads the audio",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/{{vm_msg}}/audio",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "{{vm_msg}}",
+                    "audio"
+                  ]
+                },
+                "description": "Needs the login token. The file comes back as bytes (here the test MP3 header)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('audio bytes', () => pm.expect(pm.response.text()).to.include('ID3'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "16. Primary downloads it too",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/{{vm_msg}}/audio",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "{{vm_msg}}",
+                    "audio"
+                  ]
+                },
+                "description": "Sender and receiver only."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. It is in the chat history",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages?with_user_id={{vm_p_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_user_id",
+                      "value": "{{vm_p_id}}"
+                    }
+                  ]
+                },
+                "description": "Voice messages sit in the same list as text, newest first. Show a play button when type = priority_voice."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const m = pm.response.json().items[0];",
+                      "pm.test('voice first', () => { pm.expect(m.type).to.eql('priority_voice'); pm.expect(m.from_me).to.eql(false); pm.expect(m.read_at).to.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "18. Send again with the SAME client_id",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarVoiceBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/voice",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "voice"
+                  ]
+                },
+                "description": "A network retry: nothing is sent twice. 200 and already_sent = true.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"receiver_id\"\r\n\r\n{{vm_d_id}}\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"duration_s\"\r\n\r\n7\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\n6d2e8b14-3f5a-4c97-a0d1-8b7e5c3f9a20\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"audio\"; filename=\"note.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\nID3 tiny test audio bytes for Postman only, 0123456789 0123456789\r\n--HumsafarVoiceBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('already sent', () => pm.expect(pm.response.json().already_sent).to.eql(true));",
+                      "pm.test('same message', () => pm.expect(pm.response.json().message_id).to.eql(pm.environment.get('vm_msg')));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "19. Mark as read (Dependent)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/read",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "read"
+                  ]
+                },
+                "description": "Same endpoint as text.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"with_user_id\": \"{{vm_p_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('1 marked', () => pm.expect(pm.response.json().marked_read).to.eql(1));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests",
+          "item": [
+            {
+              "name": "20. Dependent cannot send voice (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarVoiceBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/voice",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "voice"
+                  ]
+                },
+                "description": "Voice messages are one-way: Guardian to Dependent.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"receiver_id\"\r\n\r\n{{vm_p_id}}\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"duration_s\"\r\n\r\n5\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"audio\"; filename=\"note.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\nID3 tiny test audio bytes for Postman only, 0123456789 0123456789\r\n--HumsafarVoiceBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. Not an audio file (expect 415)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarVoiceBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/voice",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "voice"
+                  ]
+                },
+                "description": "The server checks the real file header, not the name.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"receiver_id\"\r\n\r\n{{vm_d_id}}\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"duration_s\"\r\n\r\n5\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"audio\"; filename=\"note.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\nthis is plain text, not audio. this is plain text, not audio.\r\n--HumsafarVoiceBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('415', () => pm.response.to.have.status(415));",
+                      "pm.test('UNSUPPORTED_AUDIO', () => pm.expect(pm.response.json().error.code).to.eql('UNSUPPORTED_AUDIO'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "22. Too long (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarVoiceBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/voice",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "voice"
+                  ]
+                },
+                "description": "Longest is 120 seconds.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"receiver_id\"\r\n\r\n{{vm_d_id}}\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"duration_s\"\r\n\r\n121\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"audio\"; filename=\"note.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\nID3 tiny test audio bytes for Postman only, 0123456789 0123456789\r\n--HumsafarVoiceBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. No audio part (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarVoiceBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/voice",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "voice"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"receiver_id\"\r\n\r\n{{vm_d_id}}\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"duration_s\"\r\n\r\n5\r\n--HumsafarVoiceBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. Secondary without communication (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarVoiceBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/voice",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "voice"
+                  ]
+                },
+                "description": "Same permission as text messages.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"receiver_id\"\r\n\r\n{{vm_d_id}}\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"duration_s\"\r\n\r\n5\r\n--HumsafarVoiceBoundary\r\nContent-Disposition: form-data; name=\"audio\"; filename=\"note.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\nID3 tiny test audio bytes for Postman only, 0123456789 0123456789\r\n--HumsafarVoiceBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Secondary cannot download it (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/{{vm_msg}}/audio",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "{{vm_msg}}",
+                    "audio"
+                  ]
+                },
+                "description": "Not their message."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('MESSAGE_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('MESSAGE_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "26. Unknown message (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{vm_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/messages/00000000-0000-4000-8000-000000000000/audio",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "00000000-0000-4000-8000-000000000000",
+                    "audio"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('MESSAGE_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('MESSAGE_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. Download without token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/messages/{{vm_msg}}/audio",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "messages",
+                    "{{vm_msg}}",
+                    "audio"
                   ]
                 },
                 "description": "Login required."
