@@ -303,7 +303,7 @@ def test_database_refuses_a_text_message_without_body(db):
     with pytest.raises(IntegrityError):
         db.commit()
     db.rollback()
-    db.add(Message(sender_id=a.user_id, receiver_id=b.user_id, type="priority_voice", content_url="x"))
+    db.add(Message(sender_id=a.user_id, receiver_id=b.user_id, type="priority_voice", content_url="x", duration_s=3))
     db.commit()  # voice messages need no body
 
 
@@ -313,3 +313,148 @@ def test_dependent_to_dependent_is_refused(client):
     t = msgteam(client)
     other = make_dependent(client, 2)
     assert_error(send(client, t["dt"], other), 403, "NOT_LINKED_TO_DEPENDENT")
+
+
+# ============================================================ Task 4.3: priority voice messages (FR-E4)
+
+from app.core.config import get_settings  # noqa: E402
+
+M4A = b"\x00\x00\x00\x18ftypM4A \x00\x00\x00\x00M4A mp42isom" + b"\x01" * 400
+TOKEN_G = "g" * 40 + "-guardian-phone-token"
+
+
+@pytest.fixture(autouse=True)
+def voice_dir(tmp_path, monkeypatch):
+    monkeypatch.setattr(get_settings(), "VOICE_STORAGE_DIR", str(tmp_path / "voice"))
+    return tmp_path / "voice"
+
+
+def voice(client, token, to, data=M4A, dur=5, **extra):
+    form = {"receiver_id": to, "duration_s": str(dur), **{k: str(v) for k, v in extra.items()}}
+    return client.post("/messages/voice", data=form, files={"audio": ("note.m4a", data, "audio/mp4")}, headers=auth(token))
+
+
+def test_guardian_sends_voice_as_critical_and_dependent_downloads_it(client, push, voice_dir):
+    t = msgteam(client)
+    client.put("/devices/push-token", json={"token": TOKEN_D}, headers=auth(t["dt"]))
+    r = voice(client, t["pt"], t["dep"], dur=7)
+    assert r.status_code == 201, r.text
+    m = r.json()
+    assert m["type"] == "priority_voice" and m["priority"] == "critical" and m["duration_s"] == 7 and m["body"] is None
+    assert m["content_url"] == f"/messages/{m['message_id']}/audio"
+    n = inbox(client, t["dt"])["items"][0]
+    assert n["type"] == "voice_message" and n["priority"] == "critical" and n["data"]["message_id"] == m["message_id"]
+    assert push.sent[-1].priority == "critical"
+    for who in ("dt", "pt"):  # receiver and sender can both fetch it
+        a = client.get(m["content_url"], headers=auth(t[who]))
+        assert a.status_code == 200 and a.content == M4A
+    assert len(list(voice_dir.iterdir())) == 1
+
+
+def test_voice_appears_in_history_and_conversations_and_can_be_read(client):
+    t = msgteam(client)
+    send(client, t["pt"], t["dep"], "text first")
+    m = voice(client, t["pt"], t["dep"]).json()
+    h = history(client, t["dt"], t["pid"])["items"]
+    assert [i["type"] for i in h] == ["priority_voice", "text"]
+    c = client.get("/messages/conversations", headers=auth(t["dt"])).json()
+    assert c["items"][0]["last_message"]["message_id"] == m["message_id"] and c["items"][0]["unread_count"] == 2
+    assert client.post("/messages/read", json={"with_user_id": t["pid"]}, headers=auth(t["dt"])).json() == {"marked_read": 2}
+
+
+def test_dependent_cannot_send_voice(client):
+    t = msgteam(client)
+    assert_error(voice(client, t["dt"], t["pid"]), 403, "FORBIDDEN")
+
+
+def test_voice_follows_the_communication_permission(client):
+    t = msgteam(client)
+    assert_error(voice(client, t["st"], t["dep"]), 403, "MODULE_ACCESS_DENIED")
+    allow(client, t)
+    m = voice(client, t["st"], t["dep"]).json()
+    assert client.get(m["content_url"], headers=auth(t["st"])).status_code == 200
+    allow(client, t, False)
+    assert_error(client.get(m["content_url"], headers=auth(t["st"])), 403, "MODULE_ACCESS_DENIED")
+    assert_error(client.get(m["content_url"], headers=auth(t["dt"])), 403, "MODULE_ACCESS_DENIED")
+
+
+def test_only_sender_and_receiver_can_download(client):
+    t = msgteam(client)
+    allow(client, t)
+    m = voice(client, t["pt"], t["dep"]).json()
+    assert_error(client.get(m["content_url"], headers=auth(t["st"])), 404, "MESSAGE_NOT_FOUND")
+    assert_error(client.get(m["content_url"]), 401, "NOT_AUTHENTICATED")
+    assert_error(client.get(f"/messages/{uuid.uuid4()}/audio", headers=auth(t["pt"])), 404, "MESSAGE_NOT_FOUND")
+    text = send(client, t["pt"], t["dep"], "hello").json()
+    assert_error(client.get(f"/messages/{text['message_id']}/audio", headers=auth(t["pt"])), 404, "MESSAGE_NOT_FOUND")
+
+
+def test_bad_audio_is_refused_and_nothing_is_saved(client, voice_dir):
+    t = msgteam(client)
+    assert_error(voice(client, t["pt"], t["dep"], data=b"this is not audio at all" * 20), 415, "UNSUPPORTED_AUDIO")
+    assert_error(voice(client, t["pt"], t["dep"], data=b""), 422, "VALIDATION_ERROR")
+    assert_error(voice(client, t["pt"], t["dep"], data=M4A + b"x" * 2_000_000), 413, "AUDIO_TOO_LARGE")
+    for d in (0, 121, -3):
+        assert_error(voice(client, t["pt"], t["dep"], dur=d), 422, "VALIDATION_ERROR")
+    assert_error(client.post("/messages/voice", data={"receiver_id": t["dep"], "duration_s": "5"}, headers=auth(t["pt"])), 422, "VALIDATION_ERROR")
+    assert not voice_dir.exists() or list(voice_dir.iterdir()) == []
+
+
+def test_other_audio_types_are_accepted(client):
+    t = msgteam(client)
+    samples = [b"ID3\x03\x00" + b"\x00" * 50, b"OggS" + b"\x00" * 50, b"RIFF\x00\x00\x00\x00WAVE" + b"\x00" * 50, b"#!AMR\n" + b"\x00" * 50]
+    for s in samples:
+        assert voice(client, t["pt"], t["dep"], data=s).status_code == 201
+
+
+def test_voice_retry_with_client_id_sends_once(client, db, voice_dir):
+    t = msgteam(client)
+    cid = str(uuid.uuid4())
+    a = voice(client, t["pt"], t["dep"], client_id=cid)
+    b = voice(client, t["pt"], t["dep"], client_id=cid)
+    assert (a.status_code, b.status_code) == (201, 200) and b.json()["already_sent"] is True
+    assert a.json()["message_id"] == b.json()["message_id"]
+    assert len(list(voice_dir.iterdir())) == 1 and len(inbox(client, t["dt"])["items"]) == 1
+    assert_error(voice(client, t["pt"], t["dep"], dur=9, client_id=cid), 409, "CLIENT_ID_REUSED")
+
+
+def test_parallel_voice_retries_leave_one_message_and_one_file(client, db, voice_dir):
+    t = msgteam(client)
+    cid = str(uuid.uuid4())
+    n = 6
+    gate = Barrier(n)
+
+    def go(_):
+        gate.wait()
+        return voice(client, t["pt"], t["dep"], client_id=cid)
+
+    with ThreadPoolExecutor(n) as pool:
+        rs = list(pool.map(go, range(n)))
+    assert sorted(r.status_code for r in rs) == [200] * (n - 1) + [201]
+    assert db.scalar(select(func.count()).select_from(Message)) == 1
+    assert len(list(voice_dir.iterdir())) == 1
+    assert db.scalar(select(func.count()).select_from(Notification)) == 1
+
+
+def test_missing_file_on_disk_is_a_clean_404(client, voice_dir):
+    t = msgteam(client)
+    m = voice(client, t["pt"], t["dep"]).json()
+    for f in voice_dir.iterdir():
+        f.unlink()
+    assert_error(client.get(m["content_url"], headers=auth(t["dt"])), 404, "AUDIO_NOT_FOUND")
+
+
+def test_database_refuses_voice_without_audio_or_length(db):
+    from sqlalchemy.exc import IntegrityError
+
+    from app.models import User
+
+    a = User(email="a@x.com", phone="03001110001", password_hash="x", role="guardian", full_name="A")
+    b = User(email="b@x.com", phone="03001110002", password_hash="x", role="dependent", full_name="B")
+    db.add_all([a, b])
+    db.commit()
+    for kw in ({}, {"content_url": "k"}, {"duration_s": 5}, {"content_url": "k", "duration_s": 0}):
+        db.add(Message(sender_id=a.user_id, receiver_id=b.user_id, type="priority_voice", **kw))
+        with pytest.raises(IntegrityError):
+            db.commit()
+        db.rollback()

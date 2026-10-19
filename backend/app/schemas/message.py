@@ -31,7 +31,8 @@ class MessageOut(BaseModel):
     receiver_id: UUID
     type: Literal["text", "priority_voice"]
     body: str | None = Field(default=None, description="The text (text messages).")
-    content_url: str | None = Field(default=None, description="The audio (priority voice messages, Task 4.3).")
+    content_url: str | None = Field(default=None, description="Voice messages: the path to download the audio, `/messages/{message_id}/audio` (send the login token).")
+    duration_s: int | None = Field(default=None, description="Voice messages: length in seconds.")
     priority: Literal["standard", "critical"]
     sent_at: datetime
     read_at: datetime | None = Field(default=None, description="When the receiver opened it. Null = not read yet.")

@@ -33,12 +33,16 @@ class Message(Base):
     read_at = Column(DateTime(timezone=True), nullable=True)
     # Chosen by the app for each message, so a retry on a bad network does not send it twice.
     client_id = Column(UUID(as_uuid=True), nullable=True)
+    # Task 4.3: length of a voice message in seconds.
+    duration_s = Column(Integer, nullable=True)
 
     __table_args__ = (
         CheckConstraint(in_list("type", MESSAGE_TYPES), name="type_valid"),
         CheckConstraint(in_list("priority", PRIORITY_TIERS), name="priority_valid"),
         CheckConstraint("type <> 'text' OR body IS NOT NULL", name="text_has_body"),
         CheckConstraint("body IS NULL OR char_length(body) BETWEEN 1 AND 2000", name="body_length"),
+        CheckConstraint("type <> 'priority_voice' OR (content_url IS NOT NULL AND duration_s IS NOT NULL)", name="voice_has_audio"),
+        CheckConstraint("duration_s IS NULL OR duration_s BETWEEN 1 AND 600", name="duration_range"),
         Index("ix_messages_receiver_sent", "receiver_id", "sent_at"),
         Index("uq_messages_sender_client", "sender_id", "client_id", unique=True, postgresql_where=text("client_id IS NOT NULL")),
     )

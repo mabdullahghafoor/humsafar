@@ -1,4 +1,4 @@
-# Humsafar API reference (Tasks 1.3 to 4.2)
+# Humsafar API reference (Tasks 1.3 to 4.3)
 
 For Talha (Flutter) and Sarim (QA). Base URL (local): `http://127.0.0.1:8000`. Interactive docs: `http://127.0.0.1:8000/docs`.
 All bodies are JSON. The server is Abdullah's `backend/`.
@@ -25,7 +25,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `panic_contract.md` | Panic Mode: the big button, who is told, closing it |
 | `alarm_contract.md` | Remote Alarm Override: Primary-only loud alarm on the Dependent's phone |
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
-| `messaging_contract.md` | Text messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry |
+| `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
 | `../backend/sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
 ## 3. All endpoints
@@ -90,6 +90,8 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | GET `/messages` | same | History with one person (newest first, paged) |
 | GET `/messages/conversations` | same | My conversations, last message, unread count |
 | POST `/messages/read` | same | Mark a person's messages as read |
+| POST `/messages/voice` | Guardian (Secondary needs `communication`) | Send a priority voice message (multipart: `receiver_id`, `duration_s`, `audio`, optional `client_id`); critical notification |
+| GET `/messages/{id}/audio` | sender or receiver | Download the audio of a voice message |
 
 Modules: `live_location`, `health_records`, `communication`, `emergency_alerts`, `camera_viewing`, `medication_management`.
 
