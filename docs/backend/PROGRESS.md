@@ -1,6 +1,6 @@
 # Humsafar Progress Tracker
 
-Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-15.
+Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-19.
 Statuses: Done = merged into `dev`.
 
 ## Backend (Abdullah)
@@ -27,7 +27,9 @@ Statuses: Done = merged into `dev`.
 | 3.5 | Escalation chain: Primary, then Secondary, then external-contact level, by timers; Guardian acknowledge stops it (+ contract `docs/api/escalation_contract.md`) | Done |
 | 3.6 | Panic Mode: Dependent button tells every linked Guardian at once, permissions ignored; one open panic at a time; close by Dependent or Primary (+ contract `docs/api/panic_contract.md`) | Done |
 | 3.7 | Remote Alarm Override: Primary Guardian only, loud alarm on the Dependent's phone, start / status / stop (+ contract `docs/api/alarm_contract.md`) | Done |
-| 3.8 | External Emergency Contact fallback: ONE contact per Dependent, mock SMS when an alert reaches the last escalation level, retries, all-clear (+ contract `docs/api/emergency_contact_contract.md`) | In review (PR) |
+| 3.8 | External Emergency Contact fallback: ONE contact per Dependent, mock SMS when an alert reaches the last escalation level, retries, all-clear (+ contract `docs/api/emergency_contact_contract.md`) | Done |
+| 4.1 | Call technology decision: hosted SDK, ZegoCloud (clarification 75) | Done |
+| 4.2 | Text messaging: send, history, conversations, read receipts, safe retry, permission `communication` (+ contract `docs/api/messaging_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
