@@ -1,4 +1,4 @@
-# Humsafar API reference (Tasks 1.3 to 4.3)
+# Humsafar API reference (Tasks 1.3 to 4.4)
 
 For Talha (Flutter) and Sarim (QA). Base URL (local): `http://127.0.0.1:8000`. Interactive docs: `http://127.0.0.1:8000/docs`.
 All bodies are JSON. The server is Abdullah's `backend/`.
@@ -26,6 +26,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `alarm_contract.md` | Remote Alarm Override: Primary-only loud alarm on the Dependent's phone |
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
+| `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
 | `../backend/sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
 ## 3. All endpoints
@@ -92,6 +93,12 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | POST `/messages/read` | same | Mark a person's messages as read |
 | POST `/messages/voice` | Guardian (Secondary needs `communication`) | Send a priority voice message (multipart: `receiver_id`, `duration_s`, `audio`, optional `client_id`); critical notification |
 | GET `/messages/{id}/audio` | sender or receiver | Download the audio of a voice message |
+| POST `/calls` | linked Guardian or Dependent (Secondary needs `communication`) | Start a voice or video call (rings the other person) |
+| GET `/calls` | me | Call history (newest first, paged) |
+| GET `/calls/{id}` | caller or callee | State of a call (+ join info when allowed) |
+| POST `/calls/{id}/accept` | callee | Accept (gets the join info) |
+| POST `/calls/{id}/decline` | callee | Decline |
+| POST `/calls/{id}/end` | caller or callee | Hang up / cancel |
 
 Modules: `live_location`, `health_records`, `communication`, `emergency_alerts`, `camera_viewing`, `medication_management`.
 

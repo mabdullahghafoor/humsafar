@@ -49,7 +49,7 @@ def _pair(db: Session, me: User, other_id: uuid.UUID) -> tuple[User, uuid.UUID]:
     """Check that `me` and `other_id` may talk. Returns (other user, dependent_id) or raises 403."""
     other = db.get(User, other_id)
     if other is None or other.user_id == me.user_id or other.role == me.role:
-        raise AppError(403, "NOT_LINKED_TO_DEPENDENT", "You can only message a person you are linked to.")
+        raise AppError(403, "NOT_LINKED_TO_DEPENDENT", "You can only contact a person you are linked to.")
     guardian, dep_id = (me, other.user_id) if me.role == "guardian" else (other, me.user_id)
     permission_service.check_module_access(db, guardian, dep_id, MODULE)
     return other, dep_id

@@ -12,6 +12,7 @@ from app.models._common import fk_col, in_list, ts_col, uuid_pk
 
 MESSAGE_TYPES = ("text", "priority_voice")
 CALL_TYPES = ("voice", "video")
+CALL_STATUSES = ("ringing", "accepted", "ended", "declined", "missed", "cancelled")
 PRIORITY_TIERS = ("standard", "critical")  # FR-M1: at least two tiers
 
 
@@ -57,10 +58,19 @@ class CallLog(Base):
     type = Column(String(10), nullable=False)
     started_at = ts_col()
     duration_s = Column(Integer, nullable=True)  # NULL until the call ends
+    # Task 4.4 (clarification 82): the call's life, the room name at the call provider, and when it was answered / finished.
+    status = Column(String(15), nullable=False, server_default=text("'ringing'"))
+    room_id = Column(String(64), nullable=True)
+    answered_at = Column(DateTime(timezone=True), nullable=True)
+    ended_at = Column(DateTime(timezone=True), nullable=True)
 
     __table_args__ = (
         CheckConstraint(in_list("type", CALL_TYPES), name="type_valid"),
         CheckConstraint("duration_s IS NULL OR duration_s >= 0", name="duration_nonneg"),
+        CheckConstraint(in_list("status", CALL_STATUSES), name="status_valid"),
+        CheckConstraint("status NOT IN ('accepted', 'ended') OR answered_at IS NOT NULL", name="answered_when_accepted"),
+        CheckConstraint("caller_id <> callee_id", name="not_self"),
+        Index("ix_call_logs_open", "status", "started_at", postgresql_where=text("status IN ('ringing', 'accepted')")),
     )
 
 
