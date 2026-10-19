@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1-4 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging, Voice messages)",
+    "name": "Humsafar API - Phase 1-4 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging, Voice messages, Calls)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -25090,6 +25090,1642 @@
                     "messages",
                     "{{vm_msg}}",
                     "audio"
+                  ]
+                },
+                "description": "Login required."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "18 - Calls (Task 4.4)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{cl_p_email}}\",\n  \"phone\": \"{{cl_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('cl_p_email','clp'+run+'@humsafar-test.com'); pm.environment.set('cl_p_phone','03'+r());",
+                      "pm.environment.set('cl_d_email','cld'+run+'@humsafar-test.com'); pm.environment.set('cl_d_phone','03'+r());",
+                      "pm.environment.set('cl_s_email','cls'+run+'@humsafar-test.com'); pm.environment.set('cl_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('cl_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{cl_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('cl_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{cl_d_email}}\",\n  \"phone\": \"{{cl_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('cl_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{cl_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{cl_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{cl_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{cl_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{cl_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{cl_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('cl_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{cl_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{cl_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{cl_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('cl_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{cl_s_email}}\",\n  \"phone\": \"{{cl_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{cl_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{cl_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('cl_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('cl_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Get the Primary's id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('cl_p_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Call, accept, decline, end",
+          "item": [
+            {
+              "name": "13. Primary starts a VIDEO call",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "Rings the Dependent (critical notification). 'voice' or 'video'. The caller gets join info at once; the callee only after accepting.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\",\n  \"type\": \"video\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('ringing, caller can join', () => { pm.expect(j.status).to.eql('ringing'); pm.expect(j.type).to.eql('video'); pm.expect(j.join.token).to.be.a('string'); pm.expect(j.join.user_id).to.eql(pm.environment.get('cl_p_id')); pm.expect(j.ring_expires_at).to.not.eql(null); });",
+                      "pm.environment.set('cl_call', j.call_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "201 Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{cl_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/calls",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "calls"
+                      ]
+                    },
+                    "description": "Rings the Dependent (critical notification). 'voice' or 'video'. The caller gets join info at once; the callee only after accepting.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\",\n  \"type\": \"video\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"call_id\": \"3b8f2d41-7c6e-4a95-b1d0-5e9a4c7f8321\",\n  \"caller_id\": \"00000000-0000-0000-0000-000000000001\",\n  \"callee_id\": \"00000000-0000-0000-0000-000000000002\",\n  \"type\": \"video\",\n  \"status\": \"ringing\",\n  \"started_at\": \"2026-10-20T09:00:00Z\",\n  \"answered_at\": null,\n  \"ended_at\": null,\n  \"duration_s\": null,\n  \"from_me\": true,\n  \"other_name\": \"Test User\",\n  \"already_active\": false,\n  \"ring_expires_at\": \"2026-10-20T09:00:30Z\",\n  \"join\": {\n    \"provider\": \"mock\",\n    \"app_id\": \"mock-app\",\n    \"room_id\": \"call_3b8f2d417c6e4a95b1d05e9a4c7f8321\",\n    \"user_id\": \"00000000-0000-0000-0000-000000000001\",\n    \"token\": \"mock-4f1c...\",\n    \"expires_at\": \"2026-10-20T10:00:00Z\"\n  }\n}"
+                }
+              ]
+            },
+            {
+              "name": "14. Dependent got a CRITICAL incoming_call notification",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/notifications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": "Ring screen opens from this push."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const it = pm.response.json().items.filter(i => i.type === 'incoming_call');",
+                      "pm.test('one critical ring', () => { pm.expect(it.length).to.eql(1); pm.expect(it[0].priority).to.eql('critical'); pm.expect(it[0].data.call_id).to.eql(pm.environment.get('cl_call')); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "15. Dependent looks at the call (no join info yet)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call}}"
+                  ]
+                },
+                "description": "The callee must accept first (FR-E2)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('ringing, no join', () => { pm.expect(j.status).to.eql('ringing'); pm.expect(j.join).to.eql(null); pm.expect(j.from_me).to.eql(false); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "16. Same call again: nothing new",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "A double tap returns the same call: 200 and already_active = true.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\",\n  \"type\": \"video\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('same call', () => { pm.expect(pm.response.json().already_active).to.eql(true); pm.expect(pm.response.json().call_id).to.eql(pm.environment.get('cl_call')); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. Dependent calls back while it rings (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "One open call per person.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_p_id}}\",\n  \"type\": \"voice\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('USER_BUSY', () => pm.expect(pm.response.json().error.code).to.eql('USER_BUSY'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "18. Dependent accepts",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call}}/accept",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call}}",
+                    "accept"
+                  ]
+                },
+                "description": "Only the callee can accept. Now they get the join info."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('accepted, callee can join', () => { pm.expect(j.status).to.eql('accepted'); pm.expect(j.join.user_id).to.eql(pm.environment.get('cl_d_id')); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "19. Caller sees it accepted",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call}}"
+                  ]
+                },
+                "description": "The caller can poll this while it rings (the call SDK also shows when the other person joins)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('accepted', () => pm.expect(pm.response.json().status).to.eql('accepted'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "20. Primary hangs up",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call}}/end",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call}}",
+                    "end"
+                  ]
+                },
+                "description": "Either person can end an answered call. duration_s = seconds since the answer."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('ended with a duration', () => { pm.expect(j.status).to.eql('ended'); pm.expect(j.duration_s).to.be.at.least(0); pm.expect(j.join).to.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. Hang up again (safe to repeat)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call}}/end",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call}}",
+                    "end"
+                  ]
+                },
+                "description": "Still 200, same result."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('still ended', () => pm.expect(pm.response.json().status).to.eql('ended'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "22. Primary starts a voice call",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('cl_call2', pm.response.json().call_id);",
+                      "pm.test('voice is the default', () => pm.expect(pm.response.json().type).to.eql('voice'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. Dependent declines",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call2}}/decline",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call2}}",
+                    "decline"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('declined', () => pm.expect(pm.response.json().status).to.eql('declined'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. Accept after decline (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call2}}/accept",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call2}}",
+                    "accept"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('CALL_NOT_RINGING', () => pm.expect(pm.response.json().error.code).to.eql('CALL_NOT_RINGING'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Primary starts another call",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('cl_call3', pm.response.json().call_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "26. Primary hangs up before the answer",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call3}}/end",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call3}}",
+                    "end"
+                  ]
+                },
+                "description": "A ringing call ended by the caller becomes 'cancelled'; the Dependent gets a standard missed_call notification."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('cancelled', () => pm.expect(pm.response.json().status).to.eql('cancelled'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. Dependent got a missed_call notification",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/notifications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const it = pm.response.json().items.filter(i => i.type === 'missed_call');",
+                      "pm.test('one standard missed call', () => { pm.expect(it.length).to.eql(1); pm.expect(it[0].priority).to.eql('standard'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "28. Call history",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls?limit=10",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Newest first. Paged with next_before."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('three calls, newest cancelled', () => { pm.expect(j.items.length).to.eql(3); pm.expect(j.items[0].status).to.eql('cancelled'); pm.expect(j.items[2].status).to.eql('ended'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests",
+          "item": [
+            {
+              "name": "29. Start one more call",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "Setup for the checks below.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('cl_call4', pm.response.json().call_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "30. The caller cannot accept their own call (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call4}}/accept",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call4}}",
+                    "accept"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "31. Secondary cannot see it (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/{{cl_call4}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "{{cl_call4}}"
+                  ]
+                },
+                "description": "Not their call."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('CALL_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('CALL_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "32. Secondary without communication cannot call (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "Same permission as messages.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "33. Guardian to Guardian (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_s_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('NOT_LINKED_TO_DEPENDENT', () => pm.expect(pm.response.json().error.code).to.eql('NOT_LINKED_TO_DEPENDENT'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "34. Bad call type (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callee_id\": \"{{cl_d_id}}\",\n  \"type\": \"hologram\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "35. Unknown call (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{cl_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/calls/00000000-0000-4000-8000-000000000000",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls",
+                    "00000000-0000-4000-8000-000000000000"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('CALL_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('CALL_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "36. No token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/calls",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "calls"
                   ]
                 },
                 "description": "Login required."
