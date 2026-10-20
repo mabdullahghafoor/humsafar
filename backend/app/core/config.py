@@ -85,6 +85,20 @@ class Settings(BaseSettings):
     ALARM_DEFAULT_S: int = 60  # Task 3.7: how long the Dependent's phone sounds the alarm unless told otherwise
     ALARM_MIN_S: int = 10
     ALARM_MAX_S: int = 300
+    # Task 5.1: medical vault (FR-G1, G3), appointments (FR-G4).
+    RECORDS_STORAGE_DIR: str = ""  # where record files are saved (encrypted). Empty = ~/humsafar_uploads/records (outside the repo)
+    RECORDS_ENCRYPTION_KEY: str = ""  # secret for encrypting record files (FR-N2). Empty = derived from JWT_SECRET_KEY (development only). Set it in .env for real use and never change it later
+    RECORD_MAX_BYTES: int = 10_000_000  # about 10 MB per file
+    RECORDS_MAX_PER_DEPENDENT: int = 500
+    EXPORT_MAX_RECORDS: int = 200  # one PDF export never holds more records than this
+    EXPORT_MAX_BYTES: int = 60_000_000  # files added to one PDF export, in total; later files are left out with a note
+    PUBLIC_BASE_URL: str = ""  # e.g. https://api.example.com. Empty = doctor links are returned as a path only
+    SHARE_DEFAULT_HOURS: int = 72  # FR-G3 recommended default
+    SHARE_MAX_HOURS: int = 720  # longest a doctor link may live (30 days)
+    SHARE_MAX_ACTIVE: int = 10  # open links per Dependent at one time
+    APPOINTMENT_TIMEZONE: str = "Asia/Karachi"  # the time shown in reminders
+    APPOINTMENT_REMIND_LEADS_S: str = "86400,3600"  # reminders this long before: 24 h and 1 h (comma separated)
+    APPOINTMENT_MAX_OPEN: int = 100  # scheduled appointments per Dependent
     WELLNESS_ALERT_MAX_AGE_S: int = 21600  # a check found unanswered more than 6 h after its deadline is closed, not alerted
 
     SCHEDULER_ENABLED: bool = True

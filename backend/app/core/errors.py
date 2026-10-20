@@ -90,8 +90,20 @@ async def _unhandled_error_handler(request: Request, exc: Exception) -> JSONResp
     )
 
 
+async def _value_error_handler(request: Request, exc: ValueError) -> JSONResponse:
+    # Found in Task 5.1: text with a NUL character (0x00) makes the database driver raise ValueError for ANY endpoint
+    # that saves text. It is the caller's bad input, so answer 422 instead of 500. Any other ValueError is a real bug: let it through.
+    if "NUL" in str(exc) and "0x00" in str(exc):
+        return JSONResponse(
+            status_code=422,
+            content=error_body("VALIDATION_ERROR", "A text field contains a character that is not allowed.", {"fields": []}),
+        )
+    raise exc
+
+
 def register_error_handlers(app: FastAPI) -> None:
     app.add_exception_handler(AppError, _app_error_handler)
     app.add_exception_handler(StarletteHTTPException, _http_exception_handler)
     app.add_exception_handler(RequestValidationError, _validation_error_handler)
+    app.add_exception_handler(ValueError, _value_error_handler)
     app.add_exception_handler(Exception, _unhandled_error_handler)

@@ -1,4 +1,4 @@
-# Humsafar API reference (Tasks 1.3 to 4.4)
+# Humsafar API reference (Tasks 1.3 to 5.1)
 
 For Talha (Flutter) and Sarim (QA). Base URL (local): `http://127.0.0.1:8000`. Interactive docs: `http://127.0.0.1:8000/docs`.
 All bodies are JSON. The server is Abdullah's `backend/`.
@@ -27,6 +27,8 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
 | `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
+| `records_contract.md` | Medical Vault: records with files (encrypted), notes, PDF export (complete / year / month), doctor-shareable 72 h link |
+| `appointment_contract.md` | Appointments: add / move / cancel, who is told, reminders 24 h and 1 h before |
 | `../backend/sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
 ## 3. All endpoints
@@ -99,6 +101,18 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | POST `/calls/{id}/accept` | callee | Accept (gets the join info) |
 | POST `/calls/{id}/decline` | callee | Decline |
 | POST `/calls/{id}/end` | caller or callee | Hang up / cancel |
+| POST `/dependents/{id}/records` | the Dependent, or a Guardian with `health_records` | Add a medical record (multipart: `category`, `title`, `record_date`, optional `notes`, `client_id`, `file`) |
+| GET `/dependents/{id}/records` | same | List records (filters `category`, `year`, `month`; `limit` / `offset`) |
+| GET `/dependents/{id}/records/{record_id}` | same | One record |
+| GET `/dependents/{id}/records/{record_id}/file` | same | Download the original file (stored encrypted) |
+| PATCH / DELETE `/dependents/{id}/records/{record_id}` | uploader, or the Primary | Change / delete a record |
+| GET `/dependents/{id}/records/export` | same as list | PDF export: `scope` = `complete` / `year` / `month` |
+| POST / GET `/dependents/{id}/records/share` | same as list | Make a doctor link (default 72 h) / list the links |
+| DELETE `/dependents/{id}/records/share/{share_id}` | link maker, Primary, Dependent | Cancel a link |
+| GET `/shared/records/{token}` | **anyone with the link (no login)** | The doctor's read-only PDF |
+| POST / GET `/dependents/{id}/appointments` | the Dependent, or a Guardian with `health_records` | Add / list appointments (`when` = `upcoming` / `past` / `all`) |
+| GET / PATCH / DELETE `/dependents/{id}/appointments/{appointment_id}` | same | One / change / delete |
+| POST `/dependents/{id}/appointments/{appointment_id}/cancel` | same | Cancel (kept in the history) |
 
 Modules: `live_location`, `health_records`, `communication`, `emergency_alerts`, `camera_viewing`, `medication_management`.
 
@@ -111,11 +125,13 @@ Every error has the same shape; branch on `error.code`, never on `message`:
 |---|---|
 | 400 | `CONFIRM_TOKEN_EXPIRED`, `CONFIRM_TOKEN_INVALID`, `INVITE_EXPIRED`, `INVITE_INVALID`, `OTP_INVALID`, `PRIMARY_NOT_GOVERNABLE` |
 | 401 | `NOT_AUTHENTICATED`, `INVALID_CREDENTIALS`, `TOKEN_EXPIRED` (call refresh, retry once), `TOKEN_INVALID`, `TOKEN_WRONG_TYPE` |
-| 403 | `ACCOUNT_NOT_ACTIVATED`, `FORBIDDEN`, `GUARDIAN_NOT_VERIFIED`, `INVITE_NOT_FOR_YOU`, `MODULE_ACCESS_DENIED`, `NOT_LINKED_TO_DEPENDENT`, `NOT_PRIMARY_GUARDIAN`, `PRIMARY_CANNOT_ACCEPT_INVITE`, `SECONDARY_CANNOT_LINK` |
-| 404 | `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `DOSE_NOT_FOUND`, `EMERGENCY_CONTACT_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `MEDICATION_NOT_FOUND`, `NO_DOSE_DUE`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND`, `ESCALATION_NOT_FOUND`, `WELLNESS_CHECK_NOT_FOUND` |
-| 409 | `ALREADY_ESCALATED`, `ALREADY_LINKED`, `ALREADY_REGISTERED`, `ALREADY_VERIFIED`, `CNIC_ALREADY_REGISTERED`, `DOSE_ALREADY_CONFIRMED`, `EMAIL_ALREADY_REGISTERED`, `GEOFENCE_LIMIT_REACHED`, `GUARDIAN_CAP_REACHED`, `INVITEE_NOT_ELIGIBLE`, `MEDICATION_LIMIT_REACHED`, `NO_ACTIVE_ALARM`, `NO_ACTIVE_PANIC`, `NO_OPEN_ALERT`, `SCHEDULE_ALREADY_EXISTS`, `WELLNESS_LIMIT_REACHED`, `WELLNESS_TIME_EXISTS`, `PHONE_ALREADY_REGISTERED`, `PRIMARY_ALREADY_EXISTS` |
-| 422 | `VALIDATION_ERROR` (`details.fields` lists each bad field), `UNKNOWN_MODULE`, `TIMESTAMP_IN_FUTURE`, `TIMESTAMP_TOO_OLD`, `INVALID_RANGE` |
-| 500 | `INTERNAL_ERROR` |
+| 403 | `RECORD_MODIFY_DENIED`, `SHARE_MODIFY_DENIED`, `CATEGORY_NOT_ALLOWED`, `ACCOUNT_NOT_ACTIVATED`, `FORBIDDEN`, `GUARDIAN_NOT_VERIFIED`, `INVITE_NOT_FOR_YOU`, `MODULE_ACCESS_DENIED`, `NOT_LINKED_TO_DEPENDENT`, `NOT_PRIMARY_GUARDIAN`, `PRIMARY_CANNOT_ACCEPT_INVITE`, `SECONDARY_CANNOT_LINK` |
+| 404 | `RECORD_NOT_FOUND`, `NO_FILE`, `FILE_NOT_FOUND`, `SHARE_NOT_FOUND`, `APPOINTMENT_NOT_FOUND`, `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `DOSE_NOT_FOUND`, `EMERGENCY_CONTACT_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `MEDICATION_NOT_FOUND`, `NO_DOSE_DUE`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND`, `ESCALATION_NOT_FOUND`, `WELLNESS_CHECK_NOT_FOUND` |
+| 409 | `RECORDS_LIMIT`, `SHARE_LIMIT`, `APPOINTMENT_EXISTS`, `APPOINTMENTS_LIMIT`, `APPOINTMENT_CANCELLED`, `ALREADY_ESCALATED`, `ALREADY_LINKED`, `ALREADY_REGISTERED`, `ALREADY_VERIFIED`, `CNIC_ALREADY_REGISTERED`, `DOSE_ALREADY_CONFIRMED`, `EMAIL_ALREADY_REGISTERED`, `GEOFENCE_LIMIT_REACHED`, `GUARDIAN_CAP_REACHED`, `INVITEE_NOT_ELIGIBLE`, `MEDICATION_LIMIT_REACHED`, `NO_ACTIVE_ALARM`, `NO_ACTIVE_PANIC`, `NO_OPEN_ALERT`, `SCHEDULE_ALREADY_EXISTS`, `WELLNESS_LIMIT_REACHED`, `WELLNESS_TIME_EXISTS`, `PHONE_ALREADY_REGISTERED`, `PRIMARY_ALREADY_EXISTS` |
+| 410 | `SHARE_EXPIRED`, `SHARE_REVOKED` (the doctor link) |
+| 413 / 415 | `FILE_TOO_LARGE` / `UNSUPPORTED_FILE` (record files: PDF, JPEG, PNG up to 10 MB) |
+| 422 | `RECORD_NEEDS_CONTENT`, `INVALID_DATE`, `APPOINTMENT_IN_PAST`, `VALIDATION_ERROR` (`details.fields` lists each bad field), `UNKNOWN_MODULE`, `TIMESTAMP_IN_FUTURE`, `TIMESTAMP_TOO_OLD`, `INVALID_RANGE` |
+| 500 | `INTERNAL_ERROR`, `FILE_UNREADABLE` (a stored record file is damaged) |
 
 ## 5. The user journey (what the screens follow)
 1. **Guardian:** register, log in, verify (CNIC or phone OTP).

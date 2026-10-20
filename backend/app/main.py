@@ -16,8 +16,8 @@ from fastapi import FastAPI
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core import scheduler
-from app.routers import alarm, auth, calls, device_health, emergency_contact, escalation, geofence, health, kyc, linkage, location, medication, messages, notifications, panic, permissions, wellness
-from app.services import call_service, device_health_service, escalation_service, external_contact_service, medication_service, notification_service, wellness_service
+from app.routers import alarm, appointments, auth, calls, device_health, emergency_contact, escalation, geofence, health, kyc, linkage, location, medication, messages, notifications, panic, permissions, records, wellness
+from app.services import appointments_service, call_service, device_health_service, escalation_service, external_contact_service, medication_service, notification_service, wellness_service
 
 settings = get_settings()
 
@@ -28,6 +28,7 @@ scheduler.register("wellness_sweep", wellness_service.sweep)  # Task 3.4 (before
 scheduler.register("escalation_sweep", escalation_service.sweep)  # Task 3.5 (after the other sweeps, before the dispatch)
 scheduler.register("external_contact_sweep", external_contact_service.sweep)  # Task 3.8 (after the escalation sweep)
 scheduler.register("call_sweep", call_service.sweep)  # Task 4.4
+scheduler.register("appointment_tick", appointments_service.tick)  # Task 5.1 (reminders; after the sweeps, the dispatch only handles alert events)
 scheduler.register("notification_dispatch", notification_service.dispatch_events)  # Task 3.1 (after the sweep)
 scheduler.register("medication_tick", medication_service.tick)  # Task 3.2
 scheduler.register("wellness_tick", wellness_service.tick)  # Task 3.4
@@ -75,6 +76,9 @@ app.include_router(panic.router)  # Task 3.6
 app.include_router(alarm.router)  # Task 3.7
 app.include_router(messages.router)  # Task 4.2
 app.include_router(calls.router)  # Task 4.4
+app.include_router(records.router)  # Task 5.1
+app.include_router(records.public_router)  # Task 5.1 (doctor link, no login)
+app.include_router(appointments.router)  # Task 5.1
 
 # Future (added as each phase is implemented):
 # app.include_router(emergency.router, prefix="/emergency", tags=["Emergency"]) # Phase 3

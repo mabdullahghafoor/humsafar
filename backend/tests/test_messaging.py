@@ -458,3 +458,11 @@ def test_database_refuses_voice_without_audio_or_length(db):
         with pytest.raises(IntegrityError):
             db.commit()
         db.rollback()
+
+
+def test_a_nul_character_in_a_message_is_a_422_not_a_server_error(client):
+    """Found while building 5.1: the database cannot store NUL (0x00) and the driver raised ValueError -> 500."""
+    t = msgteam(client)
+    assert_error(send(client, t["pt"], t["dep"], "hi\x00there"), 422, "VALIDATION_ERROR")
+    assert send(client, t["pt"], t["dep"], "hi there").status_code == 201
+    assert history(client, t["pt"], t["dep"])["items"][0]["body"] == "hi there"

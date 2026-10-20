@@ -32,6 +32,7 @@ from app.models.medical import (
     MedicalRecord,
     MedicationConfirmation,
     MedicationSchedule,
+    RecordShare,
     VitalReading,
     WearableDevice,
 )
@@ -62,6 +63,7 @@ __all__ = [
     "PushToken",
     "PermissionGrant",
     "User",
+    "RecordShare",
     "VitalReading",
     "WearableDevice",
     "WellnessCheckResponse",
