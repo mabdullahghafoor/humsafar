@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1-4 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging, Voice messages, Calls)",
+    "name": "Humsafar API - Phase 1-5 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging, Voice messages, Calls, Medical vault, Appointments)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -26738,6 +26738,2633 @@
                     "exec": [
                       "pm.test('401', () => pm.response.to.have.status(401));",
                       "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "19 - Medical vault & appointments (Task 5.1)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{rv_p_email}}\",\n  \"phone\": \"{{rv_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('rv_p_email','rvp'+run+'@humsafar-test.com'); pm.environment.set('rv_p_phone','03'+r());",
+                      "pm.environment.set('rv_d_email','rvd'+run+'@humsafar-test.com'); pm.environment.set('rv_d_phone','03'+r());",
+                      "pm.environment.set('rv_s_email','rvs'+run+'@humsafar-test.com'); pm.environment.set('rv_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('rv_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{rv_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('rv_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{rv_d_email}}\",\n  \"phone\": \"{{rv_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('rv_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{rv_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{rv_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('rv_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{rv_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('rv_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{rv_s_email}}\",\n  \"phone\": \"{{rv_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{rv_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{rv_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('rv_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('rv_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Set up two future appointment times",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Only prepares the times used by the appointment checks (2 and 3 days from now)."
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.environment.set('rv_appt_time', new Date(Date.now() + 2*86400000).toISOString());",
+                      "pm.environment.set('rv_appt_time2', new Date(Date.now() + 3*86400000).toISOString());",
+                      "pm.environment.set('rv_past_time', new Date(Date.now() - 86400000).toISOString());"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Records",
+          "item": [
+            {
+              "name": "13. Primary adds a lab report (PDF)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarRecordBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "Multipart form: category (prescription, lab_report, xray, other), title, record_date (the date of the document), optional notes, optional client_id, optional file (PDF, JPEG or PNG up to 10 MB). A record needs a file, a note, or both. The file is stored encrypted. In the app you attach the real file; this request carries a tiny test file.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nlab_report\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nBlood test\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2026-03-10\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"notes\"\r\n\r\nFasting\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\n8f1c3a52-6d47-4e90-b2a1-5c7d9e0f1a23\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"file\"; filename=\"report.pdf\"\r\nContent-Type: application/pdf\r\n\r\n%PDF-1.4\n% tiny test file for Postman only (the server checks the first bytes, so this is accepted)\r\n--HumsafarRecordBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('saved with a file', () => { pm.expect(j.category).to.eql('lab_report'); pm.expect(j.has_file).to.eql(true); pm.expect(j.content_type).to.eql('application/pdf'); pm.expect(j.file_name).to.eql('report.pdf'); pm.expect(j.can_modify).to.eql(true); pm.expect(j.already_saved).to.eql(false); });",
+                      "pm.environment.set('rv_rec', j.record_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "201 Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{rv_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{rv_d_id}}",
+                        "records"
+                      ]
+                    },
+                    "description": "Multipart form: category (prescription, lab_report, xray, other), title, record_date (the date of the document), optional notes, optional client_id, optional file (PDF, JPEG or PNG up to 10 MB). A record needs a file, a note, or both. The file is stored encrypted. In the app you attach the real file; this request carries a tiny test file.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nlab_report\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nBlood test\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2026-03-10\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"notes\"\r\n\r\nFasting\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\n8f1c3a52-6d47-4e90-b2a1-5c7d9e0f1a23\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"file\"; filename=\"report.pdf\"\r\nContent-Type: application/pdf\r\n\r\n%PDF-1.4\n% tiny test file for Postman only (the server checks the first bytes, so this is accepted)\r\n--HumsafarRecordBoundary--\r\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"record_id\": \"5c1d9e30-8a47-4b26-9f10-2d3e4a5b6c7d\",\n  \"dependent_id\": \"00000000-0000-0000-0000-000000000002\",\n  \"category\": \"lab_report\",\n  \"title\": \"Blood test\",\n  \"notes\": \"Fasting\",\n  \"record_date\": \"2026-03-10\",\n  \"has_file\": true,\n  \"file_name\": \"report.pdf\",\n  \"content_type\": \"application/pdf\",\n  \"size_bytes\": 96,\n  \"file_path\": \"/dependents/00000000-0000-0000-0000-000000000002/records/5c1d9e30-8a47-4b26-9f10-2d3e4a5b6c7d/file\",\n  \"uploaded_by\": \"00000000-0000-0000-0000-000000000001\",\n  \"uploaded_by_name\": \"Test User\",\n  \"uploaded_at\": \"2026-10-20T09:00:00Z\",\n  \"can_modify\": true,\n  \"already_saved\": false\n}"
+                }
+              ]
+            },
+            {
+              "name": "14. Same upload again (same client_id)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarRecordBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "A network retry: nothing is saved twice. 200 and already_saved = true.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nlab_report\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nBlood test\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2026-03-10\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"notes\"\r\n\r\nFasting\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\n8f1c3a52-6d47-4e90-b2a1-5c7d9e0f1a23\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"file\"; filename=\"report.pdf\"\r\nContent-Type: application/pdf\r\n\r\n%PDF-1.4\n% tiny test file for Postman only (the server checks the first bytes, so this is accepted)\r\n--HumsafarRecordBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('already saved, same record', () => { pm.expect(pm.response.json().already_saved).to.eql(true); pm.expect(pm.response.json().record_id).to.eql(pm.environment.get('rv_rec')); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "15. Dependent adds a note-only record",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarRecordBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "The Dependent can add records to their own vault. No file: the note is the record.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nprescription\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nMetformin 500 mg\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2026-02-01\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"notes\"\r\n\r\nTwice a day after meals\r\n--HumsafarRecordBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('note only', () => { pm.expect(j.has_file).to.eql(false); pm.expect(j.file_path).to.eql(null); pm.expect(j.can_modify).to.eql(true); });",
+                      "pm.environment.set('rv_rec2', j.record_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "16. List the vault",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "Newest record date first. Paged with limit (1 to 100) and offset; `total` counts all pages. Filters: category, year, month (month needs year)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('two records, newest date first', () => { pm.expect(j.total).to.eql(2); pm.expect(j.items[0].title).to.eql('Blood test'); pm.expect(j.items[1].title).to.eql('Metformin 500 mg'); pm.expect(j.items[1].can_modify).to.eql(true); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. Filter by category",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records?category=prescription",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "prescription"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('only the prescription', () => { const j = pm.response.json(); pm.expect(j.total).to.eql(1); pm.expect(j.items[0].category).to.eql('prescription'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "18. Filter by month",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records?year=2026&month=3",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ],
+                  "query": [
+                    {
+                      "key": "year",
+                      "value": "2026"
+                    },
+                    {
+                      "key": "month",
+                      "value": "3"
+                    }
+                  ]
+                },
+                "description": "Uses the record date, not the upload date."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('only March', () => { const j = pm.response.json(); pm.expect(j.total).to.eql(1); pm.expect(j.items[0].title).to.eql('Blood test'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "19. Get one record",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/{{rv_rec}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "{{rv_rec}}"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('the lab report', () => pm.expect(pm.response.json().title).to.eql('Blood test'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "20. Download the file",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/{{rv_rec}}/file",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "{{rv_rec}}",
+                    "file"
+                  ]
+                },
+                "description": "Needs the login token. The server decrypts it and sends the original file. Each download is written to the audit log."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('the original file', () => pm.expect(pm.response.text()).to.include('%PDF-1.4'));",
+                      "pm.test('not cached', () => pm.expect(pm.response.headers.get('Cache-Control')).to.include('no-store'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. Dependent renames their own record",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/{{rv_rec2}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "{{rv_rec2}}"
+                  ]
+                },
+                "description": "Only the person who added a record (or the Primary Guardian) can change or delete it. Send only the fields to change.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Metformin 500 mg (morning and evening)\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('renamed', () => pm.expect(pm.response.json().title).to.include('morning and evening'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Access by a Secondary",
+          "item": [
+            {
+              "name": "22. Secondary has no health_records yet (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "A Secondary Guardian needs the health_records permission from the Primary."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. Primary grants health_records",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/permissions/health_records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "permissions",
+                    "health_records"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{rv_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. Secondary now sees the vault",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('two records', () => pm.expect(pm.response.json().total).to.eql(2));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Secondary cannot delete the Primary's record (expect 403)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/{{rv_rec}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "{{rv_rec}}"
+                  ]
+                },
+                "description": "Only the uploader or the Primary can change or delete."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('RECORD_MODIFY_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('RECORD_MODIFY_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Export and doctor link",
+          "item": [
+            {
+              "name": "26. Export: complete history (PDF)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/export",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "export"
+                  ]
+                },
+                "description": "scope = complete (default), year (+ year) or month (+ year and month). The PDF has a summary table, the notes, pictures, and attached PDF files. Postman shows it as raw text; save the response to open it."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('a PDF', () => { pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/pdf'); pm.expect(pm.response.text().slice(0, 5)).to.eql('%PDF-'); });",
+                      "pm.test('file name', () => pm.expect(pm.response.headers.get('Content-Disposition')).to.include('humsafar-records-complete.pdf'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. Export: one year",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/export?scope=year&year=2026",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "export"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "year"
+                    },
+                    {
+                      "key": "year",
+                      "value": "2026"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('2026 file', () => pm.expect(pm.response.headers.get('Content-Disposition')).to.include('humsafar-records-2026.pdf'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "28. Export: one month",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/export?scope=month&year=2026&month=3",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "export"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "month"
+                    },
+                    {
+                      "key": "year",
+                      "value": "2026"
+                    },
+                    {
+                      "key": "month",
+                      "value": "3"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('March file', () => pm.expect(pm.response.headers.get('Content-Disposition')).to.include('humsafar-records-2026-03.pdf'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "29. Export with a wrong period (expect 422)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/export?scope=month&year=2026",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "export"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "month"
+                    },
+                    {
+                      "key": "year",
+                      "value": "2026"
+                    }
+                  ]
+                },
+                "description": "A month export needs both year and month."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "30. Primary makes a doctor link",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/share",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "share"
+                  ]
+                },
+                "description": "A read-only link that opens a PDF without any login. Default 72 hours (`hours` 1 to 720). Optional scope / year / month / categories. The secret `token` is shown ONLY in this reply; the server keeps just a hash. Give the doctor `url` (add the server address in front).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scope\": \"complete\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('active link, token shown once', () => { pm.expect(j.status).to.eql('active'); pm.expect(j.token.length).to.be.at.least(40); pm.expect(j.url).to.eql('/shared/records/' + j.token); });",
+                      "pm.test('72 hours', () => pm.expect(Math.round((new Date(j.expires_at) - new Date(j.created_at)) / 3600000)).to.eql(72));",
+                      "pm.environment.set('rv_share', j.share_id); pm.environment.set('rv_share_token', j.token);"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "201 Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{rv_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/share",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{rv_d_id}}",
+                        "records",
+                        "share"
+                      ]
+                    },
+                    "description": "A read-only link that opens a PDF without any login. Default 72 hours (`hours` 1 to 720). Optional scope / year / month / categories. The secret `token` is shown ONLY in this reply; the server keeps just a hash. Give the doctor `url` (add the server address in front).",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"scope\": \"complete\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"share_id\": \"7e2f4a10-3b5c-4d68-8e91-0a1b2c3d4e5f\",\n  \"dependent_id\": \"00000000-0000-0000-0000-000000000002\",\n  \"created_by\": \"00000000-0000-0000-0000-000000000001\",\n  \"scope\": \"complete\",\n  \"year\": null,\n  \"month\": null,\n  \"categories\": [\n    \"prescription\",\n    \"lab_report\",\n    \"xray\",\n    \"other\"\n  ],\n  \"created_at\": \"2026-10-20T09:00:00Z\",\n  \"expires_at\": \"2026-10-23T09:00:00Z\",\n  \"revoked_at\": null,\n  \"status\": \"active\",\n  \"open_count\": 0,\n  \"last_opened_at\": null,\n  \"token\": \"k3Jx...(43 characters, shown only now)\",\n  \"url\": \"/shared/records/k3Jx...\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "31. The doctor opens the link (no login)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/shared/records/{{rv_share_token}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "shared",
+                    "records",
+                    "{{rv_share_token}}"
+                  ]
+                },
+                "description": "No Authorization header at all: the secret in the address is the key. Opens inline as a PDF and is never cached."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('PDF, not cached, not indexed', () => { pm.expect(pm.response.text().slice(0, 5)).to.eql('%PDF-'); pm.expect(pm.response.headers.get('Cache-Control')).to.include('no-store'); pm.expect(pm.response.headers.get('X-Robots-Tag')).to.eql('noindex'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "32. List the links",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/share",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "share"
+                  ]
+                },
+                "description": "The Dependent and the Primary see every link; a Secondary only the links they made. The token is never shown again."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const it = pm.response.json().items;",
+                      "pm.test('one link, opened once, no token', () => { pm.expect(it.length).to.eql(1); pm.expect(it[0].open_count).to.eql(1); pm.expect(it[0].status).to.eql('active'); pm.expect(it[0].token).to.eql(undefined); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "33. Cancel the link",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/share/{{rv_share}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "share",
+                    "{{rv_share}}"
+                  ]
+                },
+                "description": "The Primary, the Dependent, or whoever made it. Safe to repeat."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('revoked', () => pm.expect(pm.response.json().status).to.eql('revoked'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "34. Open the cancelled link (expect 410)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/shared/records/{{rv_share_token}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "shared",
+                    "records",
+                    "{{rv_share_token}}"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('410', () => pm.response.to.have.status(410));",
+                      "pm.test('SHARE_REVOKED', () => pm.expect(pm.response.json().error.code).to.eql('SHARE_REVOKED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "35. Open a link that never existed (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/shared/records/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "shared",
+                    "records",
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('SHARE_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('SHARE_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Appointments",
+          "item": [
+            {
+              "name": "36. Primary adds an appointment",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments"
+                  ]
+                },
+                "description": "The Dependent or a Guardian with health_records can add. scheduled_at must have a time zone and be in the future. Everyone else involved gets a standard `appointment_update` notification, and reminders follow 24 h and 1 h before (to the Dependent and the Guardians who may see appointments).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"provider_name\": \"Dr. Ayesha Khan\",\n  \"scheduled_at\": \"{{rv_appt_time}}\",\n  \"notes\": \"Bring the lab report\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('scheduled, upcoming', () => { pm.expect(j.status).to.eql('scheduled'); pm.expect(j.is_upcoming).to.eql(true); pm.expect(j.provider_name).to.eql('Dr. Ayesha Khan'); });",
+                      "pm.environment.set('rv_appt', j.appointment_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "201 Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{rv_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{rv_d_id}}",
+                        "appointments"
+                      ]
+                    },
+                    "description": "The Dependent or a Guardian with health_records can add. scheduled_at must have a time zone and be in the future. Everyone else involved gets a standard `appointment_update` notification, and reminders follow 24 h and 1 h before (to the Dependent and the Guardians who may see appointments).",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"provider_name\": \"Dr. Ayesha Khan\",\n  \"scheduled_at\": \"{{rv_appt_time}}\",\n  \"notes\": \"Bring the lab report\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"appointment_id\": \"2a9b8c7d-6e5f-4a3b-9c2d-1e0f9a8b7c6d\",\n  \"dependent_id\": \"00000000-0000-0000-0000-000000000002\",\n  \"provider_name\": \"Dr. Ayesha Khan\",\n  \"scheduled_at\": \"2026-10-22T10:30:00+05:00\",\n  \"notes\": \"Bring the lab report\",\n  \"status\": \"scheduled\",\n  \"created_by\": \"00000000-0000-0000-0000-000000000001\",\n  \"created_by_name\": \"Test User\",\n  \"created_at\": \"2026-10-20T09:00:00Z\",\n  \"is_upcoming\": true\n}"
+                }
+              ]
+            },
+            {
+              "name": "37. Dependent was told",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/notifications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": "type = appointment_update, standard priority."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const it = pm.response.json().items.filter(i => i.type === 'appointment_update');",
+                      "pm.test('one standard message', () => { pm.expect(it.length).to.eql(1); pm.expect(it[0].priority).to.eql('standard'); pm.expect(it[0].data.appointment_id).to.eql(pm.environment.get('rv_appt')); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "38. Same appointment again (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments"
+                  ]
+                },
+                "description": "Same doctor, same time.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"provider_name\": \"dr. ayesha khan\",\n  \"scheduled_at\": \"{{rv_appt_time}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('APPOINTMENT_EXISTS', () => pm.expect(pm.response.json().error.code).to.eql('APPOINTMENT_EXISTS'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "39. An appointment in the past (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"provider_name\": \"Dr. Past\",\n  \"scheduled_at\": \"{{rv_past_time}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('APPOINTMENT_IN_PAST', () => pm.expect(pm.response.json().error.code).to.eql('APPOINTMENT_IN_PAST'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "40. List upcoming appointments",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments"
+                  ]
+                },
+                "description": "when = upcoming (default, soonest first), past or all (latest first). Paged with limit / offset."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('one upcoming', () => { const j = pm.response.json(); pm.expect(j.total).to.eql(1); pm.expect(j.items[0].created_by_name).to.eql('Test User'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "41. Dependent moves it",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments/{{rv_appt}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments",
+                    "{{rv_appt}}"
+                  ]
+                },
+                "description": "Send only what changes. A new time also resets the reminders and tells the others.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scheduled_at\": \"{{rv_appt_time2}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('moved', () => pm.expect(new Date(pm.response.json().scheduled_at).getTime()).to.eql(new Date(pm.environment.get('rv_appt_time2')).getTime()));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "42. Primary was told it moved",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/notifications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('moved message', () => pm.expect(pm.response.json().items.filter(i => i.type === 'appointment_update' && i.title === 'Appointment moved').length).to.eql(1));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "43. Primary cancels it",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments/{{rv_appt}}/cancel",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments",
+                    "{{rv_appt}}",
+                    "cancel"
+                  ]
+                },
+                "description": "The appointment stays in the history as cancelled. Safe to repeat."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('cancelled', () => { pm.expect(pm.response.json().status).to.eql('cancelled'); pm.expect(pm.response.json().is_upcoming).to.eql(false); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "44. Change a cancelled appointment (expect 409)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments/{{rv_appt}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments",
+                    "{{rv_appt}}"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": \"x\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('APPOINTMENT_CANCELLED', () => pm.expect(pm.response.json().error.code).to.eql('APPOINTMENT_CANCELLED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "45. Cancelled ones are in the history",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments?when=past",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments"
+                  ],
+                  "query": [
+                    {
+                      "key": "when",
+                      "value": "past"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('one cancelled', () => { const j = pm.response.json(); pm.expect(j.total).to.eql(1); pm.expect(j.items[0].status).to.eql('cancelled'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "46. Delete it completely",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments/{{rv_appt}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments",
+                    "{{rv_appt}}"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('204', () => pm.response.to.have.status(204));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "47. It is gone (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/appointments/{{rv_appt}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "appointments",
+                    "{{rv_appt}}"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('APPOINTMENT_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('APPOINTMENT_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests and clean-up",
+          "item": [
+            {
+              "name": "48. Unknown category (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarRecordBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nscan\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nx\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2026-03-10\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"notes\"\r\n\r\nn\r\n--HumsafarRecordBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "49. Nothing to save (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarRecordBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "A record needs a file or a note.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nother\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nEmpty\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2026-03-10\r\n--HumsafarRecordBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('RECORD_NEEDS_CONTENT', () => pm.expect(pm.response.json().error.code).to.eql('RECORD_NEEDS_CONTENT'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "50. Not a PDF / JPEG / PNG (expect 415)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarRecordBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "The server checks the real file header, not the name.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nother\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nText\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2026-03-10\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"file\"; filename=\"fake.pdf\"\r\nContent-Type: application/pdf\r\n\r\nthis is plain text, not a PDF\r\n--HumsafarRecordBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('415', () => pm.response.to.have.status(415));",
+                      "pm.test('UNSUPPORTED_FILE', () => pm.expect(pm.response.json().error.code).to.eql('UNSUPPORTED_FILE'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "51. Record date in the future (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data; boundary=HumsafarRecordBoundary"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"category\"\r\n\r\nother\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"title\"\r\n\r\nFuture\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"record_date\"\r\n\r\n2999-01-01\r\n--HumsafarRecordBoundary\r\nContent-Disposition: form-data; name=\"notes\"\r\n\r\nn\r\n--HumsafarRecordBoundary--\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('INVALID_DATE', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_DATE'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "52. Record that does not exist (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/00000000-0000-4000-8000-000000000000",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "00000000-0000-4000-8000-000000000000"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('RECORD_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('RECORD_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "53. No token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records"
+                  ]
+                },
+                "description": "Login required."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "54. Primary deletes the lab report",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/{{rv_rec}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "{{rv_rec}}"
+                  ]
+                },
+                "description": "Removes the record and its stored file."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('204', () => pm.response.to.have.status(204));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "55. It is gone (expect 404)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{rv_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{rv_d_id}}/records/{{rv_rec}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{rv_d_id}}",
+                    "records",
+                    "{{rv_rec}}"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('404', () => pm.response.to.have.status(404));",
+                      "pm.test('RECORD_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('RECORD_NOT_FOUND'));"
                     ]
                   }
                 }

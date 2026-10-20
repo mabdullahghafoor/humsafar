@@ -1,6 +1,6 @@
 # Humsafar Progress Tracker
 
-Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-19.
+Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-20.
 Statuses: Done = merged into `dev`.
 
 ## Backend (Abdullah)
@@ -32,7 +32,8 @@ Statuses: Done = merged into `dev`.
 | 4.2 | Text messaging: send, history, conversations, read receipts, safe retry, permission `communication` (+ contract `docs/api/messaging_contract.md`) | Done |
 | 4.3 | Priority voice messages: Guardian uploads audio, critical notification, download, safe retry (section in `messaging_contract.md`) | Done |
 | 4.4 | Voice / video calls: start, ring, accept / decline / end, join token (mock provider), timeouts, history (+ contract `docs/api/call_contract.md`) | Done |
-| 4.4b | Real ZegoCloud join token (token04) behind `CALL_PROVIDER=zego`; keys only in `.env` | In review (PR) |
+| 4.4b | Real ZegoCloud join token (token04) behind `CALL_PROVIDER=zego`; keys only in `.env` (PR #41; checked live with the real keys) | Done |
+| 5.1 | Medical vault (records + encrypted files, PDF export complete / year / month, 72 h doctor link) and appointments with reminders (migration 0012; contracts `records_contract.md`, `appointment_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`

@@ -87,8 +87,10 @@ def _verified(profile: GuardianProfile | None) -> bool:
     return profile is not None and (profile.phone_verified or profile.cnic_verified)
 
 
-def recipients(db: Session, dependent_id: uuid.UUID, audience: str, tier: str = "primary") -> list[uuid.UUID]:
-    """User ids of the Guardians to notify, Primary first. Only ACTIVE links count."""
+def recipients(
+    db: Session, dependent_id: uuid.UUID, audience: str, tier: str = "primary", module: str = "emergency_alerts"
+) -> list[uuid.UUID]:
+    """User ids of the Guardians to notify, Primary first. Only ACTIVE links count. A Secondary needs a grant for `module`."""
     links = db.scalars(
         select(GuardianDependentLink).where(
             GuardianDependentLink.dependent_id == dependent_id, GuardianDependentLink.status == ACTIVE
@@ -101,7 +103,7 @@ def recipients(db: Session, dependent_id: uuid.UUID, audience: str, tier: str = 
         if not _verified(db.get(GuardianProfile, link.guardian_id)):
             return False
         grant = db.scalar(
-            select(PermissionGrant).where(PermissionGrant.link_id == link.link_id, PermissionGrant.module == "emergency_alerts")
+            select(PermissionGrant).where(PermissionGrant.link_id == link.link_id, PermissionGrant.module == module)
         )
         return bool(grant and grant.granted)
 

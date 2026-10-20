@@ -1,5 +1,5 @@
 """
-File storage for voice messages (Task 4.3). Same pattern as push / SMS: one small class now (local disk),
+File storage for voice messages (Task 4.3) and medical records (Task 5.1). Same pattern as push / SMS: one small class now (local disk),
 a cloud bucket later is one new class. Files are named by a random key, never by what the user sent.
 """
 
@@ -34,5 +34,8 @@ class LocalStorage:
             p.unlink(missing_ok=True)
 
 
-def get_storage() -> LocalStorage:
-    return LocalStorage(get_settings().VOICE_STORAGE_DIR or str(Path.home() / "humsafar_uploads" / "voice"))
+def get_storage(kind: str = "voice") -> LocalStorage:
+    """`kind`: 'voice' (Task 4.3) or 'records' (Task 5.1). Each has its own folder, both outside the repo by default."""
+    s = get_settings()
+    configured = s.RECORDS_STORAGE_DIR if kind == "records" else s.VOICE_STORAGE_DIR
+    return LocalStorage(configured or str(Path.home() / "humsafar_uploads" / kind))

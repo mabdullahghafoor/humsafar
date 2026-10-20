@@ -16,6 +16,9 @@ alembic==1.14.0
 PyJWT==2.10.1
 bcrypt==4.2.1
 cryptography==50.0.1  # Task 4.4: ZegoCloud call tokens (AES-GCM)
+reportlab==5.0.1  # Task 5.1: PDF export of medical records
+pypdf==5.9.0  # Task 5.1: adds attached PDF files to the export
+pillow==12.3.0  # Task 5.1: pictures in the export (also needed by reportlab)
 email-validator==2.2.0
 python-multipart==0.0.20
 

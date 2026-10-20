@@ -10,20 +10,26 @@ from sqlalchemy import (
     Boolean,
     CheckConstraint,
     Column,
+    Date,
     DateTime,
     Float,
     Index,
+    Integer,
     String,
     Text,
     Time,
     UniqueConstraint,
     text,
 )
+from sqlalchemy.dialects.postgresql import ARRAY, UUID
 
 from app.core.database import Base
 from app.models._common import fk_col, in_list, ts_col, uuid_pk
 
 VITAL_SOURCES = ("manual", "wearable")
+RECORD_CATEGORIES = ("prescription", "lab_report", "xray", "other")  # FR-G1 (the SDS column is `type`)
+APPOINTMENT_STATUSES = ("scheduled", "cancelled")
+SHARE_SCOPES = ("complete", "year", "month")
 
 
 class MedicationSchedule(Base):
@@ -60,14 +66,72 @@ class MedicationConfirmation(Base):
 
 
 class MedicalRecord(Base):
+    """
+    One entry in the Medical Vault (Task 5.1, FR-G1). It can hold an uploaded file (PDF / JPEG / PNG, stored
+    encrypted, see records_service), a typed note, or both. `type` is the category (SDS column name).
+    """
+
     __tablename__ = "medical_records"
 
     record_id = uuid_pk()
     dependent_id = fk_col("dependent_profiles.user_id", index=True)
     type = Column(String(50), nullable=False)
-    file_url = Column(Text, nullable=False)
+    # Task 5.1 (clarification 91): nullable now, because a record may be a typed note without a file.
+    file_url = Column(Text, nullable=True)
     uploaded_by = fk_col("users.user_id")
     uploaded_at = ts_col()
+    title = Column(String(150), nullable=False)
+    notes = Column(Text, nullable=True)
+    record_date = Column(Date, nullable=False)  # the date of the document / visit; year and month exports use it
+    file_name = Column(String(150), nullable=True)  # the name shown on download (cleaned)
+    content_type = Column(String(50), nullable=True)
+    size_bytes = Column(Integer, nullable=True)
+    client_id = Column(UUID(as_uuid=True), nullable=True)  # safe retry of an upload
+
+    __table_args__ = (
+        CheckConstraint(in_list("type", RECORD_CATEGORIES), name="type_valid"),
+        CheckConstraint("file_url IS NOT NULL OR (notes IS NOT NULL AND char_length(btrim(notes)) > 0)", name="has_content"),
+        CheckConstraint("char_length(btrim(title)) BETWEEN 1 AND 150", name="title_length"),
+        CheckConstraint("notes IS NULL OR char_length(notes) <= 5000", name="notes_length"),
+        CheckConstraint("file_url IS NOT NULL OR (content_type IS NULL AND size_bytes IS NULL AND file_name IS NULL)", name="file_meta"),
+        CheckConstraint("size_bytes IS NULL OR size_bytes > 0", name="size_positive"),
+        Index("ix_medical_records_dependent_date", "dependent_id", "record_date"),
+        Index("uq_medical_records_uploader_client", "uploaded_by", "client_id", unique=True, postgresql_where=text("client_id IS NOT NULL")),
+    )
+
+
+class RecordShare(Base):
+    """A doctor-shareable read-only link (Task 5.1, FR-G3). Only a hash of the secret token is stored."""
+
+    __tablename__ = "record_shares"
+
+    share_id = uuid_pk()
+    dependent_id = fk_col("dependent_profiles.user_id", index=True)
+    created_by = fk_col("users.user_id")
+    token_hash = Column(String(64), nullable=False, unique=True)
+    scope = Column(String(10), nullable=False)
+    year = Column(Integer, nullable=True)
+    month = Column(Integer, nullable=True)
+    categories = Column(ARRAY(String(50)), nullable=False)  # what the link shows, fixed when it was made
+    created_at = ts_col()
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    revoked_at = Column(DateTime(timezone=True), nullable=True)
+    open_count = Column(Integer, nullable=False, server_default=text("0"))
+    last_opened_at = Column(DateTime(timezone=True), nullable=True)
+
+    __table_args__ = (
+        CheckConstraint(in_list("scope", SHARE_SCOPES), name="scope_valid"),
+        CheckConstraint(
+            "(scope = 'complete' AND year IS NULL AND month IS NULL) "
+            "OR (scope = 'year' AND year IS NOT NULL AND month IS NULL) "
+            "OR (scope = 'month' AND year IS NOT NULL AND month IS NOT NULL)",
+            name="scope_period",
+        ),
+        CheckConstraint("month IS NULL OR month BETWEEN 1 AND 12", name="month_range"),
+        CheckConstraint("year IS NULL OR year BETWEEN 1900 AND 2200", name="year_range"),
+        CheckConstraint("expires_at > created_at", name="expires_after_created"),
+        CheckConstraint("cardinality(categories) >= 1", name="has_categories"),
+    )
 
 
 class VitalReading(Base):
@@ -101,6 +165,20 @@ class Appointment(Base):
     provider_name = Column(String(150), nullable=False)
     scheduled_at = Column(DateTime(timezone=True), nullable=False)
     notes = Column(Text, nullable=True)
+    # Task 5.1 (clarification 97): who made it, whether it was cancelled, and when its time was last set
+    # (so a reminder is not sent for a time that has already passed when the appointment was made).
+    created_by = fk_col("users.user_id")
+    status = Column(String(15), nullable=False, server_default=text("'scheduled'"))
+    time_set_at = ts_col()
+    created_at = ts_col()
+
+    __table_args__ = (
+        CheckConstraint(in_list("status", APPOINTMENT_STATUSES), name="status_valid"),
+        CheckConstraint("char_length(btrim(provider_name)) BETWEEN 1 AND 150", name="provider_length"),
+        CheckConstraint("notes IS NULL OR char_length(notes) <= 2000", name="notes_length"),
+        Index("ix_appointments_dependent_time", "dependent_id", "scheduled_at"),
+        Index("ix_appointments_open_time", "scheduled_at", postgresql_where=text("status = 'scheduled'")),
+    )
 
 
 class WearableDevice(Base):
