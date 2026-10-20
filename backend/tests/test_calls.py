@@ -29,10 +29,9 @@ def push():
 
 
 @pytest.fixture(autouse=True)
-def provider():
-    c = call_provider.get_provider()
-    c.issued.clear()
-    c.fail = False
+def provider(monkeypatch):
+    c = call_provider.MockCallProvider()  # always the mock here, whatever CALL_PROVIDER says in the developer's .env
+    monkeypatch.setattr(call_provider, "_provider", c)
     yield c
 
 
@@ -328,3 +327,81 @@ def test_database_rules(db):
         with pytest.raises(IntegrityError):
             db.commit()
         db.rollback()
+
+
+# ------------------------------------------------------------ the real ZegoCloud token (Task 4.4, keys from Talha)
+
+FAKE_SECRET = "0123456789abcdef0123456789abcdef"  # 32 characters, NOT a real key
+
+
+def _open_token04(token, secret=FAKE_SECRET):
+    """Read a token the way ZegoCloud's own format is defined: 04 + base64(expire | nonce | AES-GCM data | mode)."""
+    import base64
+    import json
+    import struct
+
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    assert token.startswith("04")
+    raw = base64.b64decode(token[2:])
+    (expire,) = struct.unpack("!q", raw[:8])
+    (n,) = struct.unpack("!h", raw[8:10])
+    nonce = raw[10 : 10 + n]
+    (m,) = struct.unpack("!h", raw[10 + n : 12 + n])
+    sealed = raw[12 + n : 12 + n + m]
+    mode = raw[12 + n + m :]
+    return expire, nonce, mode, json.loads(AESGCM(secret.encode()).decrypt(nonce, sealed, None))
+
+
+def test_token04_has_zegos_format_and_the_right_content():
+    tok = call_provider.make_token04(1234567, "user-1", FAKE_SECRET, 3600, '{"room_id":"r1"}', now=1_800_000_000)
+    expire, nonce, mode, info = _open_token04(tok)
+    assert expire == 1_800_003_600 and len(nonce) == 12 and mode == b"\x01"
+    assert info["app_id"] == 1234567 and info["user_id"] == "user-1" and info["payload"] == '{"room_id":"r1"}'
+    assert info["ctime"] == 1_800_000_000 and info["expire"] == expire
+    assert call_provider.make_token04(1234567, "user-1", FAKE_SECRET, 3600, "") != call_provider.make_token04(1234567, "user-1", FAKE_SECRET, 3600, "")  # fresh every time
+    with pytest.raises(Exception):  # a different secret cannot open it
+        _open_token04(tok, "f" * 32)
+
+
+@pytest.mark.parametrize("args", [(0, "u", FAKE_SECRET), (-5, "u", FAKE_SECRET), (5, "", FAKE_SECRET), (5, "u", "short"), (5, "u", "x" * 33)])
+def test_token04_refuses_bad_input(args):
+    with pytest.raises(ValueError):
+        call_provider.make_token04(args[0], args[1], args[2], 60, "")
+
+
+def test_zego_provider_gives_a_token_for_this_room_and_person_only():
+    z = call_provider.ZegoProvider(1234567, FAKE_SECRET)
+    j = z.join_info("call_abc", "person-9", "video")
+    assert j["provider"] == "zego" and j["app_id"] == "1234567" and j["room_id"] == "call_abc" and j["user_id"] == "person-9"
+    assert FAKE_SECRET not in str(j)  # the secret never leaves the server
+    _, _, _, info = _open_token04(j["token"])
+    import json
+
+    p = json.loads(info["payload"])
+    assert info["user_id"] == "person-9" and p["room_id"] == "call_abc" and p["privilege"] == {"1": 1, "2": 1} and p["stream_id_list"] is None
+
+
+def test_calls_return_real_tokens_when_the_zego_provider_is_on(client, monkeypatch):
+    t = msgteam(client)
+    monkeypatch.setattr(call_provider, "_provider", call_provider.ZegoProvider(1234567, FAKE_SECRET))
+    c = call(client, t["pt"], t["dep"]).json()
+    assert c["join"]["provider"] == "zego" and c["join"]["token"].startswith("04")
+    assert get(client, t["dt"], c["call_id"])["join"] is None  # still nothing for the callee before accepting
+    a = act(client, t["dt"], c["call_id"], "accept").json()
+    _, _, _, info = _open_token04(a["join"]["token"])
+    assert info["user_id"] == t["dep"]
+
+
+def test_provider_setting_is_checked(monkeypatch):
+    monkeypatch.setattr(call_provider, "_provider", None)
+    s = get_settings()
+    monkeypatch.setattr(s, "CALL_PROVIDER", "carrier-pigeon")
+    with pytest.raises(RuntimeError):
+        call_provider.get_provider()
+    monkeypatch.setattr(s, "CALL_PROVIDER", "zego")
+    monkeypatch.setattr(s, "ZEGO_APP_ID", 0)
+    monkeypatch.setattr(s, "ZEGO_SERVER_SECRET", "")
+    with pytest.raises(ValueError):  # keys missing: fails clearly, never a fake token
+        call_provider.get_provider()
+    assert call_provider.join_info("r", "u", "voice") is None  # and a call still works (the app asks again)

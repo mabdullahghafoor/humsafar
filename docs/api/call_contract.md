@@ -50,7 +50,9 @@ A call still running after 1 hour is ended by the server.
 | `missed_call` | standard | the callee | it timed out, or the caller hung up before an answer |
 
 ## Provider and keys
-`CALL_PROVIDER=mock` for now: the join token is fake but the whole flow works. The real ZegoCloud class (its server-made token) is added when its App ID and Server Secret exist, so it can be tested against the real service. The keys stay only in the backend `.env`, never in the app. Settings: `CALL_RING_S` (30), `CALL_MAX_S` (3600), `CALL_TOKEN_TTL_S` (3600).
+`CALL_PROVIDER=mock` (default) gives a fake token so the whole flow can be tested without ZegoCloud. `CALL_PROVIDER=zego` gives a **real ZegoCloud token04** (checked against ZegoCloud's own open-source generator): `join.provider` = `zego`, `join.app_id` is the project's App ID, `join.token` lets that person log in to **that one room** and publish a stream. The Server Secret stays only in the backend `.env` and is never sent to the app. Settings: `CALL_PROVIDER`, `ZEGO_APP_ID`, `ZEGO_SERVER_SECRET` (in your own `.env`, see `backend/.env.example`), `CALL_RING_S` (30), `CALL_MAX_S` (3600), `CALL_TOKEN_TTL_S` (3600).
+
+**For Talha (4.7):** use the `join` values with the ZegoCloud SDK: `app_id` (a string, convert to a number if the SDK wants one), `user_id`, `room_id`, `token`. Ringing comes from OUR critical `incoming_call` notification and the call state from OUR endpoints, so please do not also use ZegoCloud's own call-invitation ringing, or the phone will ring twice. Use the SDK only for the audio / video once `join` is given.
 
 ## Not in this task
 Multi-Guardian bridge call (FR-E5, optional) is Task 4.5.

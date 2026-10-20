@@ -76,7 +76,9 @@ class Settings(BaseSettings):
     VOICE_STORAGE_DIR: str = ""  # Task 4.3: where voice audio is saved. Empty = ~/humsafar_uploads/voice (outside the repo, so audio is never committed). Cloud storage = one new class in storage_service.py
     VOICE_MAX_BYTES: int = 2_000_000  # about 2 MB
     VOICE_MAX_S: int = 120  # longest voice message
-    CALL_PROVIDER: str = "mock"  # Task 4.4: 'mock' now; the ZegoCloud class is added when its keys exist (clarification 75)
+    CALL_PROVIDER: str = "mock"  # Task 4.4: 'mock' or 'zego' (ZegoCloud, clarification 75). 'zego' needs the two keys below, set only in .env
+    ZEGO_APP_ID: int = 0  # from the ZegoCloud console (a number)
+    ZEGO_SERVER_SECRET: str = ""  # from the ZegoCloud console (32 characters). NEVER commit it or send it to the app.
     CALL_RING_S: int = 30  # an unanswered call becomes 'missed' after this
     CALL_MAX_S: int = 3600  # a call still open after this is ended by the server
     CALL_TOKEN_TTL_S: int = 3600  # how long a join token works
