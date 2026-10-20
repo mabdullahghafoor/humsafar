@@ -1,4 +1,4 @@
-# Humsafar API reference (Tasks 1.3 to 5.1)
+# Humsafar API reference (Tasks 1.3 to 5.2)
 
 For Talha (Flutter) and Sarim (QA). Base URL (local): `http://127.0.0.1:8000`. Interactive docs: `http://127.0.0.1:8000/docs`.
 All bodies are JSON. The server is Abdullah's `backend/`.
@@ -27,7 +27,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
 | `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
-| `records_contract.md` | Medical Vault: records with files (encrypted), notes, PDF export (complete / year / month), doctor-shareable 72 h link |
+| `records_contract.md` | Medical Vault: records with files (encrypted), notes, PDF export (complete / year / month), doctor-shareable 72 h link, per-category access for a Secondary (5.2) |
 | `appointment_contract.md` | Appointments: add / move / cancel, who is told, reminders 24 h and 1 h before |
 | `../backend/sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
 
@@ -109,6 +109,9 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | GET `/dependents/{id}/records/export` | same as list | PDF export: `scope` = `complete` / `year` / `month` |
 | POST / GET `/dependents/{id}/records/share` | same as list | Make a doctor link (default 72 h) / list the links |
 | DELETE `/dependents/{id}/records/share/{share_id}` | link maker, Primary, Dependent | Cancel a link |
+| GET `/dependents/{id}/records/access` | Primary | Which record categories each Secondary may see (5.2) |
+| PUT `/dependents/{id}/records/access/{category}` | Primary | Show / hide one category for one Secondary (body `guardian_id`, `visible`) |
+| GET `/dependents/{id}/records/access/me` | same as list | Which categories I may see |
 | GET `/shared/records/{token}` | **anyone with the link (no login)** | The doctor's read-only PDF |
 | POST / GET `/dependents/{id}/appointments` | the Dependent, or a Guardian with `health_records` | Add / list appointments (`when` = `upcoming` / `past` / `all`) |
 | GET / PATCH / DELETE `/dependents/{id}/appointments/{appointment_id}` | same | One / change / delete |

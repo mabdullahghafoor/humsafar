@@ -134,6 +134,26 @@ class RecordShare(Base):
     )
 
 
+class RecordCategoryRestriction(Base):
+    """Task 5.2 (FR-G2): this Secondary Guardian may NOT see this record category for this Dependent.
+
+    A row means "hidden". No row means the Secondary sees the category, as long as the `health_records` module
+    is granted (that grant stays the first gate). Stored per link, so it is independent per Dependent (FR-B4).
+    """
+
+    __tablename__ = "record_category_restrictions"
+
+    restriction_id = uuid_pk()
+    link_id = fk_col("guardian_dependent_links.link_id", index=True)
+    category = Column(String(50), nullable=False)
+    created_at = ts_col()
+
+    __table_args__ = (
+        UniqueConstraint("link_id", "category", name="uq_restriction_link_category"),
+        CheckConstraint(in_list("category", RECORD_CATEGORIES), name="category_valid"),
+    )
+
+
 class VitalReading(Base):
     __tablename__ = "vital_readings"
 

@@ -99,3 +99,39 @@ class ShareCreated(ShareOut):
 
 class ShareList(BaseModel):
     items: list[ShareOut]
+
+
+# --- Task 5.2 (FR-G2): which record categories a Secondary Guardian may see
+
+
+class SetRecordAccessRequest(BaseModel):
+    guardian_id: UUID = Field(description="The Secondary Guardian.")
+    visible: bool = Field(description="true = may see this category, false = hidden from them.")
+
+
+class RecordAccessOut(BaseModel):
+    dependent_id: UUID
+    guardian_id: UUID
+    category: Category
+    visible: bool
+    visible_categories: list[Category]
+
+
+class SecondaryRecordAccess(BaseModel):
+    guardian_id: UUID
+    email: str | None = None
+    phone: str | None = None
+    health_records_granted: bool = Field(description="The `health_records` module (Task 1.6). false = they see no records at all.")
+    categories: dict[str, bool] = Field(description="Per category: true = visible, false = hidden. Only counts when the module is granted.")
+
+
+class RecordAccessDashboard(BaseModel):
+    dependent_id: UUID
+    categories: list[Category]
+    secondaries: list[SecondaryRecordAccess]
+
+
+class MyRecordAccess(BaseModel):
+    dependent_id: UUID
+    categories: dict[str, bool]
+    visible_categories: list[Category]

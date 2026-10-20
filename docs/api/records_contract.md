@@ -1,4 +1,4 @@
-# Medical Vault contract (Task 5.1, FR-G1 and FR-G3)
+# Medical Vault contract (Tasks 5.1 and 5.2, FR-G1, FR-G2 and FR-G3)
 
 For Talha (records screens, task 5.6) and Sarim (QA cases, 5.10). Store prescriptions, lab reports, X-rays and other records for a Dependent, export them as PDF, and give a doctor a read-only link.
 
@@ -11,7 +11,7 @@ For Talha (records screens, task 5.6) and Sarim (QA cases, 5.10). Store prescrip
 6. A vault holds at most **500** records (`409 RECORDS_LIMIT`).
 7. Reading a file, exporting, and every add / change / delete are written to the **audit log** (FR-N3).
 8. The **PDF export** can be complete, one year, or one month (by record date). The **doctor link** opens the same PDF with no login and stops working after 72 hours (or when cancelled).
-9. Task 5.2 will let the Primary hide record **categories** from a Secondary. Nothing changes for the app now: a hidden record will simply look like it does not exist (`404 RECORD_NOT_FOUND`) and disappear from lists and exports.
+9. **Category access (Task 5.2, FR-G2):** the Primary can hide single record **categories** from a Secondary, separately for each Dependent and each Secondary (see the section below). A hidden record looks like it does not exist (`404 RECORD_NOT_FOUND`) and is left out of lists, totals, exports and doctor links.
 
 ## The record object
 `{ record_id, dependent_id, category, title, notes, record_date, has_file, file_name, content_type, size_bytes, file_path, uploaded_by, uploaded_by_name, uploaded_at, can_modify, already_saved }`
@@ -42,6 +42,19 @@ A front page with the person's name, the period, and a table of every record; th
 The create reply also has `url`: `/shared/records/<token>` (or the full address when the server knows its public address). Show it so it can be shared by WhatsApp or SMS; **the app must add the server address in front if `url` starts with `/`**. The server stores only a hash of the token, so a lost link cannot be shown again: make a new one.
 The link shows the records **as they are when it is opened** (a record added later appears; a deleted one disappears). A link made by a Secondary stops working if the Primary removes that Secondary's `health_records` permission. Up to **10** open links per Dependent (`409 SHARE_LIMIT`).
 
+## Category access for a Secondary (Task 5.2, FR-G2)
+A Secondary needs two things to see a record: the `health_records` permission (Task 1.6) **and** the record's category not hidden. By default nothing is hidden. The Primary and the Dependent always see all four categories.
+
+| Endpoint | Who | What |
+|---|---|---|
+| GET `/dependents/{id}/records/access` | Primary only | `{ dependent_id, categories: [...4], secondaries: [ { guardian_id, email, phone, health_records_granted, categories: { prescription: true, lab_report: true, xray: false, other: true } } ] }`. `true` = visible. The category flags only count when `health_records_granted` is true. |
+| PUT `/dependents/{id}/records/access/{category}` | Primary only | Body `{ "guardian_id": "...", "visible": true \| false }` for one Secondary. Reply `{ dependent_id, guardian_id, category, visible, visible_categories }`. Safe to repeat. Takes effect on the next request. |
+| GET `/dependents/{id}/records/access/me` | anyone who may use the vault | `{ dependent_id, categories: { prescription: true, ... }, visible_categories: [...] }`. Use it to show or hide category tabs and the category choice when adding a record. A Secondary without `health_records` gets `403 MODULE_ACCESS_DENIED`. |
+
+What a hidden category does for the Secondary: it is missing from the list, from `total`, and from a `category` filter (that filter returns an empty list, not an error); opening the record, its file, editing or deleting it gives `404 RECORD_NOT_FOUND`; adding a record into it, moving one into it, or sharing it gives `403 CATEGORY_NOT_ALLOWED`; the PDF export and the doctor links they make leave it out. A doctor link a Secondary made earlier is narrowed when it is opened (and answers `410 SHARE_REVOKED` if nothing is left). Records the Secondary added themselves in a category hidden later are hidden from them too.
+
+**Screens:** Primary: in the permission screen of each Secondary add four switches under "Health records" (Prescriptions, Lab reports, X-rays, Other), fed by `GET .../records/access`, and send `PUT` on each switch; grey them out while `health_records_granted` is false. Secondary: use `GET .../records/access/me` to build the tabs and the category picker; do not show a hidden category at all.
+
 ## Errors
 | Code | Status | When |
 |---|---|---|
@@ -52,7 +65,11 @@ The link shows the records **as they are when it is opened** (a record added lat
 | `GUARDIAN_NOT_VERIFIED` | 403 | the Guardian has not verified phone or CNIC |
 | `RECORD_MODIFY_DENIED` | 403 | changing or deleting a record someone else added (and you are not the Primary) |
 | `SHARE_MODIFY_DENIED` | 403 | cancelling a link you may not cancel |
-| `CATEGORY_NOT_ALLOWED` | 403 | using a category you may not (Task 5.2) |
+| `CATEGORY_NOT_ALLOWED` | 403 | adding, moving or sharing into a category hidden from you (Task 5.2) |
+| `NOT_PRIMARY_GUARDIAN` | 403 | a Secondary using the category access endpoints that only the Primary may use (Task 5.2) |
+| `SECONDARY_NOT_FOUND` | 404 | `guardian_id` is not a Secondary of this Dependent |
+| `PRIMARY_NOT_GOVERNABLE` | 400 | trying to restrict the Primary |
+| `UNKNOWN_CATEGORY` | 422 | the category in the address is not one of the four |
 | `RECORD_NOT_FOUND`, `NO_FILE`, `FILE_NOT_FOUND`, `SHARE_NOT_FOUND` | 404 | unknown id, no file on the record, file missing on the server, unknown link |
 | `RECORDS_LIMIT`, `CLIENT_ID_REUSED`, `SHARE_LIMIT` | 409 | 500 records, retry id reused, 10 open links |
 | `SHARE_EXPIRED`, `SHARE_REVOKED` | 410 | the doctor opens a link that ran out or was cancelled |

@@ -7,6 +7,9 @@ GET    /dependents/{id}/records/export                PDF export: complete, year
 POST   /dependents/{id}/records/share                 make a read-only doctor link (default 72 h)
 GET    /dependents/{id}/records/share                 list the links
 DELETE /dependents/{id}/records/share/{share_id}      cancel a link
+GET    /dependents/{id}/records/access                Primary: which categories each Secondary may see (5.2)
+GET    /dependents/{id}/records/access/me             which categories I may see (5.2)
+PUT    /dependents/{id}/records/access/{category}     Primary: show or hide one category for one Secondary (5.2)
 GET    /dependents/{id}/records/{record_id}           one record
 GET    /dependents/{id}/records/{record_id}/file      download the file (decrypted)
 PATCH  /dependents/{id}/records/{record_id}           change title / category / date / note
@@ -27,8 +30,9 @@ from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.core.errors import AppError
 from app.models import User
-from app.schemas.records import Category, RecordList, RecordOut, RecordUpdate, Scope, ShareCreated, ShareIn, ShareList, ShareOut, check_period
-from app.services import records_service as svc
+from app.schemas.records import MyRecordAccess, RecordAccessDashboard, RecordAccessOut, SetRecordAccessRequest, Category, RecordList, RecordOut, RecordUpdate, Scope, ShareCreated, ShareIn, ShareList, ShareOut, check_period
+from app.core.deps import require_verified_guardian
+from app.services import record_access_service, records_service as svc
 
 router = APIRouter(tags=["Medical Vault"])
 public_router = APIRouter(tags=["Medical Vault"])
@@ -105,6 +109,24 @@ def list_shares(dependent_id: uuid.UUID, user: User = Depends(get_current_user),
 @router.delete("/dependents/{dependent_id}/records/share/{share_id}", response_model=ShareOut)
 def revoke_share(dependent_id: uuid.UUID, share_id: uuid.UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return svc.revoke_share(db, user, dependent_id, share_id)
+
+
+@router.get("/dependents/{dependent_id}/records/access", response_model=RecordAccessDashboard)
+def record_access_dashboard(dependent_id: uuid.UUID, user: User = Depends(require_verified_guardian), db: Session = Depends(get_db)):
+    return record_access_service.dashboard(db, user, dependent_id)
+
+
+@router.get("/dependents/{dependent_id}/records/access/me", response_model=MyRecordAccess)
+def my_record_access(dependent_id: uuid.UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return record_access_service.my_access(db, user, dependent_id)
+
+
+@router.put("/dependents/{dependent_id}/records/access/{category}", response_model=RecordAccessOut)
+def set_record_access(
+    dependent_id: uuid.UUID, category: str, body: SetRecordAccessRequest,
+    user: User = Depends(require_verified_guardian), db: Session = Depends(get_db),
+):
+    return record_access_service.set_access(db, user, dependent_id, category, body.guardian_id, body.visible)
 
 
 @router.get("/dependents/{dependent_id}/records/{record_id}", response_model=RecordOut)

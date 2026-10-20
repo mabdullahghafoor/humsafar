@@ -7,8 +7,8 @@ Who may do what
   every endpoint here, so removing the permission takes effect on the next request.
 - Edit / delete: the person who added the record, or the Primary Guardian.
 - `visible_categories` is the single place that says which record categories a person may see. Today it
-  returns all four; Task 5.2 (FR-G2) narrows it for a Secondary, and every read, download, export and link
-  below already goes through it.
+  returns all four for the Primary and the Dependent and, for a Secondary, all except the categories the Primary
+  hid (Task 5.2, FR-G2, see record_access_service). Every read, download, export and link below goes through it.
 
 Files are PDF / JPEG / PNG (checked by their first bytes), at most RECORD_MAX_BYTES, stored encrypted (FR-N2).
 """
@@ -29,7 +29,7 @@ from app.core.errors import AppError
 from app.models import AuditLog, DependentProfile, MedicalRecord, RecordShare, User
 from app.models.medical import RECORD_CATEGORIES
 from app.schemas.records import RecordList, RecordOut, RecordUpdate, ShareCreated, ShareIn, ShareList, ShareOut
-from app.services import crypto_service, linkage_service, permission_service, records_pdf, storage_service
+from app.services import crypto_service, linkage_service, permission_service, record_access_service, records_pdf, storage_service
 
 MODULE = "health_records"
 EARLIEST = date(1900, 1, 1)
@@ -47,8 +47,8 @@ def authorize(db: Session, user: User, dependent_id: uuid.UUID) -> None:
 
 
 def visible_categories(db: Session, user: User, dependent_id: uuid.UUID) -> tuple[str, ...]:
-    """The record categories this person may see. Task 5.2 (FR-G2) will narrow this for a Secondary Guardian."""
-    return RECORD_CATEGORIES
+    """The record categories this person may see (Task 5.2, FR-G2): all of them, minus what the Primary hid from a Secondary."""
+    return record_access_service.visible_for(db, user, dependent_id)
 
 
 def _audit(db: Session, user_id: uuid.UUID, action: str, target_type: str, target_id: uuid.UUID) -> None:
@@ -454,6 +454,13 @@ def open_share(db: Session, token: str) -> tuple[bytes, str]:
             permission_service.check_module_access(db, creator, sh.dependent_id, MODULE)
         except AppError:
             raise AppError(410, "SHARE_REVOKED", "This link was cancelled.")
+    cats = list(sh.categories)
+    if creator is not None and creator.role == "guardian":
+        # FR-G2: a category hidden from the Secondary after they made the link disappears from the link too
+        vis = visible_categories(db, creator, sh.dependent_id)
+        cats = [c for c in cats if c in vis]
+        if not cats:
+            raise AppError(410, "SHARE_REVOKED", "This link was cancelled.")
     if db.get(DependentProfile, sh.dependent_id) is None:
         raise AppError(404, "SHARE_NOT_FOUND", "This link does not exist.")
     got = db.execute(
@@ -467,5 +474,5 @@ def open_share(db: Session, token: str) -> tuple[bytes, str]:
         raise AppError(410, "SHARE_REVOKED", "This link is no longer available.")
     _audit(db, sh.created_by, "record_share_opened", "record_share", sh.share_id)  # logged under the person who made the link
     db.commit()
-    pdf = _export_bytes(db, sh.dependent_id, sh.scope, sh.year, sh.month, sh.categories)
+    pdf = _export_bytes(db, sh.dependent_id, sh.scope, sh.year, sh.month, cats)
     return pdf, records_pdf.file_stem(sh.scope, sh.year, sh.month) + ".pdf"
