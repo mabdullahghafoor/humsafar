@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="800" viewBox="0 0 1700 800"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9CA3AF"/></marker></defs>
+<rect x="0" y="0" width="1700" height="800" fill="#FFFFFF"/>
+<text x="40" y="52" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#1F2937" text-anchor="start">Workflow — Messages and urgent voice messages (FR-E1, FR-E4)</text>
+<text x="40" y="82" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="start">From messaging_contract.md. Each Guardian has a private thread with the Dependent. Primary always allowed; a Secondary needs &#x27;communication&#x27;.</text>
+<rect x="40" y="120" width="1620" height="270" rx="8" fill="#DBEAFE" fill-opacity="0.25" stroke="#1E3A8A" stroke-width="1"/>
+<rect x="40" y="120" width="150" height="270" rx="8" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1"/>
+<text x="115" y="260.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">TEXT</text>
+<rect x="220" y="160" width="260" height="110" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="350.0" y="200.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Sender</text>
+<text x="350.0" y="220.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">Guardian ↔ Dependent</text>
+<text x="350.0" y="240.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">new client_id per message</text>
+<rect x="550" y="160" width="300" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="700.0" y="200.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Server checks</text>
+<text x="700.0" y="220.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">linked? Guardian verified?</text>
+<text x="700.0" y="240.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">Secondary has communication?</text>
+<rect x="920" y="160" width="300" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="1070.0" y="200.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Saved once</text>
+<text x="1070.0" y="220.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">same client_id again = 200</text>
+<text x="1070.0" y="240.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">already_sent (no double send)</text>
+<rect x="1290" y="160" width="340" height="110" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="1460.0" y="200.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Receiver</text>
+<text x="1460.0" y="220.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">standard push: name +</text>
+<text x="1460.0" y="240.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">first 80 characters</text>
+<line x1="482" y1="215" x2="548" y2="215" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="465" y="135" width="102.39999999999999" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="470" y="148" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">POST /messages</text>
+<line x1="852" y1="215" x2="918" y2="215" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<line x1="1222" y1="215" x2="1288" y2="215" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="920" y="300" width="710" height="70" rx="10" fill="#CCFBF1" stroke="#115E59" stroke-width="1.6"/>
+<text x="1275.0" y="339.9" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Read receipts: opening the chat calls POST /messages/read → the sender sees &#x27;Read&#x27;</text>
+<text x="220" y="330" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="start">Text 1–2000 characters. Guardian↔Guardian and</text>
+<text x="220" y="350" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="start">Dependent↔Dependent are refused (403).</text>
+<rect x="40" y="430" width="1620" height="240" rx="8" fill="#FFE4E6" fill-opacity="0.25" stroke="#BE123C" stroke-width="1"/>
+<rect x="40" y="430" width="150" height="240" rx="8" fill="#FFE4E6" stroke="#BE123C" stroke-width="1"/>
+<text x="115" y="555.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">URGENT VOICE</text>
+<rect x="220" y="470" width="260" height="110" rx="10" fill="#FFE4E6" stroke="#BE123C" stroke-width="1.6"/>
+<text x="350.0" y="510.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Guardian only</text>
+<text x="350.0" y="530.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">records up to 2 min</text>
+<text x="350.0" y="550.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">(file up to 2 MB)</text>
+<rect x="550" y="470" width="300" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="700.0" y="510.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Server</text>
+<text x="700.0" y="530.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">checks the real audio type,</text>
+<text x="700.0" y="550.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">stores the file</text>
+<rect x="920" y="470" width="300" height="110" rx="10" fill="#FFE4E6" stroke="#BE123C" stroke-width="1.6"/>
+<text x="1070.0" y="510.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Dependent&#x27;s phone</text>
+<text x="1070.0" y="530.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">CRITICAL push +</text>
+<text x="1070.0" y="550.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">&#x27;I heard it&#x27; (acknowledge)</text>
+<rect x="1290" y="470" width="340" height="110" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="1460.0" y="510.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Playback</text>
+<text x="1460.0" y="530.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">audio download needs the</text>
+<text x="1460.0" y="550.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">login token (not a plain URL)</text>
+<line x1="482" y1="525" x2="548" y2="525" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="455" y="445" width="142.0" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="460" y="458" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">POST /messages/voice</text>
+<line x1="852" y1="525" x2="918" y2="525" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<line x1="1222" y1="525" x2="1288" y2="525" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<text x="220" y="620" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="start">A Dependent cannot send one (403). It shows in the same thread as text (type priority_voice).</text>
+<text x="60" y="720" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="start">If the Primary removes &#x27;communication&#x27;: the Secondary can no longer send, read or download, and the thread disappears from their list. Panic is not affected.</text>
+<text x="60" y="750" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="start">Screens: 17 Messages, 17b Chat, 17c Urgent voice, 17g No permission (Guardian) · 25 Messages, 25b Chat, 25c Urgent message (Dependent).</text>
+</svg>

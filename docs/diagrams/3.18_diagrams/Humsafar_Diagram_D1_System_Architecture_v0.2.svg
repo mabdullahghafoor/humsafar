@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9CA3AF"/></marker></defs>
+<rect x="0" y="0" width="1600" height="1000" fill="#FFFFFF"/>
+<text x="40" y="52" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#1F2937" text-anchor="start">Humsafar — System Architecture (as built, Phases 1–4)</text>
+<text x="40" y="82" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="start">v0.2 of D1. Layered modular monolith (SDS 6.2). Flutter apps, FastAPI backend, PostgreSQL, in-process scheduler. Communication module now built.</text>
+<text x="60" y="150" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#6B7280" text-anchor="start">PRESENTATION</text>
+<rect x="250" y="115" width="380" height="90" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="440.0" y="154.8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937" text-anchor="middle">Guardian App</text>
+<text x="440.0" y="177.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">Flutter + Riverpod · Android (API 26+)</text>
+<rect x="700" y="115" width="380" height="90" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="890.0" y="154.8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937" text-anchor="middle">Dependent App</text>
+<text x="890.0" y="177.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">Flutter · Dependent Mode (3 safety actions)</text>
+<rect x="1150" y="105" width="410" height="115" rx="14" fill="#EDE9FE" fill-opacity="0.35" stroke="#5B21B6" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="1164" y="127" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#5B21B6" text-anchor="start">DEVICES NEAR THE DEPENDENT</text>
+<rect x="1170" y="140" width="180" height="66" rx="10" fill="#EDE9FE" stroke="#5B21B6" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="1260.0" y="168.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Wearable band</text>
+<text x="1260.0" y="187.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">BLE · ESP32 build pending</text>
+<rect x="1365" y="140" width="180" height="66" rx="10" fill="#EDE9FE" stroke="#5B21B6" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="1455.0" y="168.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Spare phone camera</text>
+<text x="1455.0" y="187.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">local network · Phase 6</text>
+<line x1="1170" y1="173" x2="1082" y2="160" stroke="#9CA3AF" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<rect x="1095" y="137" width="29.799999999999997" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="1100" y="150" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">BLE</text>
+<text x="60" y="290" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#6B7280" text-anchor="start">INTERFACE</text>
+<rect x="250" y="250" width="830" height="76" rx="10" fill="#E0E7FF" stroke="#3730A3" stroke-width="1.6"/>
+<text x="665.0" y="282.8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937" text-anchor="middle">REST API — FastAPI</text>
+<text x="665.0" y="305.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">HTTPS · JWT access (15 min) + refresh (7 days) · one error envelope · OpenAPI docs</text>
+<line x1="440" y1="207" x2="440" y2="248" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="441.0" y="208.5" width="89.19999999999999" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="446.0" y="221.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">HTTPS / JSON</text>
+<line x1="890" y1="207" x2="890" y2="248" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="891.0" y="208.5" width="89.19999999999999" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="896.0" y="221.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">HTTPS / JSON</text>
+<text x="60" y="430" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#6B7280" text-anchor="start">APPLICATION</text>
+<rect x="230" y="340" width="1100" height="340" rx="14" fill="#FFFFFF" fill-opacity="0.35" stroke="#9CA3AF" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="244" y="362" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#9CA3AF" text-anchor="start">EIGHT SERVICE MODULES (SDS 7.1)  ·  routers → services → models</text>
+<rect x="250" y="395" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="375.0" y="445.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Identity &amp; Access</text>
+<text x="375.0" y="465.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">auth · KYC · linkage · permissions</text>
+<rect x="518" y="395" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="643.0" y="445.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Location &amp; Geofence</text>
+<text x="643.0" y="465.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">location · zones · device health</text>
+<rect x="786" y="395" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="911.0" y="445.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Emergency &amp; Escalation</text>
+<text x="911.0" y="465.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">panic · alarm · wellness · escalation</text>
+<rect x="1054" y="395" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="1179.0" y="445.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Notification</text>
+<text x="1179.0" y="465.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">priority tiers · acknowledgements</text>
+<rect x="250" y="525" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="375.0" y="575.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Medication &amp; Records</text>
+<text x="375.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">medication built · vault/vitals Phase 5</text>
+<rect x="518" y="525" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="643.0" y="575.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Communication</text>
+<text x="643.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">text · urgent voice · calls (Phase 4)</text>
+<rect x="786" y="525" width="250" height="110" rx="10" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="911.0" y="575.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Directory &amp; Marketplace</text>
+<text x="911.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">providers · bookings · Phase 6</text>
+<rect x="1054" y="525" width="250" height="110" rx="10" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="1179.0" y="575.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Security &amp; Surveillance</text>
+<text x="1179.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">camera · audit · retention · Phase 6</text>
+<line x1="665" y1="328" x2="665" y2="338" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="1360" y="375" width="200" height="280" rx="10" fill="#CCFBF1" stroke="#115E59" stroke-width="1.6"/>
+<text x="1460.0" y="434.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Background</text>
+<text x="1460.0" y="453.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">scheduler</text>
+<text x="1460.0" y="472.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">runs every minute:</text>
+<text x="1460.0" y="491.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">offline sweep</text>
+<text x="1460.0" y="510.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">missed-dose sweep</text>
+<text x="1460.0" y="529.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">wellness sweep</text>
+<text x="1460.0" y="548.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">escalation sweep</text>
+<text x="1460.0" y="567.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">ext. contact sweep</text>
+<text x="1460.0" y="586.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">missed-call sweep</text>
+<text x="1460.0" y="605.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">notification dispatch</text>
+<line x1="1358" y1="515" x2="1332" y2="515" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<text x="60" y="805" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#6B7280" text-anchor="start">DATA</text>
+<rect x="430" y="735" width="470" height="100" rx="10" fill="#FEE2E2" stroke="#991B1B" stroke-width="1.6"/>
+<text x="665.0" y="779.8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937" text-anchor="middle">PostgreSQL</text>
+<text x="665.0" y="802.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">27 SDS tables · SQLAlchemy · Alembic 0001–0011</text>
+<rect x="960" y="735" width="300" height="100" rx="10" fill="#FEE2E2" stroke="#991B1B" stroke-width="1.6"/>
+<text x="1110.0" y="770.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">File storage</text>
+<text x="1110.0" y="790.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">voice messages: server folder</text>
+<text x="1110.0" y="810.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">records &amp; clips: Phase 5–6</text>
+<line x1="665" y1="682" x2="665" y2="733" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="666.0" y="688.5" width="29.799999999999997" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="671.0" y="701.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">SQL</text>
+<line x1="1100" y1="682" x2="1100" y2="733" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="1101.0" y="688.5" width="82.6" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="1106.0" y="701.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">audio files</text>
+<rect x="40" y="880" width="1520" height="95" rx="14" fill="#FEF3C7" fill-opacity="0.35" stroke="#92400E" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="54" y="902" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#92400E" text-anchor="start">EXTERNAL SERVICES (behind one adapter each; mocked today, swapped for real providers later)</text>
+<rect x="70" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
+<text x="240.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Push — Firebase FCM</text>
+<text x="240.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">mock now · Task 3.14</text>
+<rect x="440" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
+<text x="610.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">KYC / liveness</text>
+<text x="610.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">mock provider</text>
+<rect x="810" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
+<text x="980.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">SMS gateway</text>
+<text x="980.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">mock · external contact</text>
+<rect x="1180" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
+<text x="1350.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">ZegoCloud (voice/video)</text>
+<text x="1350.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">decided 4.1 · mock token now</text>
+<path d="M 1460 657 L 1460 862 L 1060 862 L 1060 908" fill="none" stroke="#9CA3AF" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="1468" y="780" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">push · SMS</text>
+<rect x="60" y="690" width="26" height="16" rx="4" fill="#DCFCE7" stroke="#166534"/>
+<text x="96" y="703" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#1F2937" text-anchor="start">Built and merged (dev)</text>
+<rect x="60" y="716" width="26" height="16" rx="4" fill="#F3F4F6" stroke="#9CA3AF" stroke-dasharray="5 3"/>
+<text x="96" y="729" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#1F2937" text-anchor="start">Planned (later phase)</text>
+<rect x="60" y="742" width="26" height="16" rx="4" fill="#FEF3C7" stroke="#92400E"/>
+<text x="96" y="755" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#1F2937" text-anchor="start">External / mocked</text>
+</svg>
