@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="760" viewBox="0 0 1700 760"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9CA3AF"/></marker></defs>
+<rect x="0" y="0" width="1700" height="760" fill="#FFFFFF"/>
+<text x="40" y="52" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#1F2937" text-anchor="start">Workflow — Voice / video call lifecycle (FR-E2)</text>
+<text x="40" y="82" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="start">From call_contract.md. The server manages the call; audio and video travel through ZegoCloud (decision 4.1). Mock join token until the real keys are wired in.</text>
+<rect x="60" y="300" width="230" height="100" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="175.0" y="334.6" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2937" text-anchor="middle">Caller</text>
+<text x="175.0" y="355.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">POST /calls</text>
+<text x="175.0" y="376.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">voice or video</text>
+<rect x="380" y="290" width="260" height="120" rx="10" fill="#CCFBF1" stroke="#115E59" stroke-width="1.6"/>
+<text x="510.0" y="333.95" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#1F2937" text-anchor="middle">RINGING</text>
+<text x="510.0" y="355.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">callee gets a critical push</text>
+<text x="510.0" y="377.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">caller polls every ~2 s</text>
+<line x1="292" y1="350" x2="378" y2="350" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="760" y="120" width="260" height="100" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="890.0" y="153.95" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#1F2937" text-anchor="middle">ACCEPTED</text>
+<text x="890.0" y="175.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">callee taps Answer</text>
+<text x="890.0" y="197.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">→ both get join token</text>
+<rect x="1140" y="120" width="260" height="100" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="1270.0" y="153.95" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#1F2937" text-anchor="middle">ENDED</text>
+<text x="1270.0" y="175.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">either side hangs up</text>
+<text x="1270.0" y="197.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">duration saved</text>
+<rect x="760" y="280" width="260" height="90" rx="10" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.6"/>
+<text x="890.0" y="319.95" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#1F2937" text-anchor="middle">DECLINED</text>
+<text x="890.0" y="341.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">callee says no</text>
+<rect x="760" y="400" width="260" height="90" rx="10" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.6"/>
+<text x="890.0" y="439.95" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#1F2937" text-anchor="middle">CANCELLED</text>
+<text x="890.0" y="461.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">caller hangs up first</text>
+<rect x="760" y="520" width="260" height="100" rx="10" fill="#FFE4E6" stroke="#BE123C" stroke-width="1.6"/>
+<text x="890.0" y="553.95" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#1F2937" text-anchor="middle">MISSED</text>
+<text x="890.0" y="575.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">no answer in 30 s</text>
+<text x="890.0" y="597.95" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="middle">standard push to callee</text>
+<line x1="642" y1="320" x2="758" y2="175" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="655" y="217" width="49.599999999999994" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="660" y="230" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">accept</text>
+<line x1="642" y1="340" x2="758" y2="325" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="675" y="305" width="56.199999999999996" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="680" y="318" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">decline</text>
+<line x1="642" y1="370" x2="758" y2="440" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="675" y="407" width="49.599999999999994" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="680" y="420" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">cancel</text>
+<line x1="642" y1="395" x2="758" y2="565" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="665" y="487" width="36.4" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="670" y="500" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">30 s</text>
+<line x1="1022" y1="170" x2="1138" y2="170" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="1081.0" y="151.0" width="29.799999999999997" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
+<text x="1086.0" y="164.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">end</text>
+<rect x="1140" y="300" width="500" height="200" rx="10" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.6"/>
+<text x="1390.0" y="347.9" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Rules</text>
+<text x="1390.0" y="366.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">Primary can always call; a Secondary needs &#x27;communication&#x27;</text>
+<text x="1390.0" y="385.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">only the callee can accept or decline</text>
+<text x="1390.0" y="404.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">one open call per person: else 409 USER_BUSY</text>
+<text x="1390.0" y="423.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">calling the same person while ringing = same call</text>
+<text x="1390.0" y="442.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">a call running for 1 hour is ended by the server</text>
+<text x="1390.0" y="461.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">every action is safe to repeat</text>
+<text x="60" y="680" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="start">Screens: 17d Calls history, 17e Calling, 17f In call (ZegoCloud prebuilt UI) · 25d Incoming call (Dependent).</text>
+<text x="60" y="710" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="start">Multi-Guardian bridge call (FR-E5) is optional and not built.</text>
+</svg>
