@@ -1,8 +1,8 @@
-# UI text — English and Urdu (v0.1)
+# UI text — English and Urdu (v0.2)
 
 **Owner:** Sarim · **For:** Talha's Task 7.4 (full Urdu, NFR-09) and every screen built before it.
 
-`Humsafar_UI_Text_EN_UR_v0.1.xlsx` lists the fixed text of all 56 high-fidelity screens (1.12, 2.8, 3.9, 4.9, 5.9, 6.11), one row per string, with:
+`Humsafar_UI_Text_EN_UR_v0.2.xlsx` lists the fixed text of all high-fidelity screens (1.12, 2.8, 3.9, 4.9, 5.9 v0.2, 6.11), one row per string, with:
 
 | Column | Meaning |
 |---|---|
