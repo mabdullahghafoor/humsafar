@@ -21,7 +21,7 @@
 | # | Screen | Requirements |
 |---|---|---|
 | 28 | My health — next doctor visit, big "Add my blood pressure / sugar", band status, my records | FR-P1, FR-G4, FR-H1 |
-| 27 | My band — connected, last sync, heart rate, steps, band battery, Sync now | FR-H2 |
+| 27 | My band — connected, last sync, heart rate, steps, Sync now (band battery is shown by 3 lights on the band, not in the app) | FR-H2 |
 | 27b | Connect band — scanning, bands found, Connect | FR-H2 |
 
 ## Notes for Talha
@@ -32,6 +32,7 @@
 - **Band disconnected / out of range** must not block anything else (FR-H2): show a grey "Not connected · last sync …" instead of the green chip on 27 and 28.
 - **15e** is only shown to the Primary, and only matters for a Secondary who already has the Health Records permission.
 - The band's name (Band 7A2F) is a placeholder until the band is chosen (5.11).
+- **Band battery is not shown in the app** (team decision 19 Oct, at the band maker's shop): the band shows it with 3 LEDs. Screen 27 only reminds the user to look at the lights. Can be added later if the supervisor asks.
 
 ## Design choices open to discussion
 1. **"Above usual" chip** on blood pressure (amber). The SRS sets no alert rule for vitals, so this is display only; the green band on the chart is a placeholder normal range. Remove it if the team prefers no judgement on screen.
