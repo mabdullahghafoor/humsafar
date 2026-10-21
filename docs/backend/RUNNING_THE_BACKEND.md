@@ -91,3 +91,7 @@ Import both files from `backend\postman` (Replace), choose environment **Humsafa
 | `relation "users" does not exist` | run `alembic upgrade head` |
 | `column ... full_name does not exist` | run `alembic upgrade head` (you pulled new code) |
 | Cleartext / `Cleartext HTTP traffic not permitted` | add `usesCleartextTraffic` (section 3) |
+
+## 8. Going live (Task 6.5)
+With `ENVIRONMENT=production` the server refuses to start unless these are set in `.env`: `JWT_SECRET_KEY` (32+ random characters), `RECORDS_ENCRYPTION_KEY` (32+ random characters, never change it later), `DEBUG=false`, `ENFORCE_HTTPS=true`, `RATE_LIMIT_ENABLED=true`, and a remote database URL ending in `?sslmode=require`. Behind Render or another proxy also set `TRUST_PROXY_HEADERS=true`. Check any environment with `python -m app.scripts.security_audit` (prints PASS / WARN / FAIL and what is protected how). Details: `docs/backend/security_encryption.md`.
+

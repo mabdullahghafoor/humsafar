@@ -119,6 +119,17 @@ class Settings(BaseSettings):
     CLIP_REQUEST_TTL_S: int = 180  # the phone must pick up the request and upload the clip within this time, else it is `missed`
     CLIP_MAX_BYTES: int = 30_000_000  # about 30 MB per clip
     CLIPS_MAX_PER_DEPENDENT: int = 100  # stored clips per Dependent; no new request when full (FR-O1 deletes old ones, Task 6.7)
+    # Task 6.5: transport security and hardening (FR-N1, SDS 17).
+    ENFORCE_HTTPS: bool = False  # true in production: plain http requests are refused (400 HTTPS_REQUIRED), HSTS is sent
+    TRUST_PROXY_HEADERS: bool = False  # true only behind a trusted proxy (Render, nginx): read X-Forwarded-Proto / X-Forwarded-For
+    HSTS_MAX_AGE_S: int = 31536000  # one year
+    RATE_LIMIT_ENABLED: bool = True  # SDS 17: rate limiting on authentication and KYC endpoints
+    RATE_REGISTER_PER_MIN: int = 60  # per IP address
+    RATE_LOGIN_PER_MIN: int = 60  # per IP address (login and token refresh)
+    LOGIN_FAIL_LIMIT: int = 8  # wrong passwords for one email within the window; then 429 for the rest of the window
+    LOGIN_FAIL_WINDOW_S: int = 300
+    OTP_FAIL_LIMIT: int = 5  # wrong phone codes / failed CNIC checks for one Guardian within the window
+    OTP_FAIL_WINDOW_S: int = 300
     CAMERA_POLL_ACTIVE_S: int = 5  # the same while someone is watching
     APPOINTMENT_MAX_OPEN: int = 100  # scheduled appointments per Dependent
     WELLNESS_ALERT_MAX_AGE_S: int = 21600  # a check found unanswered more than 6 h after its deadline is closed, not alerted

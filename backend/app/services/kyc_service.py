@@ -17,7 +17,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.core import security
+from app.core import ratelimit, security
 from app.core.config import get_settings
 from app.core.errors import AppError
 from app.models import DependentProfile, GuardianProfile, User
@@ -41,12 +41,17 @@ def _bad_credentials() -> AppError:
 def verify_dependent(
     db: Session, provider: KycProvider, dependent_id: uuid.UUID, data: DependentKycRequest
 ) -> DependentKycResponse:
+    st = get_settings()
+    ratelimit.blocked("kyc_fail", str(dependent_id), st.OTP_FAIL_LIMIT, st.OTP_FAIL_WINDOW_S)  # wrong passwords here would be password guessing
     user = db.get(User, dependent_id)
     if user is None or user.role != "dependent":
         security.burn_password_check(data.password)
+        ratelimit.fail("kyc_fail", str(dependent_id))
         raise _bad_credentials()
     if not security.verify_password(data.password, user.password_hash):
+        ratelimit.fail("kyc_fail", str(dependent_id))
         raise _bad_credentials()
+    ratelimit.clear("kyc_fail", str(dependent_id))
 
     profile = db.get(DependentProfile, dependent_id)
     if profile is None:
@@ -137,8 +142,12 @@ def request_guardian_otp(db: Session, provider: KycProvider, user: User) -> OtpR
 
 def confirm_guardian_otp(db: Session, provider: KycProvider, user: User, code: str) -> GuardianVerificationOut:
     profile = _guardian_profile(db, user)
+    st = get_settings()
+    ratelimit.blocked("otp_fail", str(user.user_id), st.OTP_FAIL_LIMIT, st.OTP_FAIL_WINDOW_S)  # a 6-digit code must not be guessable
     if not provider.check_otp(user.phone, code):
+        ratelimit.fail("otp_fail", str(user.user_id))
         raise AppError(400, "OTP_INVALID", "That code is incorrect or has expired.")
+    ratelimit.clear("otp_fail", str(user.user_id))
     profile.phone_verified = True
     db.commit()
     return guardian_status(db, user, VERIFIED)
@@ -148,7 +157,11 @@ def verify_guardian_cnic(db: Session, provider: KycProvider, user: User, cnic: s
     profile = _guardian_profile(db, user)
     # Guardians have no stored CNIC to remember a first submission by, so a guardian
     # CNIC check is always final: verified or failed, never left pending.
+    st = get_settings()
+    ratelimit.blocked("cnic_fail", str(user.user_id), st.OTP_FAIL_LIMIT * 2, st.OTP_FAIL_WINDOW_S)
     result = provider.check_cnic(cnic, previously_submitted=True)
+    if result.status != VERIFIED:
+        ratelimit.fail("cnic_fail", str(user.user_id))
     if result.status == VERIFIED:
         profile.cnic_verified = True
         db.commit()

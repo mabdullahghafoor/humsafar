@@ -156,6 +156,8 @@ Every error has the same shape; branch on `error.code`, never on `message`:
 | Status | Codes |
 |---|---|
 | 400 | `CONFIRM_TOKEN_EXPIRED`, `CONFIRM_TOKEN_INVALID`, `INVITE_EXPIRED`, `INVITE_INVALID`, `OTP_INVALID`, `PRIMARY_NOT_GOVERNABLE` |
+| 429 | `TOO_MANY_REQUESTS` (Task 6.5): too many wrong passwords for one email (8 in 5 minutes), too many wrong phone codes (5 in 5 minutes), or too many login / register calls from one address (60 per minute). `Retry-After` header and `details.retry_after_s` say how long to wait; show "try again in N seconds" |
+| 400 | `HTTPS_REQUIRED` (only when the server runs with `ENFORCE_HTTPS=true`): use https |
 | 401 | `NOT_AUTHENTICATED`, `INVALID_CREDENTIALS`, `TOKEN_EXPIRED` (call refresh, retry once), `TOKEN_INVALID`, `TOKEN_WRONG_TYPE` |
 | 403 | `RECORD_MODIFY_DENIED`, `SHARE_MODIFY_DENIED`, `CATEGORY_NOT_ALLOWED`, `ACCOUNT_NOT_ACTIVATED`, `FORBIDDEN`, `GUARDIAN_NOT_VERIFIED`, `INVITE_NOT_FOR_YOU`, `MODULE_ACCESS_DENIED`, `NOT_LINKED_TO_DEPENDENT`, `NOT_PRIMARY_GUARDIAN`, `PRIMARY_CANNOT_ACCEPT_INVITE`, `SECONDARY_CANNOT_LINK` |
 | 404 | `RECORD_NOT_FOUND`, `NO_FILE`, `FILE_NOT_FOUND`, `SHARE_NOT_FOUND`, `APPOINTMENT_NOT_FOUND`, `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `DOSE_NOT_FOUND`, `EMERGENCY_CONTACT_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `MEDICATION_NOT_FOUND`, `NO_DOSE_DUE`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND`, `ESCALATION_NOT_FOUND`, `WELLNESS_CHECK_NOT_FOUND` |
