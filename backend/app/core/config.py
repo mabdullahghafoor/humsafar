@@ -110,6 +110,11 @@ class Settings(BaseSettings):
     BOOKING_MAX_OPEN: int = 20  # open (pending / confirmed) home-care requests per Dependent (Task 6.2)
     BOOKING_MAX_AHEAD_DAYS: int = 365
     ACTIVITY_CONTACT_DEDUPE_S: int = 60  # the same person tapping the same organization twice within this time logs once
+    CAMERA_SESSION_TTL_S: int = 90  # a viewing session ends this long after the viewer last renewed it (Task 6.3)
+    CAMERA_ONLINE_S: int = 30  # the camera phone counts as online this long after its last heartbeat
+    CAMERA_MAX_VIEWERS: int = 3  # Guardians watching one camera at the same time
+    CAMERA_POLL_IDLE_S: int = 10  # how often the camera phone asks "is anyone watching?"
+    CAMERA_POLL_ACTIVE_S: int = 5  # the same while someone is watching
     APPOINTMENT_MAX_OPEN: int = 100  # scheduled appointments per Dependent
     WELLNESS_ALERT_MAX_AGE_S: int = 21600  # a check found unanswered more than 6 h after its deadline is closed, not alerted
 

@@ -16,8 +16,8 @@ from fastapi import FastAPI
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core import scheduler
-from app.routers import alarm, appointments, auth, booking, calls, device_health, directory, emergency_contact, escalation, geofence, health, kyc, linkage, location, medication, messages, notifications, panic, permissions, records, vitals, wearable, wellness
-from app.services import appointments_service, call_service, device_health_service, escalation_service, external_contact_service, medication_service, notification_service, wellness_service, wearable_service
+from app.routers import alarm, appointments, auth, booking, calls, camera, device_health, directory, emergency_contact, escalation, geofence, health, kyc, linkage, location, medication, messages, notifications, panic, permissions, records, vitals, wearable, wellness
+from app.services import appointments_service, call_service, camera_service, device_health_service, escalation_service, external_contact_service, medication_service, notification_service, wellness_service, wearable_service
 
 settings = get_settings()
 
@@ -29,6 +29,7 @@ scheduler.register("wellness_sweep", wellness_service.sweep)  # Task 3.4 (before
 scheduler.register("escalation_sweep", escalation_service.sweep)  # Task 3.5 (after the other sweeps, before the dispatch)
 scheduler.register("external_contact_sweep", external_contact_service.sweep)  # Task 3.8 (after the escalation sweep)
 scheduler.register("call_sweep", call_service.sweep)  # Task 4.4
+scheduler.register("camera_sweep", camera_service.sweep)  # Task 6.3
 scheduler.register("appointment_tick", appointments_service.tick)  # Task 5.1 (reminders; after the sweeps, the dispatch only handles alert events)
 scheduler.register("notification_dispatch", notification_service.dispatch_events)  # Task 3.1 (after the sweep)
 scheduler.register("medication_tick", medication_service.tick)  # Task 3.2
@@ -84,6 +85,7 @@ app.include_router(vitals.router)  # Task 5.3
 app.include_router(wearable.router)  # Task 5.4
 app.include_router(directory.router)  # Task 6.1
 app.include_router(booking.router)  # Task 6.2
+app.include_router(camera.router)  # Task 6.3
 
 # Future (added as each phase is implemented):
 # app.include_router(emergency.router, prefix="/emergency", tags=["Emergency"]) # Phase 3

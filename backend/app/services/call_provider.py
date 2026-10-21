@@ -30,6 +30,8 @@ class CallProvider(Protocol):
 
     def join_info(self, room_id: str, user_id: str, call_type: str) -> dict: ...
 
+    def room_token(self, room_id: str, user_id: str, *, publish: bool, ttl_s: int) -> dict: ...  # Task 6.3 (camera room)
+
 
 class MockCallProvider:
     """No real media. Gives a stable fake token so the app flow and tests can be built."""
@@ -52,6 +54,17 @@ class MockCallProvider:
             "user_id": user_id,
             "token": "mock-" + hashlib.sha256(f"{room_id}:{user_id}".encode()).hexdigest()[:32],
             "expires_at": datetime.now(timezone.utc) + timedelta(seconds=ttl),
+        }
+
+
+    def room_token(self, room_id: str, user_id: str, *, publish: bool, ttl_s: int) -> dict:
+        if self.fail:
+            raise RuntimeError("mock call provider is down")
+        self.issued.append((room_id, user_id))
+        return {
+            "provider": "mock", "app_id": "mock-app", "room_id": room_id, "user_id": user_id,
+            "token": ("mock-pub-" if publish else "mock-view-") + hashlib.sha256(f"{room_id}:{user_id}:{publish}".encode()).hexdigest()[:32],
+            "expires_at": datetime.now(timezone.utc) + timedelta(seconds=ttl_s),
         }
 
 
@@ -96,6 +109,16 @@ class ZegoProvider:
         }
 
 
+    def room_token(self, room_id: str, user_id: str, *, publish: bool, ttl_s: int) -> dict:
+        """Camera room token: a viewer may log in and watch (privilege 1) but NOT publish; the camera phone may publish (privilege 2)."""
+        payload = json.dumps({"room_id": room_id, "privilege": {1: 1, 2: 1 if publish else 0}, "stream_id_list": None})
+        return {
+            "provider": "zego", "app_id": str(self.app_id), "room_id": room_id, "user_id": user_id,
+            "token": make_token04(self.app_id, user_id, self.secret, ttl_s, payload),
+            "expires_at": datetime.now(timezone.utc) + timedelta(seconds=ttl_s),
+        }
+
+
 _provider: CallProvider | None = None
 
 
@@ -119,4 +142,13 @@ def join_info(room_id: str, user_id: str, call_type: str) -> dict | None:
         return get_provider().join_info(room_id, user_id, call_type)
     except Exception:  # noqa: BLE001
         log.exception("call provider failed")
+        return None
+
+
+def room_token(room_id: str, user_id: str, *, publish: bool, ttl_s: int) -> dict | None:
+    """Never raises. None = the provider could not give a token."""
+    try:
+        return get_provider().room_token(room_id, user_id, publish=publish, ttl_s=ttl_s)
+    except Exception:  # noqa: BLE001
+        log.exception("call provider failed (camera room token)")
         return None

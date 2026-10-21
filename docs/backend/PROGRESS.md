@@ -39,7 +39,8 @@ Statuses: Done = merged into `dev`.
 | 5.4 | Wearable band with mock data: pair / unpair, sync of heart rate (+ SpO2, temperature), status, "no data" detection with a standard notification, demo-data endpoint, daily band summary in the PDFs (migration 0015; contract `wearable_contract.md`) | Done (PR #59) |
 | 5.5 | Real wearable band integration | **Blocked**: waits for the band, the Android spike 2.4 and the sensor list (clarifications 88, 89) |
 | 6.1 | Healthcare directory (hospitals, ambulances, pharmacies...) and home-care provider directory: list, search, filters, "nearby", details, starting content (migration 0016; contract `directory_contract.md`) | Done (PR #60) |
-| 6.2 | Home-care booking requests (pending, confirmed, completed, cancelled) and the shared Activity Timeline for organization contacts and bookings (migration 0017; contract `booking_contract.md`) | In review (PR) |
+| 6.2 | Home-care booking requests (pending, confirmed, completed, cancelled) and the shared Activity Timeline for organization contacts and bookings (migration 0017; contract `booking_contract.md`) | Done (PR merged) |
+| 6.3 | Camera pairing and live viewing: spare phone in camera mode publishes into a private video room only while a Guardian watches; Primary always, Secondary needs `camera_viewing`; viewing sessions with renewal, viewer limit, "being viewed" indicator and notices (migration 0018; contract `camera_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
