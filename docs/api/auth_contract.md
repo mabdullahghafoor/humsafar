@@ -52,7 +52,7 @@ Guardians can log in right after registering. Feature gating by verification (FR
 
 ### POST /auth/refresh  → 200
 Request: `{ "refresh_token": "jwt" }`. Response: same shape as login (a **new pair**; store the new refresh token and discard the old one).
-Errors: 401 `TOKEN_EXPIRED` (send user to login), 401 `TOKEN_INVALID`, 401 `TOKEN_WRONG_TYPE` (an access token was sent), 403 `ACCOUNT_NOT_ACTIVATED`.
+Errors: 401 `TOKEN_EXPIRED` (send user to login), 401 `TOKEN_INVALID`, 401 `TOKEN_WRONG_TYPE` (an access token was sent), 403 `ACCOUNT_NOT_ACTIVATED`, 403 `ACCOUNT_CLOSED` (Task 6.7: the account was closed; every call with its old tokens answers this too; see `account_contract.md`).
 
 ### GET /auth/me  → 200  (helper beyond the SDS list)
 Header `Authorization: Bearer <access_token>`. Returns the user object above. Useful to restore the session on app start.

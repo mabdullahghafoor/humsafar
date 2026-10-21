@@ -54,6 +54,12 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     role = Column(String(20), nullable=False)
     created_at = ts_col()
+    # Task 6.7 (FR-O1, clarifications 157-159): account closure. A closed account cannot sign in; its data is deleted
+    # or anonymized by the background job once `delete_after` has passed. `retention_hold` pauses that for an active audit or dispute.
+    closed_at = Column(DateTime(timezone=True), nullable=True)
+    delete_after = Column(DateTime(timezone=True), nullable=True)
+    purged_at = Column(DateTime(timezone=True), nullable=True)
+    retention_hold = Column(Boolean, nullable=False, server_default=text("false"))
 
     guardian_profile = relationship(
         "GuardianProfile", back_populates="user", uselist=False
@@ -64,6 +70,7 @@ class User(Base):
 
     __table_args__ = (
         CheckConstraint(in_list("role", USER_ROLES), name="role_valid"),
+        Index("ix_users_delete_due", "delete_after", postgresql_where=text("delete_after IS NOT NULL AND purged_at IS NULL")),
     )
 
 
