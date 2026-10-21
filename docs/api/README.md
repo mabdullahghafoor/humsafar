@@ -27,6 +27,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
 | `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
+| `vitals_contract.md` | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, separate / combined PDF (5.3) |
 | `records_contract.md` | Medical Vault: records with files (encrypted), notes, PDF export (complete / year / month), doctor-shareable 72 h link, per-category access for a Secondary (5.2) |
 | `appointment_contract.md` | Appointments: add / move / cancel, who is told, reminders 24 h and 1 h before |
 | `../backend/sds_clarifications.md` | every place the SDS was silent or contradictory, with our decision |
@@ -106,12 +107,16 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | GET `/dependents/{id}/records/{record_id}` | same | One record |
 | GET `/dependents/{id}/records/{record_id}/file` | same | Download the original file (stored encrypted) |
 | PATCH / DELETE `/dependents/{id}/records/{record_id}` | uploader, or the Primary | Change / delete a record |
-| GET `/dependents/{id}/records/export` | same as list | PDF export: `scope` = `complete` / `year` / `month` |
+| GET `/dependents/{id}/records/export` | same as list | PDF export: `scope` = `complete` / `year` / `month`; `include_vitals=true` adds the vitals |
 | POST / GET `/dependents/{id}/records/share` | same as list | Make a doctor link (default 72 h) / list the links |
 | DELETE `/dependents/{id}/records/share/{share_id}` | link maker, Primary, Dependent | Cancel a link |
 | GET `/dependents/{id}/records/access` | Primary | Which record categories each Secondary may see (5.2) |
 | PUT `/dependents/{id}/records/access/{category}` | Primary | Show / hide one category for one Secondary (body `guardian_id`, `visible`) |
 | GET `/dependents/{id}/records/access/me` | same as list | Which categories I may see |
+| POST / GET `/dependents/{id}/vitals` | the Dependent, or a Guardian with `health_records` | Save / list manual vitals (5.3) |
+| GET `/dependents/{id}/vitals/latest` | same | Newest reading of each metric |
+| GET / DELETE `/dependents/{id}/vitals/{reading_id}` | same (delete: who typed it, or the Primary) | One / delete a reading |
+| GET `/dependents/{id}/vitals/export` | same | Separate vitals PDF (`scope`, `year`, `month`) |
 | GET `/shared/records/{token}` | **anyone with the link (no login)** | The doctor's read-only PDF |
 | POST / GET `/dependents/{id}/appointments` | the Dependent, or a Guardian with `health_records` | Add / list appointments (`when` = `upcoming` / `past` / `all`) |
 | GET / PATCH / DELETE `/dependents/{id}/appointments/{appointment_id}` | same | One / change / delete |

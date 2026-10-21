@@ -29,7 +29,7 @@ from app.core.errors import AppError
 from app.models import AuditLog, DependentProfile, MedicalRecord, RecordShare, User
 from app.models.medical import RECORD_CATEGORIES
 from app.schemas.records import RecordList, RecordOut, RecordUpdate, ShareCreated, ShareIn, ShareList, ShareOut
-from app.services import crypto_service, linkage_service, permission_service, record_access_service, records_pdf, storage_service
+from app.services import crypto_service, linkage_service, permission_service, record_access_service, records_pdf, storage_service, vitals_service
 
 MODULE = "health_records"
 EARLIEST = date(1900, 1, 1)
@@ -312,7 +312,8 @@ def delete_record(db: Session, user: User, dependent_id: uuid.UUID, record_id: u
 # ------------------------------------------------------------------ export
 
 def _export_bytes(
-    db: Session, dependent_id: uuid.UUID, scope: str, year: int | None, month: int | None, categories: tuple[str, ...] | list[str]
+    db: Session, dependent_id: uuid.UUID, scope: str, year: int | None, month: int | None, categories: tuple[str, ...] | list[str],
+    include_vitals: bool = False,
 ) -> bytes:
     s = get_settings()
     where = [MedicalRecord.dependent_id == dependent_id, MedicalRecord.type.in_(list(categories)), *period_conditions(year, month)]
@@ -341,14 +342,18 @@ def _export_bytes(
             "added_by": names.get(r.uploaded_by) or "A Guardian", "added_at": r.uploaded_at,
             "content_type": r.content_type, "name": r.file_name or "file", "data": data, "skipped": skipped,
         })
+    v_rows, v_total = vitals_service.export_rows(db, dependent_id, year, month) if include_vitals else (None, 0)
     return records_pdf.build(
-        person_name=names.get(dependent_id) or "Dependent", scope=scope, year=year, month=month, rows=rows, total_matching=total
+        person_name=names.get(dependent_id) or "Dependent", scope=scope, year=year, month=month, rows=rows, total_matching=total,
+        vitals=v_rows, vitals_total=v_total,
     )
 
 
-def export_pdf(db: Session, user: User, dependent_id: uuid.UUID, scope: str, year: int | None, month: int | None) -> tuple[bytes, str]:
+def export_pdf(
+    db: Session, user: User, dependent_id: uuid.UUID, scope: str, year: int | None, month: int | None, include_vitals: bool = False
+) -> tuple[bytes, str]:
     authorize(db, user, dependent_id)
-    pdf = _export_bytes(db, dependent_id, scope, year, month, visible_categories(db, user, dependent_id))
+    pdf = _export_bytes(db, dependent_id, scope, year, month, visible_categories(db, user, dependent_id), include_vitals)
     _audit(db, user.user_id, "records_exported", "dependent", dependent_id)
     db.commit()
     return pdf, records_pdf.file_stem(scope, year, month) + ".pdf"
@@ -369,7 +374,7 @@ def _status(sh: RecordShare, now: datetime) -> str:
 def _share_out(sh: RecordShare, now: datetime) -> ShareOut:
     return ShareOut(
         share_id=sh.share_id, dependent_id=sh.dependent_id, created_by=sh.created_by, scope=sh.scope, year=sh.year,
-        month=sh.month, categories=list(sh.categories), created_at=sh.created_at, expires_at=sh.expires_at,
+        month=sh.month, categories=list(sh.categories), include_vitals=sh.include_vitals, created_at=sh.created_at, expires_at=sh.expires_at,
         revoked_at=sh.revoked_at, status=_status(sh, now), open_count=sh.open_count, last_opened_at=sh.last_opened_at,
     )
 
@@ -400,7 +405,7 @@ def create_share(db: Session, user: User, dependent_id: uuid.UUID, body: ShareIn
         raise AppError(409, "SHARE_LIMIT", f"There are already {s.SHARE_MAX_ACTIVE} open links. Cancel one first.")
     sh = RecordShare(
         dependent_id=dependent_id, created_by=user.user_id, token_hash=_hash(token), scope=body.scope, year=body.year,
-        month=body.month, categories=cats, created_at=now, expires_at=now + timedelta(hours=hours),
+        month=body.month, categories=cats, include_vitals=body.include_vitals, created_at=now, expires_at=now + timedelta(hours=hours),
     )
     db.add(sh)
     db.flush()
@@ -474,5 +479,5 @@ def open_share(db: Session, token: str) -> tuple[bytes, str]:
         raise AppError(410, "SHARE_REVOKED", "This link is no longer available.")
     _audit(db, sh.created_by, "record_share_opened", "record_share", sh.share_id)  # logged under the person who made the link
     db.commit()
-    pdf = _export_bytes(db, sh.dependent_id, sh.scope, sh.year, sh.month, cats)
+    pdf = _export_bytes(db, sh.dependent_id, sh.scope, sh.year, sh.month, cats, sh.include_vitals)
     return pdf, records_pdf.file_stem(sh.scope, sh.year, sh.month) + ".pdf"

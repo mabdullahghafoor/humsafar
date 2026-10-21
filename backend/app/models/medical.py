@@ -27,6 +27,9 @@ from app.core.database import Base
 from app.models._common import fk_col, in_list, ts_col, uuid_pk
 
 VITAL_SOURCES = ("manual", "wearable")
+VITAL_METRICS = ("blood_pressure", "blood_sugar", "spo2", "temperature", "heart_rate")  # the first four are typed in (FR-H1); heart_rate comes from the band (5.4)
+MANUAL_METRICS = ("blood_pressure", "blood_sugar", "spo2", "temperature")
+SUGAR_CONTEXTS = ("fasting", "after_meal", "random")
 RECORD_CATEGORIES = ("prescription", "lab_report", "xray", "other")  # FR-G1 (the SDS column is `type`)
 APPOINTMENT_STATUSES = ("scheduled", "cancelled")
 SHARE_SCOPES = ("complete", "year", "month")
@@ -113,6 +116,7 @@ class RecordShare(Base):
     year = Column(Integer, nullable=True)
     month = Column(Integer, nullable=True)
     categories = Column(ARRAY(String(50)), nullable=False)  # what the link shows, fixed when it was made
+    include_vitals = Column(Boolean, nullable=False, server_default=text("false"))  # Task 5.3: also show the vitals
     created_at = ts_col()
     expires_at = Column(DateTime(timezone=True), nullable=False)
     revoked_at = Column(DateTime(timezone=True), nullable=True)
@@ -155,25 +159,38 @@ class RecordCategoryRestriction(Base):
 
 
 class VitalReading(Base):
+    """One health reading. Units are fixed: blood_pressure mmHg (value = systolic, diastolic), blood_sugar mg/dL, spo2 %,
+    temperature degrees Celsius, heart_rate beats per minute (Task 5.3, FR-H1)."""
+
     __tablename__ = "vital_readings"
 
     reading_id = uuid_pk()
     dependent_id = fk_col("dependent_profiles.user_id")
-    metric_type = Column(String(30), nullable=False)  # heart_rate, steps, bp, ...
+    metric_type = Column(String(30), nullable=False)
     value = Column(Float, nullable=False)
+    diastolic = Column(Float, nullable=True)  # blood_pressure only
+    context = Column(String(20), nullable=True)  # blood_sugar only: fasting / after_meal / random
+    note = Column(Text, nullable=True)
     # Nullable: wearable-sourced readings have no human recorder.
     recorded_by = fk_col("users.user_id", nullable=True)
-    recorded_at = ts_col()
+    recorded_at = ts_col()  # when it was measured
+    created_at = ts_col()  # when it was saved
     source = Column(String(20), nullable=False)
+    client_id = Column(UUID(as_uuid=True), nullable=True)  # safe retry (one per recorder)
 
     __table_args__ = (
         CheckConstraint(in_list("source", VITAL_SOURCES), name="source_valid"),
+        CheckConstraint(in_list("metric_type", VITAL_METRICS), name="metric_valid"),
+        CheckConstraint("(metric_type = 'blood_pressure') = (diastolic IS NOT NULL)", name="diastolic_for_bp"),
+        CheckConstraint("context IS NULL OR (metric_type = 'blood_sugar' AND context IN ('fasting', 'after_meal', 'random'))", name="context_for_sugar"),
+        CheckConstraint("note IS NULL OR char_length(note) <= 200", name="note_length"),
         Index(
             "ix_vital_readings_dependent_metric_recorded",
             "dependent_id",
             "metric_type",
             "recorded_at",
         ),
+        Index("uq_vital_readings_recorder_client", "recorded_by", "client_id", unique=True, postgresql_where=text("client_id IS NOT NULL")),
     )
 
 

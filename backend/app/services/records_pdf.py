@@ -82,9 +82,11 @@ def _pdf_pages(data: bytes) -> int | None:
 
 
 def build(
-    *, person_name: str, scope: str, year: int | None, month: int | None, rows: list[dict], total_matching: int
+    *, person_name: str, scope: str, year: int | None, month: int | None, rows: list[dict], total_matching: int,
+    vitals: list[dict] | None = None, vitals_total: int = 0,
 ) -> bytes:
     """
+    vitals: when not None, a "Vitals" section is added after the records (Task 5.3, FR-H1 "combined with the complete export").
     rows: newest first, each {date, category, title, notes, added_by, added_at, content_type, name, data}.
     `data` is the decrypted file (bytes) or None when there is no file or it was left out (`skipped` explains why).
     """
@@ -160,6 +162,9 @@ def build(
                 block.append(Paragraph(f"File: {_t(r['name'])} is not included ({_t(r.get('skipped') or 'unreadable file')}). Download it from the app.", small))
             story.append(KeepTogether(block))
 
+    if vitals is not None:
+        story.extend(_vitals_section(vitals, vitals_total, tz, h=head, body=body, small=small, cell=cell))
+
     def footer(canvas, doc):
         canvas.saveState()
         canvas.setFont("Helvetica", 8)
@@ -182,4 +187,82 @@ def build(
             log.warning("an attached PDF could not be merged", exc_info=True)
     out = BytesIO()
     writer.write(out)
+    return out.getvalue()
+
+
+# ------------------------------------------------------------------ vitals (Task 5.3, FR-H1)
+
+METRIC_LABELS = {"blood_pressure": "Blood pressure", "blood_sugar": "Blood sugar", "spo2": "Oxygen saturation", "temperature": "Temperature", "heart_rate": "Heart rate"}
+CONTEXT_LABELS = {"fasting": "fasting", "after_meal": "after a meal", "random": "random"}
+
+
+def format_reading(r: dict) -> str:
+    """Text like "128/82 mmHg" or "112 mg/dL (fasting)"; no judgement of the number, only what was typed."""
+    m, v = r["metric"], f"{r['value']:g}"
+    if m == "blood_pressure":
+        return f"{v}/{r['diastolic']:g} mmHg"
+    if m == "blood_sugar":
+        return f"{v} mg/dL" + (f" ({CONTEXT_LABELS[r['context']]})" if r.get("context") else "")
+    if m == "spo2":
+        return f"{v} %"
+    if m == "temperature":
+        return f"{v} \u00b0C"
+    return f"{v} bpm"
+
+
+def _vitals_section(rows: list[dict], total: int, tz, *, h, body, small, cell) -> list:
+    out: list = [Spacer(1, 6 * mm), Paragraph("Vitals", ParagraphStyle("vh", parent=h, fontSize=14, textColor=TEAL))]
+    if not rows:
+        out.append(Paragraph("There are no vitals for this selection.", body))
+        return out
+    if total > len(rows):
+        out.append(Paragraph(f"<b>Only the newest {len(rows)} of {total} readings are included.</b> Export one year or one month at a time to get the rest.", body))
+        out.append(Spacer(1, 2 * mm))
+    data = [[Paragraph(f"<b>{t}</b>", cell) for t in ("Date and time", "Measurement", "Reading", "Added by", "Note")]]
+    for r in rows:
+        data.append([
+            Paragraph(f"{r['at'].astimezone(tz):%d %b %Y, %H:%M}", cell), Paragraph(_t(METRIC_LABELS[r["metric"]]), cell),
+            Paragraph(_t(format_reading(r)), cell), Paragraph(_t(r["by"]), cell), Paragraph(_t(r.get("note") or ""), cell),
+        ])
+    table = Table(data, colWidths=[32 * mm, 32 * mm, 34 * mm, 30 * mm, 46 * mm], repeatRows=1)
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E0F2F7")),
+        ("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#CBD5E1")),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("TOPPADDING", (0, 0), (-1, -1), 3), ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+    ]))
+    out.append(table)
+    out.append(Spacer(1, 2 * mm))
+    out.append(Paragraph("These values were typed in or sent by the band. Humsafar does not interpret them; ask a doctor.", small))
+    return out
+
+
+def build_vitals(*, person_name: str, scope: str, year: int | None, month: int | None, rows: list[dict], total_matching: int) -> bytes:
+    """A separate vitals report (one PDF with just the readings)."""
+    tz = ZoneInfo(get_settings().APPOINTMENT_TIMEZONE)
+    base = getSampleStyleSheet()
+    h1 = ParagraphStyle("h1", parent=base["Title"], fontName="Helvetica-Bold", fontSize=20, textColor=TEAL, spaceAfter=4, alignment=0)
+    sub = ParagraphStyle("sub", parent=base["Normal"], fontSize=10, textColor=colors.HexColor("#475569"), leading=14)
+    body = ParagraphStyle("body", parent=base["Normal"], fontSize=9.5, leading=13)
+    small = ParagraphStyle("small", parent=body, fontSize=8.5, textColor=colors.HexColor("#475569"), leading=11)
+    head = ParagraphStyle("head", parent=base["Heading3"], fontName="Helvetica-Bold", fontSize=11.5, spaceBefore=10, spaceAfter=2)
+    cell = ParagraphStyle("cell", parent=body, fontSize=8.5, leading=11)
+    story: list = [
+        Paragraph("Vitals report", h1),
+        Paragraph(f"<b>{_t(person_name)}</b> &nbsp;&middot;&nbsp; {_t(scope_label(scope, year, month))}", sub),
+        Paragraph(f"Created {datetime.now(tz):%d %b %Y, %H:%M} by Humsafar. Confidential medical information.", small),
+    ]
+    story.extend(_vitals_section(rows, total_matching, tz, h=head, body=body, small=small, cell=cell))
+
+    def footer(canvas, doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica", 8)
+        canvas.setFillColor(colors.HexColor("#64748B"))
+        canvas.drawString(MARGIN, 10 * mm, "Humsafar - confidential medical information")
+        canvas.drawRightString(PAGE_W - MARGIN, 10 * mm, f"Page {doc.page}")
+        canvas.restoreState()
+
+    out = BytesIO()
+    SimpleDocTemplate(out, pagesize=A4, leftMargin=MARGIN, rightMargin=MARGIN, topMargin=MARGIN, bottomMargin=18 * mm,
+                      title="Vitals report", author="Humsafar").build(story, onFirstPage=footer, onLaterPages=footer)
     return out.getvalue()

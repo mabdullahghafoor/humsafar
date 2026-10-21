@@ -85,6 +85,7 @@ def export_records(
     scope: Scope = "complete",
     year: int | None = Query(None, ge=1900, le=2200),
     month: int | None = Query(None, ge=1, le=12),
+    include_vitals: bool = Query(False, description="Also add the vitals to this PDF (Task 5.3)."),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -92,7 +93,7 @@ def export_records(
         check_period(scope, year, month)
     except ValueError as exc:
         raise AppError(422, "VALIDATION_ERROR", str(exc))
-    pdf, name = svc.export_pdf(db, user, dependent_id, scope, year, month)
+    pdf, name = svc.export_pdf(db, user, dependent_id, scope, year, month, include_vitals)
     return Response(pdf, media_type="application/pdf", headers={**NO_STORE, "Content-Disposition": f'attachment; filename="{name}"'})
 
 
