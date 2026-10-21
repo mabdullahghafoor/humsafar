@@ -27,6 +27,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
 | `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
+| `wearable_contract.md` | Wearable band (mock data first): pair, sync readings, status, "no data" notice, demo data (5.4) |
 | `vitals_contract.md` | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, separate / combined PDF (5.3) |
 | `records_contract.md` | Medical Vault: records with files (encrypted), notes, PDF export (complete / year / month), doctor-shareable 72 h link, per-category access for a Secondary (5.2) |
 | `appointment_contract.md` | Appointments: add / move / cancel, who is told, reminders 24 h and 1 h before |
@@ -117,6 +118,9 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | GET `/dependents/{id}/vitals/latest` | same | Newest reading of each metric |
 | GET / DELETE `/dependents/{id}/vitals/{reading_id}` | same (delete: who typed it, or the Primary) | One / delete a reading |
 | GET `/dependents/{id}/vitals/export` | same | Separate vitals PDF (`scope`, `year`, `month`) |
+| POST / GET / DELETE `/dependents/{id}/wearable` | Dependent or Primary (GET: health-data readers) | Pair the band / band status / unpair (5.4) |
+| POST `/dependents/{id}/wearable/sync` | the Dependent's own phone | Send a batch of band readings |
+| POST `/dependents/{id}/wearable/mock` | Dependent or Primary | Demo: make fake heart-rate readings |
 | GET `/shared/records/{token}` | **anyone with the link (no login)** | The doctor's read-only PDF |
 | POST / GET `/dependents/{id}/appointments` | the Dependent, or a Guardian with `health_records` | Add / list appointments (`when` = `upcoming` / `past` / `all`) |
 | GET / PATCH / DELETE `/dependents/{id}/appointments/{appointment_id}` | same | One / change / delete |

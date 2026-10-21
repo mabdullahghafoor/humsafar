@@ -235,10 +235,22 @@ def period_bounds(year: int | None, month: int | None) -> list:
     ]
 
 
-def export_rows(db: Session, dependent_id: uuid.UUID, year: int | None, month: int | None) -> tuple[list[dict], int]:
-    """(newest readings as plain rows for the PDF, how many matched)."""
+def band_summary(db: Session, dependent_id: uuid.UUID, year: int | None, month: int | None) -> list[dict]:
+    """Band readings are one every minute or so, far too many to list: the PDF shows one line per day and metric (Task 5.4)."""
+    tz = get_settings().APPOINTMENT_TIMEZONE
+    day = func.date(func.timezone(tz, VitalReading.recorded_at)).label("day")
+    q = (
+        select(day, VitalReading.metric_type, func.count(), func.avg(VitalReading.value), func.min(VitalReading.value), func.max(VitalReading.value))
+        .where(VitalReading.dependent_id == dependent_id, VitalReading.source == "wearable", *period_bounds(year, month))
+        .group_by(day, VitalReading.metric_type).order_by(day.desc(), VitalReading.metric_type).limit(1100)
+    )
+    return [{"day": d, "metric": m, "n": n, "avg": float(a), "min": float(lo), "max": float(hi)} for d, m, n, a, lo, hi in db.execute(q)]
+
+
+def export_rows(db: Session, dependent_id: uuid.UUID, year: int | None, month: int | None) -> tuple[list[dict], int, list[dict]]:
+    """(newest typed readings as plain rows for the PDF, how many matched, one summary line per day for the band's readings)."""
     s = get_settings()
-    where = [VitalReading.dependent_id == dependent_id, *period_bounds(year, month)]
+    where = [VitalReading.dependent_id == dependent_id, VitalReading.source == "manual", *period_bounds(year, month)]
     total = db.scalar(select(func.count()).select_from(VitalReading).where(*where))
     rows = list(db.scalars(
         select(VitalReading).where(*where)
@@ -249,17 +261,17 @@ def export_rows(db: Session, dependent_id: uuid.UUID, year: int | None, month: i
     return [
         {
             "at": r.recorded_at, "metric": r.metric_type, "value": r.value, "diastolic": r.diastolic, "context": r.context,
-            "note": r.note, "by": names.get(r.recorded_by) or "A Guardian" if r.recorded_by else "Wearable band",
+            "note": r.note, "by": names.get(r.recorded_by) or "A Guardian",
         }
         for r in rows
-    ], total
+    ], total, band_summary(db, dependent_id, year, month)
 
 
 def export_pdf(db: Session, user: User, dependent_id: uuid.UUID, scope: str, year: int | None, month: int | None) -> tuple[bytes, str]:
     records_service.authorize(db, user, dependent_id)
-    rows, total = export_rows(db, dependent_id, year, month)
+    rows, total, band = export_rows(db, dependent_id, year, month)
     names = records_service._name_map(db, {dependent_id})
-    pdf = records_pdf.build_vitals(person_name=names.get(dependent_id) or "Dependent", scope=scope, year=year, month=month, rows=rows, total_matching=total)
+    pdf = records_pdf.build_vitals(person_name=names.get(dependent_id) or "Dependent", scope=scope, year=year, month=month, rows=rows, total_matching=total, band=band)
     db.add(AuditLog(actor_id=user.user_id, action="vitals_exported", target_type="dependent", target_id=dependent_id))
     db.commit()
     return pdf, records_pdf.file_stem(scope, year, month).replace("records", "vitals") + ".pdf"

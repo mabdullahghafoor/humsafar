@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Humsafar API - Phase 1-5 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging, Voice messages, Calls, Medical vault, Appointments, Manual vitals)",
+    "name": "Humsafar API - Phase 1-5 (Auth, KYC, Linkage, Permissions, Location, Geofences, Device health, Notifications, Medication, Missed dose, Wellness check, Escalation, Panic, Remote alarm, Emergency contact, Messaging, Voice messages, Calls, Medical vault, Appointments, Manual vitals, Wearable band)",
     "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
     "description": "# Humsafar API - Phase 1\n\nEverything built so far: **Auth, KYC, Linkage, Permissions** (Tasks 1.3 to 1.6).\n\n## Quick start\n1. Start the backend: `uvicorn app.main:app --reload` (from `backend/`).\n2. Select the **Humsafar Local** environment (`base_url` = http://localhost:8000).\n3. Run any folder, or the whole collection, in the **Collection Runner**. Every folder creates its own test accounts, so folders can be run alone and in any order.\n\n## How to read it\nEvery request has a description (who may call it, body, errors) and a saved **example response** captured from the real running backend. Errors always look like `{ \"error\": { \"code\", \"message\", \"details\" } }`; branch on `error.code`.\n\n## Auth flow\n`/auth/register` -> `/auth/login` -> send `Authorization: Bearer <access_token>`. On 401 TOKEN_EXPIRED call `/auth/refresh` once.\n\nFull written contracts: `docs/api/` in the repo (start with `docs/api/README.md`)."
   },
@@ -32190,6 +32190,1864 @@
                     "exec": [
                       "pm.test('404', () => pm.response.to.have.status(404));",
                       "pm.test('VITAL_NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('VITAL_NOT_FOUND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "21 - Wearable band, mock data (Task 5.4)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{wb_p_email}}\",\n  \"phone\": \"{{wb_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('wb_p_email','wbp'+run+'@humsafar-test.com'); pm.environment.set('wb_p_phone','03'+r());",
+                      "pm.environment.set('wb_d_email','wbd'+run+'@humsafar-test.com'); pm.environment.set('wb_d_phone','03'+r());",
+                      "pm.environment.set('wb_s_email','wbs'+run+'@humsafar-test.com'); pm.environment.set('wb_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('wb_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{wb_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('wb_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{wb_d_email}}\",\n  \"phone\": \"{{wb_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('wb_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{wb_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{wb_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('wb_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{wb_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('wb_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{wb_s_email}}\",\n  \"phone\": \"{{wb_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{wb_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{wb_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('wb_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('wb_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Prepare times",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Only prepares measurement times used below (a few minutes ago)."
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const ago = (m) => new Date(Date.now() - m*60000).toISOString();",
+                      "pm.environment.set('wb_t1', ago(8)); pm.environment.set('wb_t2', ago(6)); pm.environment.set('wb_t3', ago(4)); pm.environment.set('wb_t4', ago(2));",
+                      "pm.environment.set('wb_future', new Date(Date.now() + 3600000).toISOString());"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Band",
+          "item": [
+            {
+              "name": "13. Status before pairing",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "status is one of: not_paired, waiting_for_first_data, receiving, no_data. Anyone who may see health data (the Dependent, the Primary, a Secondary with health_records) can read it."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('not paired', () => { const j = pm.response.json(); pm.expect(j.status).to.eql('not_paired'); pm.expect(j.device).to.eql(null); pm.expect(j.no_data_after_s).to.eql(1800); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "14. Dependent pairs the band",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "The Dependent's phone (or the Primary) registers the band's Bluetooth address (colons or dashes, any case). One band per Dependent. The phone finds the address by scanning; the real scan comes with Task 5.5.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ble_address\": \"c4-5b-be-12-34-56\",\n  \"name\": \"Humsafar band\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "const j = pm.response.json();",
+                      "pm.test('paired, address cleaned', () => { pm.expect(j.ble_address).to.eql('C4:5B:BE:12:34:56'); pm.expect(j.last_sync_at).to.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "201 Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{wb_d_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{wb_d_id}}",
+                        "wearable"
+                      ]
+                    },
+                    "description": "The Dependent's phone (or the Primary) registers the band's Bluetooth address (colons or dashes, any case). One band per Dependent. The phone finds the address by scanning; the real scan comes with Task 5.5.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"ble_address\": \"c4-5b-be-12-34-56\",\n  \"name\": \"Humsafar band\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"device_id\": \"5b0c9a1e-2d3f-4a5b-8c7d-9e0f1a2b3c4d\",\n  \"dependent_id\": \"00000000-0000-0000-0000-000000000002\",\n  \"ble_address\": \"C4:5B:BE:12:34:56\",\n  \"name\": \"Humsafar band\",\n  \"paired_at\": \"2026-10-21T09:00:00Z\",\n  \"last_sync_at\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "15. Pair the same band again",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "Safe to repeat: 200, nothing changes.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ble_address\": \"C4:5B:BE:12:34:56\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "16. Another band while one is paired (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "Unpair the first one before pairing a different band.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ble_address\": \"AA:BB:CC:DD:EE:FF\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('BAND_ALREADY_PAIRED', () => pm.expect(pm.response.json().error.code).to.eql('BAND_ALREADY_PAIRED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. Bad address (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ble_address\": \"not-an-address\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "18. Status: waiting for the first data",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('waiting', () => { const j = pm.response.json(); pm.expect(j.status).to.eql('waiting_for_first_data'); pm.expect(j.device.ble_address).to.eql('C4:5B:BE:12:34:56'); pm.expect(j.latest_heart_rate).to.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "19. Dependent's phone sends a batch",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "sync"
+                  ]
+                },
+                "description": "Only the Dependent's own phone sends band data. 1 to 500 readings; metric_type = heart_rate (bpm 20-250), spo2 (50-100) or temperature (30-45 C); recorded_at = when the band measured it, with a time zone, not in the future, up to 7 days old. A reading that is impossible is skipped and listed in `rejected` (the others are kept). The same sample (metric + time) is stored once, so a retry is safe.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\"metric_type\": \"heart_rate\", \"value\": 72, \"recorded_at\": \"{{wb_t1}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 75, \"recorded_at\": \"{{wb_t2}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 81, \"recorded_at\": \"{{wb_t3}}\"},\n    {\"metric_type\": \"spo2\", \"value\": 98, \"recorded_at\": \"{{wb_t3}}\"}\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('4 stored', () => { const j = pm.response.json(); pm.expect(j.received).to.eql(4); pm.expect(j.stored).to.eql(4); pm.expect(j.duplicates).to.eql(0); pm.expect(j.rejected.length).to.eql(0); pm.expect(j.last_sync_at).to.not.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{wb_d_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{wb_d_id}}",
+                        "wearable",
+                        "sync"
+                      ]
+                    },
+                    "description": "Only the Dependent's own phone sends band data. 1 to 500 readings; metric_type = heart_rate (bpm 20-250), spo2 (50-100) or temperature (30-45 C); recorded_at = when the band measured it, with a time zone, not in the future, up to 7 days old. A reading that is impossible is skipped and listed in `rejected` (the others are kept). The same sample (metric + time) is stored once, so a retry is safe.",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"readings\": [\n    {\"metric_type\": \"heart_rate\", \"value\": 72, \"recorded_at\": \"{{wb_t1}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 75, \"recorded_at\": \"{{wb_t2}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 81, \"recorded_at\": \"{{wb_t3}}\"},\n    {\"metric_type\": \"spo2\", \"value\": 98, \"recorded_at\": \"{{wb_t3}}\"}\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"received\": 4,\n  \"stored\": 4,\n  \"duplicates\": 0,\n  \"rejected\": [],\n  \"last_sync_at\": \"2026-10-21T09:05:00Z\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "20. Same batch again (retry)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "sync"
+                  ]
+                },
+                "description": "Nothing is stored twice.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\"metric_type\": \"heart_rate\", \"value\": 72, \"recorded_at\": \"{{wb_t1}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 75, \"recorded_at\": \"{{wb_t2}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 81, \"recorded_at\": \"{{wb_t3}}\"},\n    {\"metric_type\": \"spo2\", \"value\": 98, \"recorded_at\": \"{{wb_t3}}\"}\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('all duplicates', () => { const j = pm.response.json(); pm.expect(j.stored).to.eql(0); pm.expect(j.duplicates).to.eql(4); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. A batch with bad readings",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "sync"
+                  ]
+                },
+                "description": "Index 1 is an impossible heart rate, index 2 is in the future. Only index 0 is stored.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\"metric_type\": \"heart_rate\", \"value\": 79, \"recorded_at\": \"{{wb_t4}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 5, \"recorded_at\": \"{{wb_t4}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 70, \"recorded_at\": \"{{wb_future}}\"}\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('one stored, two rejected', () => { const j = pm.response.json(); pm.expect(j.stored).to.eql(1); pm.expect(j.rejected.map(r => r.index)).to.eql([1, 2]); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "22. Status: receiving",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "latest_heart_rate is the newest heart-rate reading from any source."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('receiving, newest heart rate', () => { const j = pm.response.json(); pm.expect(j.status).to.eql('receiving'); pm.expect(j.latest_heart_rate.value).to.eql(79); pm.expect(j.latest_heart_rate.source).to.eql('wearable'); pm.expect(j.seconds_since_data).to.be.below(600); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. Latest vitals now include the band",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/vitals/latest",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "vitals",
+                    "latest"
+                  ]
+                },
+                "description": "Band readings are ordinary vitals with source = wearable (Task 5.3 endpoints)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const l = pm.response.json().latest;",
+                      "pm.test('heart rate and SpO2 from the band', () => { pm.expect(l.heart_rate.value).to.eql(79); pm.expect(l.spo2.value).to.eql(98); pm.expect(l.spo2.source).to.eql('wearable'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. List heart-rate readings",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/vitals?metric_type=heart_rate",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "vitals"
+                  ],
+                  "query": [
+                    {
+                      "key": "metric_type",
+                      "value": "heart_rate"
+                    }
+                  ]
+                },
+                "description": "Filter by metric_type so a band's many readings do not bury typed ones."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('4 heart-rate readings', () => pm.expect(pm.response.json().total).to.eql(4));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Make demo readings (fake data)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/mock",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "mock"
+                  ]
+                },
+                "description": "For screens and the demo while there is no real band: fake heart-rate readings ending now (count 1-200, default 30; interval_s 10-3600, default 60). The Dependent or the Primary may call it. Switched off with WEARABLE_MOCK_ENABLED=false (then 404).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": 10,\n  \"interval_s\": 30\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('10 fake readings stored', () => { const j = pm.response.json(); pm.expect(j.received).to.eql(10); pm.expect(j.stored).to.eql(10); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "26. Primary cannot send band data (expect 403)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "sync"
+                  ]
+                },
+                "description": "Band data comes only from the Dependent's own phone.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\"metric_type\": \"heart_rate\", \"value\": 72, \"recorded_at\": \"{{wb_t1}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 75, \"recorded_at\": \"{{wb_t2}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 81, \"recorded_at\": \"{{wb_t3}}\"},\n    {\"metric_type\": \"spo2\", \"value\": 98, \"recorded_at\": \"{{wb_t3}}\"}\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. Vitals PDF with a band summary",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/vitals/export",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "vitals",
+                    "export"
+                  ]
+                },
+                "description": "The PDF shows one line per day and metric for band readings (average, lowest, highest, count), not every reading."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('a PDF', () => pm.expect(pm.response.headers.get('Content-Type')).to.include('application/pdf'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Access by a Secondary",
+          "item": [
+            {
+              "name": "28. Secondary without health_records (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "29. Primary grants health_records",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/permissions/health_records",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "permissions",
+                    "health_records"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{wb_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "30. Secondary reads the status",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('receiving', () => pm.expect(pm.response.json().status).to.eql('receiving'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "31. Secondary cannot pair or unpair (expect 403)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('NOT_PRIMARY_GUARDIAN', () => pm.expect(pm.response.json().error.code).to.eql('NOT_PRIMARY_GUARDIAN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests and clean-up",
+          "item": [
+            {
+              "name": "32. Empty batch (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "sync"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "33. Unknown metric (expect 422)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "sync"
+                  ]
+                },
+                "description": "A band cannot send blood pressure.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [{\"metric_type\": \"blood_pressure\", \"value\": 120, \"recorded_at\": \"{{wb_t1}}\"}]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "34. No token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "Login required."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "35. Dependent unpairs the band",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": "The readings already stored stay. Safe to repeat. An open 'no data' notice is closed."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('204', () => pm.response.to.have.status(204));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "36. Unpair again",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('204', () => pm.response.to.have.status(204));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "37. Sync without a band (expect 409)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable/sync",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable",
+                    "sync"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\"metric_type\": \"heart_rate\", \"value\": 72, \"recorded_at\": \"{{wb_t1}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 75, \"recorded_at\": \"{{wb_t2}}\"},\n    {\"metric_type\": \"heart_rate\", \"value\": 81, \"recorded_at\": \"{{wb_t3}}\"},\n    {\"metric_type\": \"spo2\", \"value\": 98, \"recorded_at\": \"{{wb_t3}}\"}\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('409', () => pm.response.to.have.status(409));",
+                      "pm.test('NO_BAND', () => pm.expect(pm.response.json().error.code).to.eql('NO_BAND'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "38. Status: not paired",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{wb_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{wb_d_id}}/wearable",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{wb_d_id}}",
+                    "wearable"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('not paired', () => pm.expect(pm.response.json().status).to.eql('not_paired'));"
                     ]
                   }
                 }

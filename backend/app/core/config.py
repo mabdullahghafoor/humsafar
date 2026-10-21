@@ -99,6 +99,12 @@ class Settings(BaseSettings):
     VITALS_MAX_PER_DEPENDENT: int = 10_000  # typed-in readings per Dependent (Task 5.3)
     VITALS_MAX_BACKDATE_DAYS: int = 365
     EXPORT_MAX_VITALS: int = 1000  # newest readings in one PDF
+    # Task 5.4: wearable band (mock data first; the real band is Task 5.5)
+    BAND_NO_DATA_AFTER_S: int = 1800  # a paired band that sent nothing for this long = "no data"
+    WEARABLE_MAX_BATCH: int = 500  # readings in one sync
+    WEARABLE_BACKFILL_DAYS: int = 7  # a band may store readings and send them later, up to this old
+    WEARABLE_RETENTION_DAYS: int = 90  # raw band readings older than this are deleted by the background job
+    WEARABLE_MOCK_ENABLED: bool = True  # demo endpoint that makes fake band readings; switch off once the real band works
     APPOINTMENT_TIMEZONE: str = "Asia/Karachi"  # the time shown in reminders
     APPOINTMENT_REMIND_LEADS_S: str = "86400,3600"  # reminders this long before: 24 h and 1 h (comma separated)
     APPOINTMENT_MAX_OPEN: int = 100  # scheduled appointments per Dependent

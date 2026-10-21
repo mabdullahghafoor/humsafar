@@ -35,7 +35,8 @@ Statuses: Done = merged into `dev`.
 | 4.4b | Real ZegoCloud join token (token04) behind `CALL_PROVIDER=zego`; keys only in `.env` (PR #41; checked live with the real keys) | Done |
 | 5.1 | Medical vault (records + encrypted files, PDF export complete / year / month, 72 h doctor link) and appointments with reminders (migration 0012; contracts `records_contract.md`, `appointment_contract.md`) | Done (PR #47) |
 | 5.2 | Field-level access on records: the Primary hides single record categories from a Secondary, per Dependent (migration 0013; section in `records_contract.md`) | Done (PR #51) |
-| 5.3 | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, unit conversion, separate or combined PDF, doctor link can include vitals (migration 0014; contract `vitals_contract.md`) | In review (PR) |
+| 5.3 | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, unit conversion, separate or combined PDF, doctor link can include vitals (migration 0014; contract `vitals_contract.md`) | Done (PR #58) |
+| 5.4 | Wearable band with mock data: pair / unpair, sync of heart rate (+ SpO2, temperature), status, "no data" detection with a standard notification, demo-data endpoint, daily band summary in the PDFs (migration 0015; contract `wearable_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`

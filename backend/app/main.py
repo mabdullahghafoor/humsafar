@@ -16,13 +16,14 @@ from fastapi import FastAPI
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core import scheduler
-from app.routers import alarm, appointments, auth, calls, device_health, emergency_contact, escalation, geofence, health, kyc, linkage, location, medication, messages, notifications, panic, permissions, records, vitals, wellness
-from app.services import appointments_service, call_service, device_health_service, escalation_service, external_contact_service, medication_service, notification_service, wellness_service
+from app.routers import alarm, appointments, auth, calls, device_health, emergency_contact, escalation, geofence, health, kyc, linkage, location, medication, messages, notifications, panic, permissions, records, vitals, wearable, wellness
+from app.services import appointments_service, call_service, device_health_service, escalation_service, external_contact_service, medication_service, notification_service, wellness_service, wearable_service
 
 settings = get_settings()
 
 # Background jobs (Task 2.3). Each runs every SCHEDULER_TICK_S seconds; see app/core/scheduler.py.
 scheduler.register("device_offline_sweep", device_health_service.sweep_offline)
+scheduler.register("band_no_data_sweep", wearable_service.sweep_no_data)  # Task 5.4 (after the phone-offline sweep, which it checks; before the dispatch)
 scheduler.register("medication_missed_sweep", medication_service.sweep_missed)  # Task 3.3 (before the dispatch, so alerts go out the same minute)
 scheduler.register("wellness_sweep", wellness_service.sweep)  # Task 3.4 (before the dispatch)
 scheduler.register("escalation_sweep", escalation_service.sweep)  # Task 3.5 (after the other sweeps, before the dispatch)
@@ -80,6 +81,7 @@ app.include_router(records.router)  # Task 5.1
 app.include_router(records.public_router)  # Task 5.1 (doctor link, no login)
 app.include_router(appointments.router)  # Task 5.1
 app.include_router(vitals.router)  # Task 5.3
+app.include_router(wearable.router)  # Task 5.4
 
 # Future (added as each phase is implemented):
 # app.include_router(emergency.router, prefix="/emergency", tags=["Emergency"]) # Phase 3

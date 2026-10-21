@@ -3,7 +3,7 @@
 For Talha (vitals screens, task 5.7) and Sarim (QA cases, 5.10). The Dependent, or a Guardian, types a reading of blood pressure, blood sugar, oxygen saturation (SpO2) or body temperature. The server stores it, lists it, shows the latest values, and can put it into a PDF.
 
 ## The idea in 8 lines
-1. **Four manual metrics:** `blood_pressure`, `blood_sugar`, `spo2`, `temperature`. A fifth, `heart_rate`, exists for the wearable band (Task 5.4) and **cannot be typed by hand** (`422`). It shows in `latest` as `null` until the band sends data.
+1. **Four manual metrics:** `blood_pressure`, `blood_sugar`, `spo2`, `temperature`. A fifth, `heart_rate`, comes only from the wearable band (Task 5.4, `wearable_contract.md`) and **cannot be typed by hand** (`422`). It shows in `latest` as `null` until the band sends data. Band readings have `source: "wearable"` and `recorded_by: null`; the Primary can delete them. Filter with `metric_type` so a band's many readings do not bury typed ones.
 2. **Who:** the Dependent (own data), the Primary Guardian, and a Secondary with the `health_records` permission (the same gate as the Medical Vault). Everyone else gets `403`.
 3. **Fixed units in every reply:** mmHg, mg/dL, %, degrees Celsius. A person may type blood sugar in mmol/L or temperature in Fahrenheit; the server converts and returns the fixed unit. Never convert again in the app.
 4. **Blood pressure = two numbers:** `value` (top, systolic) and `diastolic` (bottom). The other metrics send only `value`.
@@ -39,7 +39,8 @@ Values are rounded to one decimal. `diastolic` is only for blood pressure and `c
 ## Putting vitals in the other PDFs (FR-H1 "separate or combined")
 - `GET /dependents/{id}/records/export?include_vitals=true` adds a **Vitals** section to the Medical Vault PDF (default `false`).
 - `POST /dependents/{id}/records/share` accepts `include_vitals: true` (default `false`); the link and the share list show `include_vitals`. The doctor's PDF then contains the vitals. (A Secondary needs `health_records`, the same as for the vault.)
-- A PDF holds the newest 1,000 readings of the period (a note says so if more matched). Months and years are counted in Pakistan time.
+- Band readings are not listed one by one in a PDF: they appear as one line per day and metric (average, lowest, highest, count).
+- A PDF holds the newest 1,000 typed readings of the period (a note says so if more matched). Months and years are counted in Pakistan time.
 
 ## Errors
 `401 NOT_AUTHENTICATED`, `403 MODULE_ACCESS_DENIED` / `FORBIDDEN`, `404 VITAL_NOT_FOUND`, `409 CLIENT_ID_REUSED`, `409 VITALS_LIMIT`, `422 VALIDATION_ERROR`, `422 VITAL_OUT_OF_RANGE`, `422 INVALID_DATE`.

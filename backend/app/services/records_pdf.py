@@ -83,7 +83,7 @@ def _pdf_pages(data: bytes) -> int | None:
 
 def build(
     *, person_name: str, scope: str, year: int | None, month: int | None, rows: list[dict], total_matching: int,
-    vitals: list[dict] | None = None, vitals_total: int = 0,
+    vitals: list[dict] | None = None, vitals_total: int = 0, vitals_band: list[dict] | None = None,
 ) -> bytes:
     """
     vitals: when not None, a "Vitals" section is added after the records (Task 5.3, FR-H1 "combined with the complete export").
@@ -163,7 +163,7 @@ def build(
             story.append(KeepTogether(block))
 
     if vitals is not None:
-        story.extend(_vitals_section(vitals, vitals_total, tz, h=head, body=body, small=small, cell=cell))
+        story.extend(_vitals_section(vitals, vitals_total, tz, h=head, body=body, small=small, cell=cell, band=vitals_band))
 
     def footer(canvas, doc):
         canvas.saveState()
@@ -210,16 +210,18 @@ def format_reading(r: dict) -> str:
     return f"{v} bpm"
 
 
-def _vitals_section(rows: list[dict], total: int, tz, *, h, body, small, cell) -> list:
+def _vitals_section(rows: list[dict], total: int, tz, *, h, body, small, cell, band: list[dict] | None = None) -> list:
     out: list = [Spacer(1, 6 * mm), Paragraph("Vitals", ParagraphStyle("vh", parent=h, fontSize=14, textColor=TEAL))]
-    if not rows:
+    if not rows and not band:
         out.append(Paragraph("There are no vitals for this selection.", body))
         return out
-    if total > len(rows):
+    if not rows:
+        out.append(Paragraph("No typed readings for this selection.", body))
+    if rows and total > len(rows):
         out.append(Paragraph(f"<b>Only the newest {len(rows)} of {total} readings are included.</b> Export one year or one month at a time to get the rest.", body))
         out.append(Spacer(1, 2 * mm))
     data = [[Paragraph(f"<b>{t}</b>", cell) for t in ("Date and time", "Measurement", "Reading", "Added by", "Note")]]
-    for r in rows:
+    for r in (rows or []):
         data.append([
             Paragraph(f"{r['at'].astimezone(tz):%d %b %Y, %H:%M}", cell), Paragraph(_t(METRIC_LABELS[r["metric"]]), cell),
             Paragraph(_t(format_reading(r)), cell), Paragraph(_t(r["by"]), cell), Paragraph(_t(r.get("note") or ""), cell),
@@ -231,13 +233,31 @@ def _vitals_section(rows: list[dict], total: int, tz, *, h, body, small, cell) -
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("TOPPADDING", (0, 0), (-1, -1), 3), ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
     ]))
-    out.append(table)
-    out.append(Spacer(1, 2 * mm))
+    if rows:
+        out.append(table)
+        out.append(Spacer(1, 2 * mm))
+    if band:
+        out.append(Paragraph("Wearable band (one line per day)", ParagraphStyle("bh", parent=h, fontSize=11.5, spaceBefore=6)))
+        bdata = [[Paragraph(f"<b>{t}</b>", cell) for t in ("Day", "Measurement", "Average", "Lowest", "Highest", "Readings")]]
+        unit = {"heart_rate": "bpm", "spo2": "%", "temperature": "\u00b0C"}
+        for b in band:
+            u = unit[b["metric"]]
+            bdata.append([
+                Paragraph(f"{b['day']:%d %b %Y}", cell), Paragraph(_t(METRIC_LABELS[b["metric"]]), cell),
+                Paragraph(f"{b['avg']:.1f} {u}", cell), Paragraph(f"{b['min']:g} {u}", cell), Paragraph(f"{b['max']:g} {u}", cell), Paragraph(str(b["n"]), cell),
+            ])
+        bt = Table(bdata, colWidths=[28 * mm, 36 * mm, 28 * mm, 28 * mm, 28 * mm, 22 * mm], repeatRows=1)
+        bt.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E0F2F7")), ("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#CBD5E1")),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"), ("TOPPADDING", (0, 0), (-1, -1), 3), ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+        ]))
+        out.append(bt)
+        out.append(Spacer(1, 2 * mm))
     out.append(Paragraph("These values were typed in or sent by the band. Humsafar does not interpret them; ask a doctor.", small))
     return out
 
 
-def build_vitals(*, person_name: str, scope: str, year: int | None, month: int | None, rows: list[dict], total_matching: int) -> bytes:
+def build_vitals(*, person_name: str, scope: str, year: int | None, month: int | None, rows: list[dict], total_matching: int, band: list[dict] | None = None) -> bytes:
     """A separate vitals report (one PDF with just the readings)."""
     tz = ZoneInfo(get_settings().APPOINTMENT_TIMEZONE)
     base = getSampleStyleSheet()
@@ -252,7 +272,7 @@ def build_vitals(*, person_name: str, scope: str, year: int | None, month: int |
         Paragraph(f"<b>{_t(person_name)}</b> &nbsp;&middot;&nbsp; {_t(scope_label(scope, year, month))}", sub),
         Paragraph(f"Created {datetime.now(tz):%d %b %Y, %H:%M} by Humsafar. Confidential medical information.", small),
     ]
-    story.extend(_vitals_section(rows, total_matching, tz, h=head, body=body, small=small, cell=cell))
+    story.extend(_vitals_section(rows, total_matching, tz, h=head, body=body, small=small, cell=cell, band=band))
 
     def footer(canvas, doc):
         canvas.saveState()

@@ -29,6 +29,7 @@ from app.models._common import fk_col, in_list, ts_col, uuid_pk
 VITAL_SOURCES = ("manual", "wearable")
 VITAL_METRICS = ("blood_pressure", "blood_sugar", "spo2", "temperature", "heart_rate")  # the first four are typed in (FR-H1); heart_rate comes from the band (5.4)
 MANUAL_METRICS = ("blood_pressure", "blood_sugar", "spo2", "temperature")
+BAND_METRICS = ("heart_rate", "spo2", "temperature")  # what the wearable band may send (Task 5.4)
 SUGAR_CONTEXTS = ("fasting", "after_meal", "random")
 RECORD_CATEGORIES = ("prescription", "lab_report", "xray", "other")  # FR-G1 (the SDS column is `type`)
 APPOINTMENT_STATUSES = ("scheduled", "cancelled")
@@ -181,6 +182,11 @@ class VitalReading(Base):
     __table_args__ = (
         CheckConstraint(in_list("source", VITAL_SOURCES), name="source_valid"),
         CheckConstraint(in_list("metric_type", VITAL_METRICS), name="metric_valid"),
+        CheckConstraint(
+            "(source = 'manual' AND metric_type IN ('blood_pressure', 'blood_sugar', 'spo2', 'temperature')) "
+            "OR (source = 'wearable' AND metric_type IN ('heart_rate', 'spo2', 'temperature'))",
+            name="source_metric_valid",
+        ),
         CheckConstraint("(metric_type = 'blood_pressure') = (diastolic IS NOT NULL)", name="diastolic_for_bp"),
         CheckConstraint("context IS NULL OR (metric_type = 'blood_sugar' AND context IN ('fasting', 'after_meal', 'random'))", name="context_for_sugar"),
         CheckConstraint("note IS NULL OR char_length(note) <= 200", name="note_length"),
@@ -191,6 +197,8 @@ class VitalReading(Base):
             "recorded_at",
         ),
         Index("uq_vital_readings_recorder_client", "recorded_by", "client_id", unique=True, postgresql_where=text("client_id IS NOT NULL")),
+        # Task 5.4: the same band sample sent twice (a retried batch) is stored once.
+        Index("uq_vital_readings_wearable_sample", "dependent_id", "metric_type", "recorded_at", unique=True, postgresql_where=text("source = 'wearable'")),
     )
 
 
@@ -225,8 +233,12 @@ class WearableDevice(Base):
     dependent_id = fk_col("dependent_profiles.user_id", index=True)
     ble_address = Column(String(17), nullable=False)  # AA:BB:CC:DD:EE:FF
     paired_at = ts_col()
-    last_sync_at = Column(DateTime(timezone=True), nullable=True)
+    last_sync_at = Column(DateTime(timezone=True), nullable=True)  # server time of the last accepted sync (Task 5.4)
+    name = Column(String(60), nullable=True)
 
     __table_args__ = (
         UniqueConstraint("dependent_id", "ble_address", name="uq_wearable_dependent_address"),
+        UniqueConstraint("dependent_id", name="uq_wearable_one_per_dependent"),  # one band per Dependent (clarification 113)
+        CheckConstraint("ble_address ~ '^([0-9A-F]{2}:){5}[0-9A-F]{2}$'", name="address_format"),
+        CheckConstraint("name IS NULL OR char_length(btrim(name)) BETWEEN 1 AND 60", name="name_length"),
     )

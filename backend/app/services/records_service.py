@@ -342,10 +342,10 @@ def _export_bytes(
             "added_by": names.get(r.uploaded_by) or "A Guardian", "added_at": r.uploaded_at,
             "content_type": r.content_type, "name": r.file_name or "file", "data": data, "skipped": skipped,
         })
-    v_rows, v_total = vitals_service.export_rows(db, dependent_id, year, month) if include_vitals else (None, 0)
+    v_rows, v_total, v_band = vitals_service.export_rows(db, dependent_id, year, month) if include_vitals else (None, 0, None)
     return records_pdf.build(
         person_name=names.get(dependent_id) or "Dependent", scope=scope, year=year, month=month, rows=rows, total_matching=total,
-        vitals=v_rows, vitals_total=v_total,
+        vitals=v_rows, vitals_total=v_total, vitals_band=v_band,
     )
 
 

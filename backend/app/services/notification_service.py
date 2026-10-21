@@ -60,6 +60,8 @@ class Rule:
     audience: str
     resolved_title: str | None = None  # a standard "all clear" is sent when the event closes
     resolved_body: str | None = None
+    priority: str = "critical"  # FR-M1: alert events are critical, except where stated (the band "no data" notice is standard)
+    module: str = "emergency_alerts"  # the permission a Secondary needs to be told
 
 
 # FR-M1: these are all critical. Keyed by escalation_events.trigger_type.
@@ -70,6 +72,9 @@ EVENT_RULES: dict[str, Rule] = {
                         "Battery recovered", "{name}'s phone battery is back to a safe level."),
     "device_offline": Rule("Connection lost", "{name}'s phone has gone offline.", LINKED_PERMITTED,
                            "Back online", "{name}'s phone is back online."),
+    "band_no_data": Rule("Wearable band silent", "{name}'s wearable band has not sent any data for a while.", LINKED_PERMITTED,
+                         "Wearable band is sending data again", "{name}'s wearable band is sending data again.",
+                         priority="standard", module="health_records"),
     "fall": Rule("Possible fall", "{name} may have fallen.", LINKED_PERMITTED),
     "missed_dose": Rule("Missed medication", "{name} has not taken {drug} ({dosage}) due at {time}.", BY_TIER,
                         "Missed dose closed", "{name} {outcome}."),
@@ -226,9 +231,9 @@ def _notify_event(db: Session, ev: EscalationEvent, rule: Rule) -> int:
     sent = 0
     # Everyone is told at once (panic): moving up the escalation chain must not tell them all a second time.
     key = f"{ev.event_id}:all:open" if rule.audience == ALL_LINKED else f"{ev.event_id}:{ev.tier}:open"
-    for uid in recipients(db, ev.dependent_id, rule.audience, ev.tier):
+    for uid in recipients(db, ev.dependent_id, rule.audience, ev.tier, rule.module):
         n = notify(
-            db, uid, ev.trigger_type, CRITICAL, rule.title, rule.body.format_map(_Safe(name=name, **words)),
+            db, uid, ev.trigger_type, rule.priority, rule.title, rule.body.format_map(_Safe(name=name, **words)),
             dependent_id=ev.dependent_id, event_id=ev.event_id, dedupe_key=key,
             extra={"tier": ev.tier, **more},
         )
