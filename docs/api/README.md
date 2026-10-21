@@ -27,6 +27,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
 | `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
+| `booking_contract.md` | Home-care booking requests and the shared Activity Timeline (6.2) |
 | `directory_contract.md` | Healthcare directory and home-care provider directory: search, filters, nearby, details (6.1) |
 | `wearable_contract.md` | Wearable band (mock data first): pair, sync readings, status, "no data" notice, demo data (5.4) |
 | `vitals_contract.md` | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, separate / combined PDF (5.3) |
@@ -126,6 +127,11 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | GET `/directory/organizations/types` / `/{org_id}` | same | Types with counts / one organization |
 | GET `/directory/providers` | same | Home-care providers: `q`, `specialization`, `city`, `min_charge`, `max_charge`, `sort`, paging |
 | GET `/directory/providers/specializations` / `/{provider_id}` | same | Specializations with counts / one provider |
+| POST / GET `/dependents/{id}/bookings` | the Dependent, or a Guardian with `health_records` | Ask a listed provider for a visit / list requests (`status`) (6.2) |
+| GET `/dependents/{id}/bookings/{request_id}` | same | One request |
+| POST `/dependents/{id}/bookings/{request_id}/confirm` / `complete` / `cancel` | the person who asked, or the Primary | Change the request's status |
+| POST `/dependents/{id}/directory/contacts` | the Dependent, or a Guardian with `health_records` | Log "contacting this organization" (the app then opens the dialer) |
+| GET `/dependents/{id}/activity` | same | The unified Activity Timeline (`type`, `from`, `to`, paging) |
 | GET `/shared/records/{token}` | **anyone with the link (no login)** | The doctor's read-only PDF |
 | POST / GET `/dependents/{id}/appointments` | the Dependent, or a Guardian with `health_records` | Add / list appointments (`when` = `upcoming` / `past` / `all`) |
 | GET / PATCH / DELETE `/dependents/{id}/appointments/{appointment_id}` | same | One / change / delete |
