@@ -114,6 +114,11 @@ class Settings(BaseSettings):
     CAMERA_ONLINE_S: int = 30  # the camera phone counts as online this long after its last heartbeat
     CAMERA_MAX_VIEWERS: int = 3  # Guardians watching one camera at the same time
     CAMERA_POLL_IDLE_S: int = 10  # how often the camera phone asks "is anyone watching?"
+    CLIPS_STORAGE_DIR: str = ""  # Task 6.4: where emergency clips are saved (encrypted). Empty = ~/humsafar_uploads/clips (outside the repo)
+    CLIP_DURATION_S: int = 20  # how long the camera phone is asked to record after Panic Mode / Remote Alarm
+    CLIP_REQUEST_TTL_S: int = 180  # the phone must pick up the request and upload the clip within this time, else it is `missed`
+    CLIP_MAX_BYTES: int = 30_000_000  # about 30 MB per clip
+    CLIPS_MAX_PER_DEPENDENT: int = 100  # stored clips per Dependent; no new request when full (FR-O1 deletes old ones, Task 6.7)
     CAMERA_POLL_ACTIVE_S: int = 5  # the same while someone is watching
     APPOINTMENT_MAX_OPEN: int = 100  # scheduled appointments per Dependent
     WELLNESS_ALERT_MAX_AGE_S: int = 21600  # a check found unanswered more than 6 h after its deadline is closed, not alerted

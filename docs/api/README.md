@@ -137,6 +137,10 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | POST `/dependents/{id}/camera/heartbeat` | the Dependent's own phone | "Is anyone watching?" The phone publishes only when `should_publish` |
 | GET / DELETE `/dependents/{id}/camera/stream` | the Primary, or a Secondary with `camera_viewing` | Start or renew watching (returns the join token) / stop watching |
 | GET `/dependents/{id}/camera/viewing` | the Dependent | Who is watching now (FR-K1.3 indicator) |
+| POST `/dependents/{id}/camera/clips/{clip_id}` | the Dependent's own phone | Upload the emergency clip (MP4/WebM, 30 MB) asked for in the heartbeat (6.4) |
+| GET `/dependents/{id}/camera/clips` / `/{clip_id}` | the Dependent, the Primary, a Secondary with `camera_viewing` | List clips (`status`, paging) / one clip |
+| GET `/dependents/{id}/camera/clips/{clip_id}/video` | same | Download the decrypted video (Guardian downloads are audited) |
+| DELETE `/dependents/{id}/camera/clips/{clip_id}` | the Dependent, the Primary | Delete a clip |
 | GET `/shared/records/{token}` | **anyone with the link (no login)** | The doctor's read-only PDF |
 | POST / GET `/dependents/{id}/appointments` | the Dependent, or a Guardian with `health_records` | Add / list appointments (`when` = `upcoming` / `past` / `all`) |
 | GET / PATCH / DELETE `/dependents/{id}/appointments/{appointment_id}` | same | One / change / delete |
