@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="870" viewBox="0 0 1700 870"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9CA3AF"/></marker></defs>
+<rect x="0" y="0" width="1700" height="870" fill="#FFFFFF"/>
+<text x="40" y="52" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#1F2937" text-anchor="start">Workflow — Panic Mode and Remote alarm (FR-D2, FR-D3)</text>
+<text x="40" y="82" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="start">From panic_contract.md and alarm_contract.md. Panic goes from the Dependent to every Guardian; the alarm goes from the Primary to the Dependent&#x27;s phone.</text>
+<rect x="40" y="120" width="1620" height="330" rx="8" fill="#FFE4E6" fill-opacity="0.25" stroke="#BE123C" stroke-width="1"/>
+<rect x="40" y="120" width="150" height="330" rx="8" fill="#FFE4E6" stroke="#BE123C" stroke-width="1"/>
+<text x="115" y="290.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">PANIC</text>
+<rect x="220" y="160" width="250" height="110" rx="10" fill="#FFE4E6" stroke="#BE123C" stroke-width="1.6"/>
+<text x="345.0" y="199.6" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2937" text-anchor="middle">Dependent</text>
+<text x="345.0" y="220.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">press and hold PANIC</text>
+<text x="345.0" y="241.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">POST …/panic</text>
+<rect x="540" y="160" width="300" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="690.0" y="199.6" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2937" text-anchor="middle">Server</text>
+<text x="690.0" y="220.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">opens ONE panic event</text>
+<text x="690.0" y="241.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">(double tap = same event)</text>
+<rect x="910" y="140" width="330" height="150" rx="10" fill="#FFE4E6" stroke="#BE123C" stroke-width="1.6"/>
+<text x="1075.0" y="180.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Every linked Guardian</text>
+<text x="1075.0" y="200.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">critical push &#x27;PANIC ALERT&#x27;</text>
+<text x="1075.0" y="220.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">Primary + all Secondaries</text>
+<text x="1075.0" y="240.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">PERMISSIONS IGNORED</text>
+<text x="1075.0" y="260.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">(the one exception)</text>
+<rect x="1310" y="160" width="330" height="110" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
+<text x="1475.0" y="200.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Not opened in time?</text>
+<text x="1475.0" y="220.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">escalation chain →</text>
+<text x="1475.0" y="240.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">SMS to emergency contact (D4)</text>
+<line x1="472" y1="215" x2="538" y2="215" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<line x1="842" y1="215" x2="908" y2="215" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<line x1="1242" y1="215" x2="1308" y2="215" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="540" y="310" width="300" height="90" rx="10" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.6"/>
+<text x="690.0" y="340.9" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Ends when</text>
+<text x="690.0" y="359.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">the Dependent says &#x27;I am safe&#x27;</text>
+<text x="690.0" y="378.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">or the Primary closes it</text>
+<rect x="910" y="310" width="330" height="90" rx="10" fill="#CCFBF1" stroke="#115E59" stroke-width="1.6"/>
+<text x="1075.0" y="340.9" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">All-clear</text>
+<text x="1075.0" y="359.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">standard push to everyone told</text>
+<text x="1075.0" y="378.9" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">(&#x27;Panic alert closed&#x27;)</text>
+<line x1="842" y1="355" x2="908" y2="355" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<text x="220" y="430" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="start">Secondary cannot close a panic (403 NOT_PRIMARY_GUARDIAN). Location is not in the alert: the Guardian opens the Live Map.</text>
+<rect x="40" y="480" width="1620" height="270" rx="8" fill="#DBEAFE" fill-opacity="0.25" stroke="#1E3A8A" stroke-width="1"/>
+<rect x="40" y="480" width="150" height="270" rx="8" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1"/>
+<text x="115" y="620.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">REMOTE ALARM</text>
+<rect x="220" y="520" width="250" height="110" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="345.0" y="559.6" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2937" text-anchor="middle">Primary Guardian</text>
+<text x="345.0" y="580.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">&#x27;Ring alarm&#x27;</text>
+<text x="345.0" y="601.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">POST …/alarm (10–300 s)</text>
+<rect x="540" y="520" width="300" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
+<text x="690.0" y="559.6" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2937" text-anchor="middle">Server</text>
+<text x="690.0" y="580.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">one alarm at a time,</text>
+<text x="690.0" y="601.6" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">written to the audit log</text>
+<rect x="910" y="520" width="330" height="110" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
+<text x="1075.0" y="560.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Dependent&#x27;s phone</text>
+<text x="1075.0" y="580.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">critical &#x27;remote_alarm&#x27; push →</text>
+<text x="1075.0" y="600.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">loud sound, even on silent</text>
+<rect x="1310" y="520" width="330" height="110" rx="10" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.6"/>
+<text x="1475.0" y="560.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Stops when</text>
+<text x="1475.0" y="580.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">time runs out, or the</text>
+<text x="1475.0" y="600.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">Primary / Dependent taps Stop</text>
+<line x1="472" y1="575" x2="538" y2="575" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<line x1="842" y1="575" x2="908" y2="575" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<line x1="1242" y1="575" x2="1308" y2="575" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
+<text x="220" y="680" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="start">Secondary can NEVER ring it, even with every permission (not delegable). The phone acknowledges the push so the Primary sees it arrived.</text>
+<text x="220" y="715" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="start">If the push is late, the phone asks GET …/alarm.  Screens: 21 Panic, 21b Help is coming, 24 Alarm (Dependent) · 07 Home, 08 Alerts, 14 Emergency settings (Guardian).</text>
+<text x="60" y="820" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7280" text-anchor="start">Phase 6 link: FR-K2 will save a short camera clip whenever Panic or the Remote alarm is used.</text>
+</svg>

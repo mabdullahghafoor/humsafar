@@ -19,7 +19,7 @@ Bi-directional remote intervention and care coordination system for vulnerable i
 - **Frontend:** Flutter (Android-only), Riverpod
 - **API testing:** Postman
 - **Deployment:** Render (backend)
-- **Docs:** SRS v1.0, SDS v1.0, Master Development Roadmap (see `/docs`)
+- **Docs:** SRS v1.0, SDS v1.0, Master Development Roadmap (see `/docs/reference`)
 
 ---
 
@@ -29,9 +29,18 @@ Bi-directional remote intervention and care coordination system for vulnerable i
 humsafar/
 ├── backend/        # FastAPI application
 ├── frontend/        # Flutter application
-├── docs/            # SRS, SDS, roadmap, individual handbooks
-└── .github/         # PR template, workflows (later)
+├── docs/            # all documentation, organized in subfolders (see docs/README.md)
+│   ├── api/         #   API contracts (Abdullah)
+│   ├── backend/     #   progress, SDS clarifications, running guide (Abdullah)
+│   ├── reference/   #   SRS, SDS, Reference Guide, Roadmap, handbooks (Sarim)
+│   ├── design/      #   screen designs (Sarim)
+│   ├── qa/          #   QA checklists and results (Sarim)
+│   ├── diagrams/    #   architecture/workflow diagrams (Sarim)
+│   └── reports/     #   final documents and presentation (Sarim)
+└── .github/         # PR template, CODEOWNERS
 ```
+
+**Docs rule:** no file goes directly in `docs/`; every file belongs in one of its subfolders.
 
 This is a **monorepo**: backend and frontend live together for shared issue tracking, PRs, and easier integration checkpoints (ICPs).
 
@@ -76,7 +85,7 @@ flutter run
 
 ## Project Documentation
 
-Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual handbooks) is maintained in `/docs` and in the team's Claude Project Knowledge base as the single source of truth.
+Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual handbooks) is maintained in `/docs/reference` (see `docs/README.md` for the full folder map) and in the team's Claude Project Knowledge base as the single source of truth.
 
 ---
 
