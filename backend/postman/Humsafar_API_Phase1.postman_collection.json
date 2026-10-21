@@ -44664,6 +44664,1508 @@
           ]
         }
       ]
+    },
+    {
+      "name": "29 - Analytics dashboard (Task 7.1)",
+      "item": [
+        {
+          "name": "Setup",
+          "item": [
+            {
+              "name": "1. Register primary guardian",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Guardian who will be Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{an_p_email}}\",\n  \"phone\": \"{{an_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+                      "const run = r();",
+                      "pm.environment.set('an_p_email','anp'+run+'@humsafar-test.com'); pm.environment.set('an_p_phone','03'+r());",
+                      "pm.environment.set('an_d_email','and'+run+'@humsafar-test.com'); pm.environment.set('an_d_phone','03'+r());",
+                      "pm.environment.set('an_s_email','ans'+run+'@humsafar-test.com'); pm.environment.set('an_s_phone','03'+r());",
+                      "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('an_d_cnic','4'+d+'1');",
+                      "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "2. Login primary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Primary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{an_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('an_p_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "3. Verify primary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "Mock CNIC check.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "4. Register dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create the Dependent account.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{an_d_email}}\",\n  \"phone\": \"{{an_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));",
+                      "pm.environment.set('an_d_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "5. Dependent KYC",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/kyc-verify",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "kyc-verify"
+                  ]
+                },
+                "description": "Mock KYC.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{an_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "6. Primary links the dependent",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/link",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "link"
+                  ]
+                },
+                "description": "Primary claims the Dependent."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "7. Login dependent (the phone's token)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "The Dependent's phone gets its token.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{an_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('an_d_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "8. Invite secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/guardians/invite",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "guardians",
+                    "invite"
+                  ]
+                },
+                "description": "Primary invites a Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{an_s_phone}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('an_inv', pm.response.json().invite_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "9. Register secondary with invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Secondary joins.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{an_s_email}}\",\n  \"phone\": \"{{an_s_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\",\n  \"invite_token\": \"{{an_inv}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10. Login secondary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Log in the Secondary.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{an_s_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('an_s_token', pm.response.json().access_token);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "10b. Secondary: who am I",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Secondary's user_id."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.environment.set('an_s_id', pm.response.json().user_id);"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "11. Verify secondary (CNIC)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/guardians/me/verify-cnic",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "guardians",
+                    "me",
+                    "verify-cnic"
+                  ]
+                },
+                "description": "A Secondary must be verified too.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "12. Prepare times",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/me",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Only prepares times used below."
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.environment.set('an_t1', new Date(Date.now() - 50*3600000).toISOString());",
+                      "pm.environment.set('an_t2', new Date(Date.now() - 26*3600000).toISOString());",
+                      "pm.environment.set('an_t3', new Date(Date.now() - 1*3600000).toISOString());"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "13. Primary adds a medicine",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/medications",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "medications"
+                  ]
+                },
+                "description": "Adherence is built from the doses of the Dependent's medicine schedules (FR-F1).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"drug_name\": \"Metformin\",\n  \"dosage\": \"500 mg\",\n  \"times\": [\"08:00\"],\n  \"frequency\": \"daily\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "14. Dependent saves blood pressure (2 days ago)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/vitals",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "vitals"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metric_type\": \"blood_pressure\",\n  \"value\": 120,\n  \"diastolic\": 80,\n  \"recorded_at\": \"{{an_t1}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "15. Dependent saves blood pressure (yesterday)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/vitals",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "vitals"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metric_type\": \"blood_pressure\",\n  \"value\": 130,\n  \"diastolic\": 90,\n  \"recorded_at\": \"{{an_t2}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "16. Dependent saves blood pressure (an hour ago)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/vitals",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "vitals"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metric_type\": \"blood_pressure\",\n  \"value\": 140,\n  \"diastolic\": 100,\n  \"recorded_at\": \"{{an_t3}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "17. Dependent saves blood sugar",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/vitals",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "vitals"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metric_type\": \"blood_sugar\",\n  \"value\": 105,\n  \"context\": \"fasting\",\n  \"recorded_at\": \"{{an_t3}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('201', () => pm.response.to.have.status(201));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reading the trends",
+          "item": [
+            {
+              "name": "18. Adherence trend",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/adherence?days=7",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics",
+                    "adherence"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7"
+                    }
+                  ]
+                },
+                "description": "FR-Q1. Medication adherence for the last `days` days (1 to 90, default 30, today included; days are local days in Asia/Karachi). **Guardians only; needs `medication_management`** (the Primary always has it). Only decided doses count: `taken` and `missed`. A dose that is due but not yet confirmed is `waiting` and is left out of `rate_percent` (null when nothing has been decided yet). `previous` is the same number of days just before; `change_points` and `change` (`improving`, `declining`, `steady` = within 5 points, `not_enough_data`) compare the two. `perfect_days_in_a_row`: days in a row back from today with a decided dose and no missed dose. `daily` has one entry per day; `by_medicine` one per medicine and dosage. A removed medicine keeps its history."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('shape, no doses decided yet', () => { pm.expect(j.days).to.eql(7); pm.expect(j.daily.length).to.eql(7); pm.expect(j.timezone).to.eql('Asia/Karachi'); pm.expect(j.taken).to.eql(0); pm.expect(j.missed).to.eql(0); pm.expect(j.rate_percent).to.eql(null); pm.expect(j.change).to.eql('not_enough_data'); pm.expect(j.by_medicine).to.eql([]); pm.expect(j.previous.rate_percent).to.eql(null); });",
+                      "pm.test('never cached', () => pm.expect(pm.response.headers.get('Cache-Control')).to.include('no-store'));"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{an_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/adherence?days=7",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{an_d_id}}",
+                        "analytics",
+                        "adherence"
+                      ],
+                      "query": [
+                        {
+                          "key": "days",
+                          "value": "7"
+                        }
+                      ]
+                    },
+                    "description": "FR-Q1. Medication adherence for the last `days` days (1 to 90, default 30, today included; days are local days in Asia/Karachi). **Guardians only; needs `medication_management`** (the Primary always has it). Only decided doses count: `taken` and `missed`. A dose that is due but not yet confirmed is `waiting` and is left out of `rate_percent` (null when nothing has been decided yet). `previous` is the same number of days just before; `change_points` and `change` (`improving`, `declining`, `steady` = within 5 points, `not_enough_data`) compare the two. `perfect_days_in_a_row`: days in a row back from today with a decided dose and no missed dose. `daily` has one entry per day; `by_medicine` one per medicine and dosage. A removed medicine keeps its history."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"days\": 7,\n  \"from_date\": \"2026-10-16\",\n  \"to_date\": \"2026-10-22\",\n  \"timezone\": \"Asia/Karachi\",\n  \"taken\": 5,\n  \"missed\": 1,\n  \"waiting\": 0,\n  \"rate_percent\": 83.3,\n  \"previous\": {\n    \"taken\": 3,\n    \"missed\": 3,\n    \"rate_percent\": 50.0\n  },\n  \"change_points\": 33.3,\n  \"change\": \"improving\",\n  \"perfect_days_in_a_row\": 2,\n  \"daily\": [\n    {\n      \"date\": \"2026-10-22\",\n      \"taken\": 1,\n      \"missed\": 0,\n      \"rate_percent\": 100.0\n    }\n  ],\n  \"by_medicine\": [\n    {\n      \"drug_name\": \"Metformin\",\n      \"dosage\": \"500 mg\",\n      \"taken\": 5,\n      \"missed\": 1,\n      \"rate_percent\": 83.3\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "19. Vitals trends",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/vitals?days=7",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics",
+                    "vitals"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7"
+                    }
+                  ]
+                },
+                "description": "FR-Q1. Trends for blood_pressure, blood_sugar, spo2, temperature and heart_rate (manual and band readings together), for the last `days` days. **Guardians only; needs `health_records`.** Every metric is always listed; `count` 0 means no readings. Per metric: count (and how many were typed in or came from the band), min, max, avg (blood pressure also the bottom number), `latest`, `daily` (only days with readings), and `trend` = the second half of the period against the first half: `rising`, `falling`, `steady` (under 3 %), `not_enough_data`. The trend only describes numbers; it never says good or bad. Optional `metric_type` shows one metric."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "const j = pm.response.json();",
+                      "pm.test('five metrics, blood pressure summary', () => { pm.expect(j.metrics.map(m => m.metric_type)).to.eql(['blood_pressure', 'blood_sugar', 'spo2', 'temperature', 'heart_rate']); const bp = j.metrics[0]; pm.expect(bp.count).to.eql(3); pm.expect(bp.manual_count).to.eql(3); pm.expect(bp.avg).to.eql(130); pm.expect(bp.min).to.eql(120); pm.expect(bp.max).to.eql(140); pm.expect(bp.avg_diastolic).to.eql(90); pm.expect(bp.latest.value).to.eql(140); pm.expect(bp.latest.diastolic).to.eql(100); pm.expect(['rising', 'falling', 'steady', 'not_enough_data']).to.include(bp.trend); pm.expect(bp.daily.length).to.be.within(2, 3); });",
+                      "pm.test('metrics without readings are empty', () => { const s = j.metrics[2]; pm.expect(s.count).to.eql(0); pm.expect(s.latest).to.eql(null); pm.expect(s.trend).to.eql('not_enough_data'); pm.expect(s.daily).to.eql([]); });"
+                    ]
+                  }
+                }
+              ],
+              "response": [
+                {
+                  "name": "200 OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{an_p_token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/vitals?days=7",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "dependents",
+                        "{{an_d_id}}",
+                        "analytics",
+                        "vitals"
+                      ],
+                      "query": [
+                        {
+                          "key": "days",
+                          "value": "7"
+                        }
+                      ]
+                    },
+                    "description": "FR-Q1. Trends for blood_pressure, blood_sugar, spo2, temperature and heart_rate (manual and band readings together), for the last `days` days. **Guardians only; needs `health_records`.** Every metric is always listed; `count` 0 means no readings. Per metric: count (and how many were typed in or came from the band), min, max, avg (blood pressure also the bottom number), `latest`, `daily` (only days with readings), and `trend` = the second half of the period against the first half: `rising`, `falling`, `steady` (under 3 %), `not_enough_data`. The trend only describes numbers; it never says good or bad. Optional `metric_type` shows one metric."
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"days\": 7,\n  \"from_date\": \"2026-10-16\",\n  \"to_date\": \"2026-10-22\",\n  \"timezone\": \"Asia/Karachi\",\n  \"metrics\": [\n    {\n      \"metric_type\": \"blood_pressure\",\n      \"unit\": \"mmHg\",\n      \"count\": 3,\n      \"manual_count\": 3,\n      \"wearable_count\": 0,\n      \"avg\": 130.0,\n      \"min\": 120.0,\n      \"max\": 140.0,\n      \"avg_diastolic\": 90.0,\n      \"min_diastolic\": 80.0,\n      \"max_diastolic\": 100.0,\n      \"latest\": {\n        \"value\": 140.0,\n        \"diastolic\": 100.0,\n        \"recorded_at\": \"2026-10-22T08:00:00Z\",\n        \"source\": \"manual\"\n      },\n      \"trend\": \"rising\",\n      \"change_percent\": 8.3,\n      \"daily\": [\n        {\n          \"date\": \"2026-10-20\",\n          \"count\": 1,\n          \"avg\": 120.0,\n          \"min\": 120.0,\n          \"max\": 120.0,\n          \"avg_diastolic\": 80.0,\n          \"min_diastolic\": 80.0,\n          \"max_diastolic\": 80.0\n        }\n      ]\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "20. One metric only",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/vitals?days=7&metric_type=blood_sugar",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics",
+                    "vitals"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7"
+                    },
+                    {
+                      "key": "metric_type",
+                      "value": "blood_sugar"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('only blood sugar', () => { const j = pm.response.json(); pm.expect(j.metrics.length).to.eql(1); pm.expect(j.metrics[0].metric_type).to.eql('blood_sugar'); pm.expect(j.metrics[0].count).to.eql(1); pm.expect(j.metrics[0].avg).to.eql(105); pm.expect(j.metrics[0].unit).to.eql('mg/dL'); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "21. Both together",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics?days=7",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7"
+                    }
+                  ]
+                },
+                "description": "Adherence and vitals in one call, for the dashboard screen. A part the Guardian has no permission for is `null`; no permission for either part is a 403."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('both parts', () => { const j = pm.response.json(); pm.expect(j.dependent_id).to.eql(pm.environment.get('an_d_id')); pm.expect(j.days).to.eql(7); pm.expect(j.adherence.days).to.eql(7); pm.expect(j.vitals.metrics.length).to.eql(5); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "22. Secondary has no access yet (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics?days=7",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7"
+                    }
+                  ]
+                },
+                "description": "Both parts need a permission from the Primary."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "23. Primary gives the Secondary medication access",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/permissions/medication_management",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "permissions",
+                    "medication_management"
+                  ]
+                },
+                "description": "",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guardian_id\": \"{{an_s_id}}\",\n  \"granted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "24. Secondary now sees adherence but not vitals",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics?days=7",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('200', () => pm.response.to.have.status(200));",
+                      "pm.test('adherence yes, vitals null', () => { const j = pm.response.json(); pm.expect(j.adherence).to.be.an('object'); pm.expect(j.vitals).to.eql(null); });"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "25. Secondary asks for vitals alone (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_s_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/vitals",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics",
+                    "vitals"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('MODULE_ACCESS_DENIED', () => pm.expect(pm.response.json().error.code).to.eql('MODULE_ACCESS_DENIED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rejected requests",
+          "item": [
+            {
+              "name": "26. Dependent cannot read analytics (expect 403)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_d_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics"
+                  ]
+                },
+                "description": "Analytics are for Guardians."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('403', () => pm.response.to.have.status(403));",
+                      "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "27. No token (expect 401)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics"
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('401', () => pm.response.to.have.status(401));",
+                      "pm.test('NOT_AUTHENTICATED', () => pm.expect(pm.response.json().error.code).to.eql('NOT_AUTHENTICATED'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "28. days 0 (expect 422)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/adherence?days=0",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics",
+                    "adherence"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "29. days 91 (expect 422)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/vitals?days=91",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics",
+                    "vitals"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "91"
+                    }
+                  ]
+                },
+                "description": "The longest look-back is 90 days."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            },
+            {
+              "name": "30. Unknown metric (expect 422)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{an_p_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/dependents/{{an_d_id}}/analytics/vitals?metric_type=mood",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dependents",
+                    "{{an_d_id}}",
+                    "analytics",
+                    "vitals"
+                  ],
+                  "query": [
+                    {
+                      "key": "metric_type",
+                      "value": "mood"
+                    }
+                  ]
+                },
+                "description": ""
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('422', () => pm.response.to.have.status(422));",
+                      "pm.test('VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                    ]
+                  }
+                }
+              ],
+              "response": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }
