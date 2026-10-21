@@ -1,10 +1,10 @@
 # 2.10 / 3.18 — Updated architecture and new workflow diagrams
 
-**Tasks:** 2.10 and 3.18 (continue / update diagrams), covering everything merged up to Phase 4 · **Owner:** Sarim · Each diagram is a PNG (slides, report) plus an SVG (editable: Figma, Inkscape or draw.io). Same style as `../1.14_diagrams/`.
+**Tasks:** 2.10 and 3.18 (continue / update diagrams), covering everything merged up to Phase 4 (D1: up to Phase 5 and Task 6.1) · **Owner:** Sarim · Each diagram is a PNG (slides, report) plus an SVG (editable: Figma, Inkscape or draw.io). Same style as `../1.14_diagrams/`.
 
 | # | Diagram | Version | Based on |
 |---|---|---|---|
-| D1 | System Architecture (as built, Phases 1–4) | **v0.2** (replaces v0.1 in 1.14) | code on `dev`, migrations 0001–0011 |
+| D1 | System Architecture (as built, Phases 1–5 + 6.1) | **v0.3** (replaces v0.2; v0.1 in 1.14) | code on `dev` up to PR #64, migrations 0001–0016 |
 | D6 | Workflow — Panic Mode and Remote alarm | v0.1 | `panic_contract.md`, `alarm_contract.md` |
 | D7 | Workflow — Wellness check "Are you OK?" | v0.1 | `wellness_contract.md` |
 | D8 | Workflow — Location, safe zones and device health | v0.1 | `location_contract.md`, `geofence_contract.md`, `device_health_contract.md` |
@@ -12,6 +12,15 @@
 | D10 | Workflow — Voice / video call lifecycle | v0.1 | `call_contract.md` |
 
 D3 (onboarding), D4 (escalation chain) and D5 (medication) in `../1.14_diagrams/` are still correct and are not repeated here.
+
+## What changed in D1 (v0.2 → v0.3)
+- **Medication & Records** now also holds the medical vault, appointments, vitals and band sync (Tasks 5.1–5.4).
+- **Directory & Marketplace** partly built: directory and home-care providers (6.1); bookings and the activity log come with 6.2.
+- Database migrations now **0001–0016** (30 tables).
+- **File storage** now also holds medical-record files, encrypted at rest (AES-256-GCM).
+- Public read-only **doctor link** (72 h) on the API; the Dependent app sends **band batches** (mock data until the real band, 5.5).
+- Scheduler also runs the **band no-data** sweep and **appointment reminders**.
+- ZegoCloud now uses the **real token** (4.4b).
 
 ## What changed in D1 (v0.1 → v0.2)
 - **Communication** module is now built (text, urgent voice, calls).
