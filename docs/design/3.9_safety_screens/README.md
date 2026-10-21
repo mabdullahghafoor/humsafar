@@ -7,7 +7,7 @@
 |---|---|---|---|
 | 20 | Home — the 3 safety actions, one tap each. **v0.2 (21 Oct):** when a dose is due, the medicine button becomes "I took my medicine · Step 1 of 2" and opens Confirm medicine (23b) directly | FR-P1, NFR-07, FR-F1 | — |
 | 21 | Panic — press and hold 2 s | FR-D2 | `panic_contract.md` |
-| 21b | Help is coming — who was told, "I am safe now" | FR-D2 | `panic_contract.md` (resolve) |
+| 21b | Help is coming — how many Guardians were told, one shared "A Guardian has seen it" status, "I am safe now". **v0.2 (21 Oct):** the per-Guardian Told / Seen chips are removed (the panic API returns only a `notified` count and one `acknowledged_at`), and the SMS note now says **5 minutes** (Panic tells all Guardians at once, so it reaches the external contact after the first 5-minute timer, `escalation_contract.md`). Found by Talha during 3.11. | FR-D2 | `panic_contract.md` (resolve) |
 | 22 | Wellness check — "Are you OK?" with countdown | FR-D4 | `wellness_contract.md` |
 | 23 | Medicine time — step 1 "I took it" | FR-F1.3 | `medication_contract.md` |
 | 23b | Confirm medicine — step 2 + taken state | FR-F1.3 | `medication_contract.md` |
