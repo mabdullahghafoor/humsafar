@@ -9,13 +9,13 @@ Every functional requirement group in SRS v1.0 was compared with the 57 hi-fi sc
 | # | Screen | App | Requirement | Backend today |
 |---|---|---|---|---|
 | 07b | Switch Dependent — sheet opened from "tap to switch" on Home (07); pick whose care you are viewing, or link another Dependent | Guardian | FR-B4 | Exists (linkage list, Task 1.5) |
-| 16 | Analytics — medicine on time per day, wellness checks answered, vitals trend (normal range in green), 7 / 30 days; weekly PDF report marked "later" | Guardian | FR-Q1 (FR-Q2 optional) | Not yet (Task 7.1) |
+| 16 | Analytics (**v0.2**, 21 Oct: no "normal range", numbers only, per the vitals contract) — medicine on time per day, wellness checks answered, vitals trend, 7 / 30 days; weekly PDF report marked "later" | Guardian | FR-Q1 (FR-Q2 optional) | Not yet (Task 7.1) |
 | 30 | Settings — profile and Verified status, language, large text, notifications, audit log, permissions, about, **Log out**, Close my account | Guardian | FR-P2, FR-P4, FR-N3, FR-O1 | Profile from `GET /auth/me`; log out = delete tokens on the phone (no server logout, `auth_contract.md`) |
 | 30b | Close account — what happens (60-day delete or anonymise), type CLOSE + password | Guardian | FR-O1 | **No endpoint planned** (see open points) |
 | 31 | Audit log — permission changes, camera viewing, record access and export, filter by type; Primary only, read-only | Guardian | FR-N3 | Rows are written today; reading them comes with Task 6.6 |
 | 32 | My settings — big Language and Text size buttons, Show my ID (opens 05), who looks after me, log out with confirmation | Dependent | FR-P1, FR-P2, FR-P4 | Exists (`/auth/me`, linkage) |
 
-Files: `Humsafar_Design_<number>_<Screen>_v0.1.png` and `Humsafar_Design_Coverage_Overview_v0.1.png`.
+Files: `Humsafar_Design_<number>_<Screen>_v0.1.png` (16 is v0.2) and `Humsafar_Design_Coverage_Overview_v0.1.png`.
 
 ## Coverage matrix (SRS v1.0 → screens)
 
