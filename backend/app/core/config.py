@@ -96,6 +96,9 @@ class Settings(BaseSettings):
     SHARE_DEFAULT_HOURS: int = 72  # FR-G3 recommended default
     SHARE_MAX_HOURS: int = 720  # longest a doctor link may live (30 days)
     SHARE_MAX_ACTIVE: int = 10  # open links per Dependent at one time
+    VITALS_MAX_PER_DEPENDENT: int = 10_000  # typed-in readings per Dependent (Task 5.3)
+    VITALS_MAX_BACKDATE_DAYS: int = 365
+    EXPORT_MAX_VITALS: int = 1000  # newest readings in one PDF
     APPOINTMENT_TIMEZONE: str = "Asia/Karachi"  # the time shown in reminders
     APPOINTMENT_REMIND_LEADS_S: str = "86400,3600"  # reminders this long before: 24 h and 1 h (comma separated)
     APPOINTMENT_MAX_OPEN: int = 100  # scheduled appointments per Dependent

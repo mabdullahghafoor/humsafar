@@ -185,8 +185,9 @@ def test_bad_input_is_rejected(client, store, monkeypatch):
 
 def test_today_and_tomorrow_are_allowed_as_a_record_date(client):
     t = team(client)
-    ok(add(client, t["pt"], t["dep"], notes="today", record_date=date.today().isoformat()))
-    ok(add(client, t["pt"], t["dep"], notes="tomorrow (time zones)", record_date=(date.today() + timedelta(days=1)).isoformat()))
+    today = datetime.now(timezone.utc).date()  # the server counts in UTC; date.today() is the computer's local day (fails after midnight in Pakistan)
+    ok(add(client, t["pt"], t["dep"], notes="today", record_date=today.isoformat()))
+    ok(add(client, t["pt"], t["dep"], notes="tomorrow (time zones)", record_date=(today + timedelta(days=1)).isoformat()))
 
 
 def test_needs_login_and_unknown_dependent(client):

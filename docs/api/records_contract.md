@@ -34,7 +34,7 @@ A front page with the person's name, the period, and a table of every record; th
 ## Doctor link (FR-G3)
 | Method and path | What |
 |---|---|
-| POST `/dependents/{id}/records/share` | Make a link. Body (all optional): `scope` (`complete` / `year` / `month`), `year`, `month`, `hours` (1 to 720, default **72**), `categories` (default: all you may see). `201` with the link **and its secret `token`, shown only now** |
+| POST `/dependents/{id}/records/share` | Make a link. Body (all optional): `scope` (`complete` / `year` / `month`), `year`, `month`, `hours` (1 to 720, default **72**), `categories` (default: all you may see), `include_vitals` (default `false`; adds the vitals, see `vitals_contract.md`). `201` with the link **and its secret `token`, shown only now** |
 | GET `/dependents/{id}/records/share` | The links: `{ items: [ { share_id, scope, year, month, categories, created_at, expires_at, revoked_at, status, open_count, last_opened_at, created_by } ] }`. `status` = `active` / `expired` / `revoked`. The Dependent and the Primary see all links; a Secondary only their own |
 | DELETE `/dependents/{id}/records/share/{share_id}` | Cancel a link (the person who made it, the Primary, or the Dependent). Safe to repeat |
 | GET `/shared/records/{token}` | **What the doctor opens. No login.** Answers with the PDF (`inline`, never cached, not indexed) |

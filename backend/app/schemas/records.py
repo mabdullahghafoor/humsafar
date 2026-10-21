@@ -60,6 +60,7 @@ class ShareIn(BaseModel):
     month: int | None = Field(default=None, ge=1, le=12)
     hours: int | None = Field(default=None, ge=1, description="How long the link works. Default 72, longest 720 (30 days).")
     categories: list[Category] | None = Field(default=None, min_length=1, description="Only these categories. Default: all you may see.")
+    include_vitals: bool = Field(default=False, description="Also show the vitals (Task 5.3).")
 
     @model_validator(mode="after")
     def _period(self) -> "ShareIn":
@@ -84,6 +85,7 @@ class ShareOut(BaseModel):
     year: int | None = None
     month: int | None = None
     categories: list[Category]
+    include_vitals: bool = False
     created_at: datetime
     expires_at: datetime
     revoked_at: datetime | None = None
