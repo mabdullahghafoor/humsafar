@@ -35,7 +35,7 @@ class LocalStorage:
 
 
 def get_storage(kind: str = "voice") -> LocalStorage:
-    """`kind`: 'voice' (Task 4.3) or 'records' (Task 5.1). Each has its own folder, both outside the repo by default."""
+    """`kind`: 'voice' (Task 4.3), 'records' (Task 5.1) or 'clips' (Task 6.4). Each has its own folder, both outside the repo by default."""
     s = get_settings()
-    configured = s.RECORDS_STORAGE_DIR if kind == "records" else s.VOICE_STORAGE_DIR
+    configured = {"records": s.RECORDS_STORAGE_DIR, "clips": s.CLIPS_STORAGE_DIR}.get(kind, s.VOICE_STORAGE_DIR)
     return LocalStorage(configured or str(Path.home() / "humsafar_uploads" / kind))

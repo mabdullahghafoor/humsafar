@@ -24,7 +24,7 @@ from sqlalchemy.orm import Session
 from app.core.errors import AppError
 from app.models import AuditLog, EscalationEvent, Notification, User
 from app.schemas.panic import PanicOut, PanicStatusOut
-from app.services import linkage_service, notification_service, permission_service
+from app.services import camera_clip_service, linkage_service, notification_service, permission_service
 
 TRIGGER = "panic"
 OPEN, RESOLVED = "open", "resolved"
@@ -70,6 +70,7 @@ def trigger(db: Session, user: User, dependent_id: uuid.UUID) -> tuple[PanicOut,
     db.add(ev)
     db.add(AuditLog(actor_id=user.user_id, action="panic_triggered", target_type="escalation_event", target_id=ev.event_id))
     db.commit()  # the panic is saved before anything else can go wrong
+    camera_clip_service.request_for_event(db, dependent_id, TRIGGER, ev.event_id)  # FR-K2: never raises
     notification_service.dispatch_events_safely(db, dependent_id)
     db.refresh(ev)
     return _out(ev, _told(db, ev)), True

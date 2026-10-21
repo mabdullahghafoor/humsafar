@@ -9,7 +9,7 @@ Bi-directional remote intervention and care coordination system for vulnerable i
 |---|---|
 | Muhammad Abdullah Ghafoor | Team Lead — Backend, Database, API, BLE Integration, Architecture |
 | Muhammad Talha Khan | Flutter Frontend, API Integration, State Management, FCM |
-| Syed Sarim Jawad Zaidi | UI/UX, Documentation, Diagrams, Testing |
+| Syed Sarim Jawad Zaidi | UI/UX Design (Figma), QA & Test Lead, Documentation, Diagrams, Presentation |
 
 ---
 
@@ -83,6 +83,27 @@ flutter run
 
 ---
 
+## Design, QA and Documentation (Sarim)
+
+Everything here lives in `docs/` (Sarim's folders) and in Figma. No setup is needed; open the folder README for the full file list.
+
+| What | Where | Used by |
+|---|---|---|
+| Screen designs (wireframes + hi-fi mockups, style guide, one folder per task) | `docs/design/` and Figma *Humsafar – App Design* (link in `docs/design/README.md`) | Talha builds each screen from its mockup |
+| English–Urdu UI text with suggested `.arb` keys | `docs/design/ui_text/` | Talha (localisation, NFR-09) |
+| Test cases written ahead of each feature, test results, E2E test plan, accessibility and contrast checks | `docs/qa/` | Whole team; Sarim runs them once the screens exist |
+| Architecture and workflow diagrams (as built) | `docs/diagrams/` | Documentation and presentation |
+| Documentation drift register (where SRS / SDS no longer match the build) | `docs/reports/` | Task 7.6 and the final consistency check (10.1) |
+| Locked project documents and member handbooks | `docs/reference/` | Everyone |
+
+**How Sarim works with the team:**
+- Designs and test cases are matched to Abdullah's API contracts in `docs/api/` as soon as each one is merged.
+- Talha's built screens are checked against the mockups; differences are noted in the team task list.
+- Any pull request that touches Sarim's folders asks Sarim for review automatically (`.github/CODEOWNERS`).
+- Word sources of the QA and report documents are kept in Google Drive (`Humsafar`); the PDFs are in the repo.
+
+---
+
 ## Project Documentation
 
 Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual handbooks) is maintained in `/docs/reference` (see `docs/README.md` for the full folder map) and in the team's Claude Project Knowledge base as the single source of truth.
@@ -91,4 +112,4 @@ Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual han
 
 ## Status
 
-🚧 Active development — Phase 0 (Environment Setup)
+🚧 Active development. Backend progress: `docs/backend/PROGRESS.md` · designs and coverage: `docs/design/README.md` · QA documents: `docs/qa/README.md`.
