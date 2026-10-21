@@ -8,6 +8,7 @@
 |---|---|---|
 | `Humsafar_QA_Checklist_Template_v1.0.pdf` | 1.13 | Reusable checklist |
 | `Humsafar_QA_Phase1_Results_v1.0.pdf` | 2.9 | Phase 1 QA results (Postman run + functional / security checks) |
+| `Humsafar_QA_Backend_Regression_Phases1-6_Results_v1.0.pdf` | Regression (after 2.9) | Backend regression run, Phases 1–5 + Task 6.1: full Postman collection, 690 requests, 1094 / 1094 checks passed, 0 product bugs (21 Oct 2026, dev 023be6c) |
 | `Humsafar_QA_3.17_Escalation_Test_Cases_v1.0.pdf` | 3.17 | Escalation chain cases + ICP-3 live script |
 | `Humsafar_QA_3.16_Accessibility_Test_Cases_v0.1.pdf` | 3.16 | Accessibility of Dependent Mode: 2 taps (NFR-07), large text and contrast (NFR-08), touch targets, Urdu; written ahead, run waits for Talha's 3.11–3.13 |
 | `Humsafar_QA_4.10_Messaging_Calls_Test_Cases_v1.0.pdf` | 4.10 | Messaging, urgent voice and calls cases + ICP-4 live script |
