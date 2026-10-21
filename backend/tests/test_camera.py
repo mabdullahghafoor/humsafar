@@ -12,11 +12,17 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 
 from app.models import AuditLog, CameraDevice, CameraSession
-from app.services import camera_service
+from app.services import call_provider, camera_service
 from tests.test_linkage import assert_error, auth
 from tests.test_location import team
 from tests.test_notifications import inbox
 from tests.test_permissions import put
+
+
+@pytest.fixture(autouse=True)
+def mock_provider(monkeypatch):
+    """Always the mock video provider here, whatever CALL_PROVIDER says in the developer's .env."""
+    monkeypatch.setattr(call_provider, "_provider", call_provider.MockCallProvider())
 
 
 def pair(client, token, dep, **body):

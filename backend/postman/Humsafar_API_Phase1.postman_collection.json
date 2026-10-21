@@ -37568,7 +37568,7 @@
                     "type": "text/javascript",
                     "exec": [
                       "pm.test('200', () => pm.response.to.have.status(200));",
-                      "X;"
+                      "pm.test('same timeline', () => pm.expect(pm.response.json().total).to.eql(6));"
                     ]
                   }
                 }
