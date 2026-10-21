@@ -37,7 +37,7 @@ from app.models.medical import (
     VitalReading,
     WearableDevice,
 )
-from app.models.security import AuditLog, CameraClip, CameraDevice
+from app.models.security import AuditLog, CameraClip, CameraDevice, CameraSession
 
 __all__ = [
     "ActivityLog",
@@ -46,6 +46,7 @@ __all__ = [
     "BookingRequest",
     "CallLog",
     "CameraClip",
+    "CameraSession",
     "CameraDevice",
     "DependentProfile",
     "EmergencyContact",
