@@ -1,6 +1,6 @@
 # Humsafar Progress Tracker
 
-Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-20.
+Maintained by Abdullah's Claude session; updated at the end of every backend task. Last updated: 2026-10-21.
 Statuses: Done = merged into `dev`.
 
 ## Backend (Abdullah)
@@ -36,7 +36,9 @@ Statuses: Done = merged into `dev`.
 | 5.1 | Medical vault (records + encrypted files, PDF export complete / year / month, 72 h doctor link) and appointments with reminders (migration 0012; contracts `records_contract.md`, `appointment_contract.md`) | Done (PR #47) |
 | 5.2 | Field-level access on records: the Primary hides single record categories from a Secondary, per Dependent (migration 0013; section in `records_contract.md`) | Done (PR #51) |
 | 5.3 | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, unit conversion, separate or combined PDF, doctor link can include vitals (migration 0014; contract `vitals_contract.md`) | Done (PR #58) |
-| 5.4 | Wearable band with mock data: pair / unpair, sync of heart rate (+ SpO2, temperature), status, "no data" detection with a standard notification, demo-data endpoint, daily band summary in the PDFs (migration 0015; contract `wearable_contract.md`) | In review (PR) |
+| 5.4 | Wearable band with mock data: pair / unpair, sync of heart rate (+ SpO2, temperature), status, "no data" detection with a standard notification, demo-data endpoint, daily band summary in the PDFs (migration 0015; contract `wearable_contract.md`) | Done (PR #59) |
+| 5.5 | Real wearable band integration | **Blocked**: waits for the band, the Android spike 2.4 and the sensor list (clarifications 88, 89) |
+| 6.1 | Healthcare directory (hospitals, ambulances, pharmacies...) and home-care provider directory: list, search, filters, "nearby", details, starting content (migration 0016; contract `directory_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
@@ -44,6 +46,16 @@ Last known from his tracker (2026-08-12): Tasks 0.4 and 1.8 to 1.11 done in his 
 
 ## Design / QA / Docs (Sarim)
 Not tracked in this file yet. Sarim: please add your task status here.
+
+## Waiting for hardware or a physical Android phone
+Kept up to date by Abdullah's Claude session; reminded as soon as the hardware or an Android phone is available.
+| Item | Needs | Blocks |
+|---|---|---|
+| 2.4 BLE integration spike | A real Android phone (done together with 6.10 at a teammate's home) | 5.5 and the ICP-2 review |
+| 5.5 Real band integration | The band, the spike 2.4, the chip name, an nRF Connect Bluetooth test, the source code and the sensor list from the supplier (clarifications 88, 89) | Live band data; switch `WEARABLE_MOCK_ENABLED=false` afterwards |
+| Step count (FR-H2) | The sensor list (clarification 89) | Nothing else |
+| 6.10 Spare phone in camera mode | A second Android phone (with Talha) | Live camera view demo (ICP-6) |
+| Real push (3.14), real ZegoCloud call test, full team test on real devices (Talha's side) | Real phones | Final testing |
 
 ## Open decisions and blockers
 See `docs/backend/sds_clarifications.md`. Currently open: Firebase project for real push (Talha, Task 3.14, item 29), SDS 11.1/11.3 KYC auth and Guardian OTP timing (team confirmation), Dependent consent when a Guardian links (item 9), no way to remove a Guardian (item 12).
