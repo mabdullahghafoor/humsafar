@@ -18,7 +18,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.core import security
+from app.core import ratelimit, security
 from app.core.config import get_settings
 from app.core.errors import AppError
 from app.models import DependentProfile, GuardianDependentLink, GuardianProfile, User
@@ -115,12 +115,18 @@ def _require_active(db: Session, user: User) -> None:
 
 
 def authenticate(db: Session, email: str, password: str) -> User:
+    s = get_settings()
+    key = email.strip().lower()
+    ratelimit.blocked("login_fail", key, s.LOGIN_FAIL_LIMIT, s.LOGIN_FAIL_WINDOW_S)  # too many wrong passwords for this email (SDS 17)
     user = db.scalar(select(User).where(User.email == email))
     if user is None:
         security.burn_password_check(password)  # same timing as a real check
+        ratelimit.fail("login_fail", key)  # unknown emails count too, so the limit does not reveal which emails exist
         raise AppError(401, "INVALID_CREDENTIALS", "Incorrect email or password.")
     if not security.verify_password(password, user.password_hash):
+        ratelimit.fail("login_fail", key)
         raise AppError(401, "INVALID_CREDENTIALS", "Incorrect email or password.")
+    ratelimit.clear("login_fail", key)
     # Only reveal activation state to someone who proved they know the password.
     _require_active(db, user)
     return user

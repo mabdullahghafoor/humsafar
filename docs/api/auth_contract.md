@@ -56,6 +56,8 @@ Errors: 401 `TOKEN_EXPIRED` (send user to login), 401 `TOKEN_INVALID`, 401 `TOKE
 
 ### GET /auth/me  → 200  (helper beyond the SDS list)
 Header `Authorization: Bearer <access_token>`. Returns the user object above. Useful to restore the session on app start.
+Rate limits (Task 6.5): login, register and refresh can answer `429 TOO_MANY_REQUESTS` (8 wrong passwords for one email within 5 minutes, or 60 calls per minute from one address); the `Retry-After` header and `details.retry_after_s` give the seconds to wait. The same applies to wrong phone codes in `verify-phone/confirm` and to wrong passwords in `kyc-verify`.
+
 Errors: 401 `NOT_AUTHENTICATED` (no header), 401 `TOKEN_EXPIRED` (call `/auth/refresh`, retry once), 401 `TOKEN_INVALID`, 401 `TOKEN_WRONG_TYPE`.
 
 ## 3. Tokens

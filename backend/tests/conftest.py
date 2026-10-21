@@ -49,6 +49,15 @@ def engine():
     eng.dispose()
 
 
+@pytest.fixture(autouse=True)
+def _no_rate_limit(monkeypatch):
+    """Rate limits (Task 6.5) are off for the ordinary tests, which sign up and log in hundreds of times; tests/test_hardening.py turns them on."""
+    from app.core import ratelimit
+    monkeypatch.setattr(get_settings(), "RATE_LIMIT_ENABLED", False)
+    ratelimit.reset()
+    yield
+
+
 @pytest.fixture()
 def db(engine):
     Session = sessionmaker(bind=engine, autoflush=False, autocommit=False)
