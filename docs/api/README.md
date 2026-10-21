@@ -29,6 +29,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
 | `booking_contract.md` | Home-care booking requests and the shared Activity Timeline (6.2) |
 | `camera_contract.md` | Camera pairing, on-demand live viewing, permission gate (6.3) |
+| `audit_contract.md` | Activity history / audit log, Primary Guardian only (6.6) |
 | `directory_contract.md` | Healthcare directory and home-care provider directory: search, filters, nearby, details (6.1) |
 | `wearable_contract.md` | Wearable band (mock data first): pair, sync readings, status, "no data" notice, demo data (5.4) |
 | `vitals_contract.md` | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, separate / combined PDF (5.3) |

@@ -119,6 +119,7 @@ def set_permission(
                 action="permission_granted" if granted else "permission_revoked",
                 target_type="permission_grant",
                 target_id=grant.grant_id,
+                dependent_id=dependent_id,
             )
         )
     db.commit()

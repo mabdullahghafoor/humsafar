@@ -77,8 +77,8 @@ def authorize_read(db: Session, user: User, dependent_id: uuid.UUID) -> None:
     permission_service.check_module_access(db, user, dependent_id, MODULE)
 
 
-def _audit(db: Session, user: User, action: str, target_type: str, target_id: uuid.UUID) -> None:
-    db.add(AuditLog(actor_id=user.user_id, action=action, target_type=target_type, target_id=target_id))
+def _audit(db: Session, user: User, action: str, target_type: str, target_id: uuid.UUID, dependent_id: uuid.UUID) -> None:
+    db.add(AuditLog(actor_id=user.user_id, action=action, target_type=target_type, target_id=target_id, dependent_id=dependent_id))
 
 
 # ------------------------------------------------------------------ schedules
@@ -124,7 +124,7 @@ def _add_windows(db: Session, user: User, dependent_id: uuid.UUID, times: list[s
         rows.append(row)
     db.flush()
     for row in rows:
-        _audit(db, user, "wellness_check_created", "wellness_check_schedule", row.wc_id)
+        _audit(db, user, "wellness_check_created", "wellness_check_schedule", row.wc_id, dependent_id)
     db.commit()
     for row in rows:
         db.refresh(row)
@@ -200,7 +200,7 @@ def update_window(
     w.active = new_active
     if body.grace_period_min is not None:
         w.grace_period_min = body.grace_period_min
-    _audit(db, user, "wellness_check_updated", "wellness_check_schedule", w.wc_id)
+    _audit(db, user, "wellness_check_updated", "wellness_check_schedule", w.wc_id, w.dependent_id)
     db.commit()
     db.refresh(w)
     return _out(w)
@@ -211,7 +211,7 @@ def deactivate(db: Session, user: User, dependent_id: uuid.UUID, wc_id: uuid.UUI
     w = _get(db, dependent_id, wc_id)
     if w.active:
         w.active = False
-        _audit(db, user, "wellness_check_deactivated", "wellness_check_schedule", w.wc_id)
+        _audit(db, user, "wellness_check_deactivated", "wellness_check_schedule", w.wc_id, w.dependent_id)
     db.commit()
 
 
@@ -283,7 +283,7 @@ def respond(db: Session, user: User, response_id: uuid.UUID) -> RespondOut:
         .returning(WellnessCheckResponse.response_id)
     ).scalar()
     if won is not None:
-        _audit(db, user, "wellness_check_answered", "wellness_check_response", response_id)
+        _audit(db, user, "wellness_check_answered", "wellness_check_response", response_id, row[1].dependent_id)
         db.execute(
             update(EscalationEvent)
             .where(

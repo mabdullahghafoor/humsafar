@@ -51,8 +51,8 @@ def visible_categories(db: Session, user: User, dependent_id: uuid.UUID) -> tupl
     return record_access_service.visible_for(db, user, dependent_id)
 
 
-def _audit(db: Session, user_id: uuid.UUID, action: str, target_type: str, target_id: uuid.UUID) -> None:
-    db.add(AuditLog(actor_id=user_id, action=action, target_type=target_type, target_id=target_id))
+def _audit(db: Session, user_id: uuid.UUID, action: str, target_type: str, target_id: uuid.UUID, dependent_id: uuid.UUID) -> None:
+    db.add(AuditLog(actor_id=user_id, action=action, target_type=target_type, target_id=target_id, dependent_id=dependent_id))
 
 
 def _is_primary(db: Session, user: User, dependent_id: uuid.UUID) -> bool:
@@ -204,7 +204,7 @@ def create(
         )
         db.add(rec)
         db.flush()
-        _audit(db, user.user_id, "record_added", "medical_record", rec.record_id)
+        _audit(db, user.user_id, "record_added", "medical_record", rec.record_id, rec.dependent_id)
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -261,7 +261,7 @@ def get_file(db: Session, user: User, dependent_id: uuid.UUID, record_id: uuid.U
     if rec.file_url is None:
         raise AppError(404, "NO_FILE", "This record has no file.")
     data = _read_file(rec)
-    _audit(db, user.user_id, "record_downloaded", "medical_record", rec.record_id)
+    _audit(db, user.user_id, "record_downloaded", "medical_record", rec.record_id, rec.dependent_id)
     db.commit()
     return data, rec.content_type, rec.file_name or "record"
 
@@ -292,7 +292,7 @@ def update_record(db: Session, user: User, dependent_id: uuid.UUID, record_id: u
     if rec.file_url is None and rec.notes is None:
         db.rollback()
         raise AppError(422, "RECORD_NEEDS_CONTENT", "A record without a file needs a note.")
-    _audit(db, user.user_id, "record_changed", "medical_record", rec.record_id)
+    _audit(db, user.user_id, "record_changed", "medical_record", rec.record_id, rec.dependent_id)
     db.commit()
     db.refresh(rec)
     return _outs(db, [rec], user, dependent_id)[0]
@@ -303,7 +303,7 @@ def delete_record(db: Session, user: User, dependent_id: uuid.UUID, record_id: u
     _require_modify(db, user, dependent_id, rec)
     key = rec.file_url
     db.delete(rec)
-    _audit(db, user.user_id, "record_deleted", "medical_record", record_id)
+    _audit(db, user.user_id, "record_deleted", "medical_record", record_id, dependent_id)
     db.commit()
     if key:  # after the commit: if the commit failed, the file is still there
         storage_service.get_storage("records").delete(key)
@@ -354,7 +354,7 @@ def export_pdf(
 ) -> tuple[bytes, str]:
     authorize(db, user, dependent_id)
     pdf = _export_bytes(db, dependent_id, scope, year, month, visible_categories(db, user, dependent_id), include_vitals)
-    _audit(db, user.user_id, "records_exported", "dependent", dependent_id)
+    _audit(db, user.user_id, "records_exported", "dependent", dependent_id, dependent_id)
     db.commit()
     return pdf, records_pdf.file_stem(scope, year, month) + ".pdf"
 
@@ -409,7 +409,7 @@ def create_share(db: Session, user: User, dependent_id: uuid.UUID, body: ShareIn
     )
     db.add(sh)
     db.flush()
-    _audit(db, user.user_id, "record_share_created", "record_share", sh.share_id)
+    _audit(db, user.user_id, "record_share_created", "record_share", sh.share_id, sh.dependent_id)
     db.commit()
     db.refresh(sh)
     path = f"/shared/records/{token}"
@@ -437,7 +437,7 @@ def revoke_share(db: Session, user: User, dependent_id: uuid.UUID, share_id: uui
     now = datetime.now(timezone.utc)
     if sh.revoked_at is None:
         sh.revoked_at = now
-        _audit(db, user.user_id, "record_share_revoked", "record_share", sh.share_id)
+        _audit(db, user.user_id, "record_share_revoked", "record_share", sh.share_id, sh.dependent_id)
     db.commit()
     db.refresh(sh)
     return _share_out(sh, now)
@@ -477,7 +477,7 @@ def open_share(db: Session, token: str) -> tuple[bytes, str]:
     if got is None:  # cancelled or expired a moment ago
         db.rollback()
         raise AppError(410, "SHARE_REVOKED", "This link is no longer available.")
-    _audit(db, sh.created_by, "record_share_opened", "record_share", sh.share_id)  # logged under the person who made the link
+    _audit(db, sh.created_by, "record_share_opened", "record_share", sh.share_id, sh.dependent_id)  # logged under the person who made the link
     db.commit()
     pdf = _export_bytes(db, sh.dependent_id, sh.scope, sh.year, sh.month, cats, sh.include_vitals)
     return pdf, records_pdf.file_stem(sh.scope, sh.year, sh.month) + ".pdf"

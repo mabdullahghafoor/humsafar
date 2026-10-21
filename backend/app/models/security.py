@@ -5,7 +5,7 @@ audit_logs.
 Traces to: FR-K1, FR-K2, FR-N3.
 """
 
-from sqlalchemy import BigInteger, CheckConstraint, Column, DateTime, Index, Integer, String, Text, UniqueConstraint, text
+from sqlalchemy import BigInteger, CheckConstraint, Column, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import UUID
 
 from app.core.database import Base
@@ -94,7 +94,11 @@ class AuditLog(Base):
     target_type = Column(String(40), nullable=False)
     target_id = Column(UUID(as_uuid=True), nullable=True)
     occurred_at = ts_col()
+    # Task 6.6 (clarification 153): which Dependent this action is about, so the Primary Guardian can read it.
+    # SET NULL keeps the row if the profile is ever removed.
+    dependent_id = Column(UUID(as_uuid=True), ForeignKey("dependent_profiles.user_id", ondelete="SET NULL"), nullable=True)
 
     __table_args__ = (
         Index("ix_audit_logs_target", "target_type", "target_id"),
+        Index("ix_audit_logs_dependent_time", "dependent_id", "occurred_at"),
     )

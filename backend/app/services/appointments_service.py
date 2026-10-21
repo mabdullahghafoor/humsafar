@@ -48,7 +48,7 @@ def _leads() -> list[int]:
 
 
 def _audit(db: Session, user: User, action: str, a: Appointment) -> None:
-    db.add(AuditLog(actor_id=user.user_id, action=action, target_type="appointment", target_id=a.appointment_id))
+    db.add(AuditLog(actor_id=user.user_id, action=action, target_type="appointment", target_id=a.appointment_id, dependent_id=a.dependent_id))
 
 
 def _out(a: Appointment, names: dict, now: datetime) -> AppointmentOut:
@@ -190,7 +190,7 @@ def cancel(db: Session, user: User, dependent_id: uuid.UUID, appointment_id: uui
 def delete(db: Session, user: User, dependent_id: uuid.UUID, appointment_id: uuid.UUID) -> None:
     a = _get(db, user, dependent_id, appointment_id, lock=True)
     db.delete(a)
-    db.add(AuditLog(actor_id=user.user_id, action="appointment_deleted", target_type="appointment", target_id=appointment_id))
+    db.add(AuditLog(actor_id=user.user_id, action="appointment_deleted", target_type="appointment", target_id=appointment_id, dependent_id=dependent_id))
     db.commit()
 
 

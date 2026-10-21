@@ -60,7 +60,7 @@ def _require_owner_or_primary(db: Session, user: User, dependent_id: uuid.UUID) 
 
 
 def _audit(db: Session, user: User, action: str, dependent_id: uuid.UUID) -> None:
-    db.add(AuditLog(actor_id=user.user_id, action=action, target_type="dependent", target_id=dependent_id))
+    db.add(AuditLog(actor_id=user.user_id, action=action, target_type="dependent", target_id=dependent_id, dependent_id=dependent_id))
 
 
 # ------------------------------------------------------------ pair / unpair

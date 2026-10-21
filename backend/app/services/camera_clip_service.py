@@ -131,7 +131,7 @@ def upload(db: Session, user: User, dependent_id: uuid.UUID, clip_id: uuid.UUID,
             db.commit()
             raise AppError(409, "CLIP_EXPIRED", "The time to upload this clip has passed.")
         c.status, c.file_url, c.uploaded_at, c.size_bytes, c.content_type = "stored", key, now, len(data), kind[0]
-        db.add(AuditLog(actor_id=user.user_id, action="camera_clip_stored", target_type="camera_clip", target_id=c.clip_id))
+        db.add(AuditLog(actor_id=user.user_id, action="camera_clip_stored", target_type="camera_clip", target_id=c.clip_id, dependent_id=dependent_id))
         db.commit()
     except Exception:
         db.rollback()
@@ -199,7 +199,7 @@ def download(db: Session, user: User, dependent_id: uuid.UUID, clip_id: uuid.UUI
     except crypto_service.DecryptError:
         raise AppError(500, "CLIP_UNREADABLE", "This clip could not be read.")
     if guardian:
-        db.add(AuditLog(actor_id=user.user_id, action="camera_clip_viewed", target_type="camera_clip", target_id=c.clip_id))
+        db.add(AuditLog(actor_id=user.user_id, action="camera_clip_viewed", target_type="camera_clip", target_id=c.clip_id, dependent_id=dependent_id))
         db.commit()
     ext = ".mp4" if c.content_type == "video/mp4" else ".webm"
     return data, c.content_type, f"clip-{c.captured_at:%Y%m%d-%H%M%S}{ext}"
@@ -219,7 +219,7 @@ def delete(db: Session, user: User, dependent_id: uuid.UUID, clip_id: uuid.UUID)
         return
     key = c.file_url
     db.delete(c)
-    db.add(AuditLog(actor_id=user.user_id, action="camera_clip_deleted", target_type="camera_clip", target_id=clip_id))
+    db.add(AuditLog(actor_id=user.user_id, action="camera_clip_deleted", target_type="camera_clip", target_id=clip_id, dependent_id=dependent_id))
     db.commit()
     if key:
         storage_service.get_storage("clips").delete(key)

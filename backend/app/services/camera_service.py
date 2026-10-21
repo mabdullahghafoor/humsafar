@@ -39,8 +39,8 @@ def _now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def _audit(db: Session, actor_id: uuid.UUID, action: str, target_type: str, target_id: uuid.UUID) -> None:
-    db.add(AuditLog(actor_id=actor_id, action=action, target_type=target_type, target_id=target_id))
+def _audit(db: Session, actor_id: uuid.UUID, action: str, target_type: str, target_id: uuid.UUID, dependent_id: uuid.UUID) -> None:
+    db.add(AuditLog(actor_id=actor_id, action=action, target_type=target_type, target_id=target_id, dependent_id=dependent_id))
 
 
 def _camera(db: Session, dependent_id: uuid.UUID) -> CameraDevice | None:
@@ -78,7 +78,7 @@ def _join(cam: CameraDevice, uid: str, *, publish: bool, ttl_s: int) -> RoomJoin
 def _end(db: Session, s: CameraSession, reason: str, now: datetime) -> None:
     s.ended_at = now
     s.end_reason = reason
-    _audit(db, s.viewer_id, "camera_view_ended", "camera_session", s.session_id)
+    _audit(db, s.viewer_id, "camera_view_ended", "camera_session", s.session_id, s.dependent_id)
 
 
 def _live_sessions(db: Session, dependent_id: uuid.UUID, now: datetime) -> list[CameraSession]:
@@ -113,7 +113,7 @@ def pair(db: Session, user: User, dependent_id: uuid.UUID, body: CameraPairIn) -
     if created:
         cam = CameraDevice(dependent_id=dependent_id, stream_uri=f"rtc:cam-{dependent_id.hex}", name=body.name)
         db.add(cam)
-        _audit(db, user.user_id, "camera_paired", "camera_device", dependent_id)
+        _audit(db, user.user_id, "camera_paired", "camera_device", dependent_id, dependent_id)
     elif body.name is not None:
         cam.name = body.name
     db.commit()
@@ -134,7 +134,7 @@ def unpair(db: Session, user: User, dependent_id: uuid.UUID) -> None:
         _end(db, s, "unpaired", now)
     clip_service.miss_pending(db, dependent_id, now)
     db.delete(cam)
-    _audit(db, user.user_id, "camera_unpaired", "camera_device", dependent_id)
+    _audit(db, user.user_id, "camera_unpaired", "camera_device", dependent_id, dependent_id)
     db.commit()
 
 
@@ -206,7 +206,7 @@ def start_or_renew(db: Session, user: User, dependent_id: uuid.UUID) -> StreamOu
         except IntegrityError:
             db.rollback()
             raise AppError(409, "CONFLICT", "Another request for the same viewing is in progress. Try again.")
-        _audit(db, user.user_id, "camera_view_started", "camera_session", mine.session_id)
+        _audit(db, user.user_id, "camera_view_started", "camera_session", mine.session_id, dependent_id)
     else:
         mine.last_renewed_at = now
         mine.expires_at = now + timedelta(seconds=S.CAMERA_SESSION_TTL_S)
