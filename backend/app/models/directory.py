@@ -5,7 +5,7 @@ home_care_providers, booking_requests, activity_log.
 Traces to: FR-I1, FR-I2, FR-J1, FR-J2.
 """
 
-from sqlalchemy import Boolean, CheckConstraint, Column, Float, Index, Numeric, SmallInteger, String, UniqueConstraint, text
+from sqlalchemy import Boolean, DateTime, CheckConstraint, Column, Float, Index, Numeric, SmallInteger, String, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import UUID
 
 from app.core.database import Base
@@ -13,6 +13,9 @@ from app.models._common import fk_col, in_list, ts_col, uuid_pk
 
 ORG_TYPES = ("hospital", "clinic", "pharmacy", "ambulance", "emergency_service", "blood_bank", "laboratory")
 CHARGE_UNITS = ("per_visit", "per_hour", "per_day", "per_month")
+BOOKING_STATUSES = ("pending", "confirmed", "completed", "cancelled")
+BOOKING_OPEN = ("pending", "confirmed")
+ACTIVITY_TYPES = ("org_contact", "booking_request", "booking_confirmed", "booking_completed", "booking_cancelled")
 
 
 class HealthcareOrganization(Base):
@@ -76,6 +79,20 @@ class BookingRequest(Base):
     provider_id = fk_col("home_care_providers.provider_id", index=True)
     status = Column(String(20), nullable=False, server_default=text("'pending'"))
     requested_at = ts_col()
+    # Task 6.2 (clarification 126): who asked, when the visit is wanted, a note, last change, safe retry.
+    requested_by = fk_col("users.user_id", index=True)
+    preferred_at = Column(DateTime(timezone=True), nullable=True)
+    note = Column(String(300), nullable=True)
+    updated_at = ts_col()
+    client_id = Column(UUID(as_uuid=True), nullable=True)
+
+    __table_args__ = (
+        CheckConstraint(in_list("status", BOOKING_STATUSES), name="status_valid"),
+        CheckConstraint("note IS NULL OR char_length(btrim(note)) BETWEEN 1 AND 300", name="note_length"),
+        # one open request per Dependent and provider (no repeated requests for the same person)
+        Index("uq_booking_requests_one_open", "dependent_id", "provider_id", unique=True, postgresql_where=text("status IN ('pending', 'confirmed')")),
+        Index("uq_booking_requests_client", "requested_by", "client_id", unique=True, postgresql_where=text("client_id IS NOT NULL")),
+    )
 
 
 class ActivityLog(Base):
@@ -92,7 +109,11 @@ class ActivityLog(Base):
     type = Column(String(30), nullable=False)
     reference_id = Column(UUID(as_uuid=True), nullable=True)
     occurred_at = ts_col()
+    # Task 6.2 (clarification 127): who did it and the name at that moment (history stays readable if an entry changes).
+    initiated_by = fk_col("users.user_id", index=True)
+    subject_name = Column(String(200), nullable=False, server_default=text("''"))
 
     __table_args__ = (
         Index("ix_activity_log_dependent_occurred", "dependent_id", "occurred_at"),
+        CheckConstraint(in_list("type", ACTIVITY_TYPES), name="type_valid"),
     )

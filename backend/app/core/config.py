@@ -107,6 +107,9 @@ class Settings(BaseSettings):
     WEARABLE_MOCK_ENABLED: bool = True  # demo endpoint that makes fake band readings; switch off once the real band works
     APPOINTMENT_TIMEZONE: str = "Asia/Karachi"  # the time shown in reminders
     APPOINTMENT_REMIND_LEADS_S: str = "86400,3600"  # reminders this long before: 24 h and 1 h (comma separated)
+    BOOKING_MAX_OPEN: int = 20  # open (pending / confirmed) home-care requests per Dependent (Task 6.2)
+    BOOKING_MAX_AHEAD_DAYS: int = 365
+    ACTIVITY_CONTACT_DEDUPE_S: int = 60  # the same person tapping the same organization twice within this time logs once
     APPOINTMENT_MAX_OPEN: int = 100  # scheduled appointments per Dependent
     WELLNESS_ALERT_MAX_AGE_S: int = 21600  # a check found unanswered more than 6 h after its deadline is closed, not alerted
 
