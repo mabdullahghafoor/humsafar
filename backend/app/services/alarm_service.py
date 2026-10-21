@@ -25,7 +25,7 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.models import AuditLog, Notification, User
 from app.schemas.alarm import AlarmOut, AlarmStatusOut
-from app.services import linkage_service, notification_service, permission_service
+from app.services import camera_clip_service, linkage_service, notification_service, permission_service
 from app.services.notification_service import CRITICAL
 
 START, STOP = "remote_alarm", "remote_alarm_stop"
@@ -103,6 +103,7 @@ def trigger(db: Session, user: User, dependent_id: uuid.UUID, duration_s: int | 
         dependent_id=dependent_id, dedupe_key=f"{alarm_id}:start",
         extra={"alarm_id": str(alarm_id), "duration_s": d, "expires_at": (now + timedelta(seconds=d)).isoformat(), "triggered_by": str(user.user_id)},
     )
+    camera_clip_service.request_for_event(db, dependent_id, "remote_alarm", alarm_id)  # FR-K2: never raises
     return _out(db, n, now), True
 
 

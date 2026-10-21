@@ -27,8 +27,8 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.errors import AppError
 from app.models import AuditLog, CameraDevice, CameraSession, GuardianDependentLink, User
-from app.schemas.camera import CameraPairIn, CameraStatus, HeartbeatOut, RoomJoin, StreamOut, Viewer, ViewingOut
-from app.services import call_provider, linkage_service, permission_service
+from app.schemas.camera import CameraPairIn, ClipTask, CameraStatus, HeartbeatOut, RoomJoin, StreamOut, Viewer, ViewingOut
+from app.services import call_provider, camera_clip_service as clip_service, linkage_service, permission_service
 from app.services import notification_service as ns
 
 log = logging.getLogger("humsafar.camera")
@@ -132,6 +132,7 @@ def unpair(db: Session, user: User, dependent_id: uuid.UUID) -> None:
     now = _now()
     for s in db.scalars(select(CameraSession).where(CameraSession.dependent_id == dependent_id, CameraSession.ended_at.is_(None))).all():
         _end(db, s, "unpaired", now)
+    clip_service.miss_pending(db, dependent_id, now)
     db.delete(cam)
     _audit(db, user.user_id, "camera_unpaired", "camera_device", dependent_id)
     db.commit()
@@ -168,11 +169,13 @@ def heartbeat(db: Session, user: User, dependent_id: uuid.UUID) -> HeartbeatOut:
     now = _now()
     cam.last_seen_at = now
     live = _live_sessions(db, dependent_id, now)
+    task = clip_service.pending_task(db, dependent_id, now)  # FR-K2: an emergency clip is waiting to be recorded
     db.commit()
+    poll = S.CAMERA_POLL_ACTIVE_S if (live or task) else S.CAMERA_POLL_IDLE_S
     if not live:
-        return HeartbeatOut(should_publish=False, viewers_now=0, next_poll_s=S.CAMERA_POLL_IDLE_S)
+        return HeartbeatOut(should_publish=False, viewers_now=0, next_poll_s=poll, clip=task)
     join = _join(cam, f"camera-{dependent_id}", publish=True, ttl_s=S.CALL_TOKEN_TTL_S)
-    return HeartbeatOut(should_publish=True, viewers_now=len(live), next_poll_s=S.CAMERA_POLL_ACTIVE_S, join=join)
+    return HeartbeatOut(should_publish=True, viewers_now=len(live), next_poll_s=poll, join=join, clip=task)
 
 
 # ------------------------------------------------------------------ the Guardian

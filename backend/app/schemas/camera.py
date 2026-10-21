@@ -51,11 +51,40 @@ class StreamOut(BaseModel):
     renewed: bool = Field(description="true when you already had an open session and it was extended.")
 
 
+class ClipTask(BaseModel):
+    clip_id: UUID
+    trigger_type: Literal["panic", "remote_alarm"]
+    duration_s: int = Field(description="Record this many seconds now, then upload with POST .../camera/clips/{clip_id}.")
+    requested_at: datetime
+    expires_at: datetime = Field(description="Upload before this time or the clip is marked missed.")
+
+
+class ClipOut(BaseModel):
+    clip_id: UUID
+    dependent_id: UUID
+    trigger_type: Literal["panic", "remote_alarm"]
+    status: Literal["requested", "stored", "missed"]
+    event_id: UUID | None
+    captured_at: datetime = Field(description="When the emergency started.")
+    duration_s: int | None
+    uploaded_at: datetime | None
+    size_bytes: int | None
+    content_type: str | None
+
+
+class ClipList(BaseModel):
+    items: list[ClipOut]
+    total: int
+    limit: int
+    offset: int
+
+
 class HeartbeatOut(BaseModel):
     should_publish: bool = Field(description="true while at least one Guardian is watching: start (or keep) publishing. false: stop publishing and save battery.")
     viewers_now: int
     next_poll_s: int = Field(description="Send the next heartbeat after this many seconds.")
     join: RoomJoin | None = Field(default=None, description="Present when should_publish is true. null while should_publish = true means the provider is unavailable: ask again at the next poll.")
+    clip: ClipTask | None = Field(default=None, description="FR-K2: an emergency happened. Record `duration_s` seconds now and upload the clip, whatever should_publish says.")
 
 
 class Viewer(BaseModel):
