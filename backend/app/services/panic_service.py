@@ -68,7 +68,7 @@ def trigger(db: Session, user: User, dependent_id: uuid.UUID) -> tuple[PanicOut,
         return out, False
     ev = EscalationEvent(event_id=uuid.uuid4(), dependent_id=dependent_id, trigger_type=TRIGGER, tier="primary")
     db.add(ev)
-    db.add(AuditLog(actor_id=user.user_id, action="panic_triggered", target_type="escalation_event", target_id=ev.event_id))
+    db.add(AuditLog(actor_id=user.user_id, action="panic_triggered", target_type="escalation_event", target_id=ev.event_id, dependent_id=ev.dependent_id))
     db.commit()  # the panic is saved before anything else can go wrong
     camera_clip_service.request_for_event(db, dependent_id, TRIGGER, ev.event_id)  # FR-K2: never raises
     notification_service.dispatch_events_safely(db, dependent_id)
@@ -100,7 +100,7 @@ def resolve(db: Session, user: User, dependent_id: uuid.UUID) -> PanicOut:
         db.rollback()
         raise AppError(409, "NO_ACTIVE_PANIC", "There is no open panic alert.")
     ev.status, ev.resolved_at = RESOLVED, datetime.now(timezone.utc)
-    db.add(AuditLog(actor_id=user.user_id, action="panic_resolved", target_type="escalation_event", target_id=ev.event_id))
+    db.add(AuditLog(actor_id=user.user_id, action="panic_resolved", target_type="escalation_event", target_id=ev.event_id, dependent_id=ev.dependent_id))
     db.commit()
     notification_service.dispatch_events_safely(db, dependent_id)
     db.refresh(ev)

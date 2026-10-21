@@ -140,7 +140,7 @@ def create(db: Session, user: User, dependent_id: uuid.UUID, body: VitalIn) -> V
         )
         db.add(r)
         db.flush()
-        db.add(AuditLog(actor_id=user.user_id, action="vital_added", target_type="vital_reading", target_id=r.reading_id))
+        db.add(AuditLog(actor_id=user.user_id, action="vital_added", target_type="vital_reading", target_id=r.reading_id, dependent_id=dependent_id))
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -214,7 +214,7 @@ def delete(db: Session, user: User, dependent_id: uuid.UUID, reading_id: uuid.UU
     if r.recorded_by != user.user_id and not records_service._is_primary(db, user, dependent_id):
         raise AppError(403, "VITAL_MODIFY_DENIED", "Only the person who typed this reading, or the Primary Guardian, can delete it.")
     db.delete(r)
-    db.add(AuditLog(actor_id=user.user_id, action="vital_deleted", target_type="vital_reading", target_id=reading_id))
+    db.add(AuditLog(actor_id=user.user_id, action="vital_deleted", target_type="vital_reading", target_id=reading_id, dependent_id=dependent_id))
     db.commit()
 
 
@@ -272,6 +272,6 @@ def export_pdf(db: Session, user: User, dependent_id: uuid.UUID, scope: str, yea
     rows, total, band = export_rows(db, dependent_id, year, month)
     names = records_service._name_map(db, {dependent_id})
     pdf = records_pdf.build_vitals(person_name=names.get(dependent_id) or "Dependent", scope=scope, year=year, month=month, rows=rows, total_matching=total, band=band)
-    db.add(AuditLog(actor_id=user.user_id, action="vitals_exported", target_type="dependent", target_id=dependent_id))
+    db.add(AuditLog(actor_id=user.user_id, action="vitals_exported", target_type="dependent", target_id=dependent_id, dependent_id=dependent_id))
     db.commit()
     return pdf, records_pdf.file_stem(scope, year, month).replace("records", "vitals") + ".pdf"

@@ -39,8 +39,8 @@ def _is_primary(db: Session, user: User, dependent_id: uuid.UUID) -> bool:
     return user.role == "guardian" and linkage_service._is_primary_of(db, user.user_id, dependent_id)
 
 
-def _audit(db: Session, user: User, action: str, target_id: uuid.UUID) -> None:
-    db.add(AuditLog(actor_id=user.user_id, action=action, target_type="booking_request", target_id=target_id))
+def _audit(db: Session, user: User, action: str, target_id: uuid.UUID, dependent_id: uuid.UUID) -> None:
+    db.add(AuditLog(actor_id=user.user_id, action=action, target_type="booking_request", target_id=target_id, dependent_id=dependent_id))
 
 
 def _log(db: Session, dependent_id: uuid.UUID, user: User, type_: str, reference_id: uuid.UUID, subject_name: str) -> ActivityLog:
@@ -109,7 +109,7 @@ def create(db: Session, user: User, dependent_id: uuid.UUID, body: BookingIn) ->
                 return _out(db, old, db.get(HomeCareProvider, old.provider_id), already_saved=True)
         raise AppError(409, "BOOKING_ALREADY_OPEN", "There is already an open request to this provider for this Dependent.")
     _log(db, dependent_id, user, "booking_request", b.request_id, provider.name)
-    _audit(db, user, "booking_requested", b.request_id)
+    _audit(db, user, "booking_requested", b.request_id, b.dependent_id)
     db.commit()
     db.refresh(b)
     _tell_others(db, user, b, provider.name, "New home-care request", "was made")
@@ -163,7 +163,7 @@ def change_status(db: Session, user: User, dependent_id: uuid.UUID, request_id: 
     b.status = new_status
     b.updated_at = _utcnow()
     _log(db, dependent_id, user, act_type, b.request_id, p.name)
-    _audit(db, user, audit, b.request_id)
+    _audit(db, user, audit, b.request_id, b.dependent_id)
     db.commit()
     db.refresh(b)
     _tell_others(db, user, b, p.name, title, what)

@@ -102,8 +102,8 @@ def require_self_dependent(user: User, dependent_id: uuid.UUID) -> None:
         raise AppError(403, "FORBIDDEN", "Only the Dependent can do this.")
 
 
-def _audit(db: Session, user: User, action: str, target_type: str, target_id: uuid.UUID) -> None:
-    db.add(AuditLog(actor_id=user.user_id, action=action, target_type=target_type, target_id=target_id))
+def _audit(db: Session, user: User, action: str, target_type: str, target_id: uuid.UUID, dependent_id: uuid.UUID) -> None:
+    db.add(AuditLog(actor_id=user.user_id, action=action, target_type=target_type, target_id=target_id, dependent_id=dependent_id))
 
 
 # ------------------------------------------------------------------ schedules
@@ -163,7 +163,7 @@ def create(db: Session, user: User, dependent_id: uuid.UUID, body: MedicationIn)
         rows.append(row)
     db.flush()
     for row in rows:
-        _audit(db, user, "medication_schedule_created", "medication_schedule", row.schedule_id)
+        _audit(db, user, "medication_schedule_created", "medication_schedule", row.schedule_id, dependent_id)
     db.commit()
     for row in rows:
         db.refresh(row)
@@ -225,7 +225,7 @@ def update_schedule(
         s.active = body.active
     if changed_timing:
         _drop_future_pending(db, s.schedule_id, datetime.now(timezone.utc))
-    _audit(db, user, "medication_schedule_updated", "medication_schedule", s.schedule_id)
+    _audit(db, user, "medication_schedule_updated", "medication_schedule", s.schedule_id, s.dependent_id)
     db.commit()
     db.refresh(s)
     return _out(s)
@@ -237,7 +237,7 @@ def deactivate(db: Session, user: User, dependent_id: uuid.UUID, schedule_id: uu
     if s.active:
         s.active = False
         _drop_future_pending(db, s.schedule_id, datetime.now(timezone.utc))
-        _audit(db, user, "medication_schedule_deactivated", "medication_schedule", s.schedule_id)
+        _audit(db, user, "medication_schedule_deactivated", "medication_schedule", s.schedule_id, s.dependent_id)
     db.commit()
 
 
@@ -364,7 +364,7 @@ def confirm(
         .returning(MedicationConfirmation.confirmation_id)
     ).scalar()
     if won is not None:
-        _audit(db, user, "medication_dose_confirmed", "medication_confirmation", dose_id)
+        _audit(db, user, "medication_dose_confirmed", "medication_confirmation", dose_id, dependent_id)
         _close_missed_alert(db, dose_id, now)  # a late "taken" closes the Guardians' alert (clarification 38)
     db.commit()
     if won is not None:
@@ -530,7 +530,7 @@ def extend(db: Session, user: User, dependent_id: uuid.UUID, confirmation_id: uu
     c.extended_until = max(deadline(c), now) + timedelta(minutes=minutes)
     c.status = PENDING
     _close_missed_alert(db, c.confirmation_id, now)
-    _audit(db, user, "medication_dose_extended", "medication_confirmation", c.confirmation_id)
+    _audit(db, user, "medication_dose_extended", "medication_confirmation", c.confirmation_id, dependent_id)
     db.commit()
     db.refresh(c)
     local = c.extended_until.astimezone(tz())
@@ -574,7 +574,7 @@ def escalate(db: Session, user: User, dependent_id: uuid.UUID, confirmation_id: 
         raise AppError(409, "ALREADY_ESCALATED", "This alert has already been escalated.")
     ev.tier = "secondary"
     ev.tier_changed_at = datetime.now(timezone.utc)  # the Secondary timer (Task 3.5) starts now
-    _audit(db, user, "medication_alert_escalated", "escalation_event", ev.event_id)
+    _audit(db, user, "medication_alert_escalated", "escalation_event", ev.event_id, ev.dependent_id)
     db.commit()
     notification_service.dispatch_events(db, dependent_id)
     told = db.scalar(

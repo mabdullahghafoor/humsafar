@@ -97,7 +97,7 @@ def trigger(db: Session, user: User, dependent_id: uuid.UUID, duration_s: int | 
     d = duration_s or s.ALARM_DEFAULT_S
     alarm_id = uuid.uuid4()
     name = notification_service._display_name(db, dependent_id)
-    db.add(AuditLog(actor_id=user.user_id, action="remote_alarm_triggered", target_type="dependent", target_id=dependent_id))
+    db.add(AuditLog(actor_id=user.user_id, action="remote_alarm_triggered", target_type="dependent", target_id=dependent_id, dependent_id=dependent_id))
     n = notification_service.notify(  # commits
         db, dependent_id, START, CRITICAL, "Alarm", "Your Guardian is sounding the alarm to find you.",
         dependent_id=dependent_id, dedupe_key=f"{alarm_id}:start",
@@ -131,7 +131,7 @@ def stop(db: Session, user: User, dependent_id: uuid.UUID) -> AlarmOut:
         db.rollback()
         raise AppError(409, "NO_ACTIVE_ALARM", "No alarm is sounding.")
     p = cur.payload
-    db.add(AuditLog(actor_id=user.user_id, action="remote_alarm_stopped", target_type="dependent", target_id=dependent_id))
+    db.add(AuditLog(actor_id=user.user_id, action="remote_alarm_stopped", target_type="dependent", target_id=dependent_id, dependent_id=dependent_id))
     notification_service.notify(  # commits; the phone stops the sound
         db, dependent_id, STOP, CRITICAL, "Alarm stopped", "The alarm has been stopped.", dependent_id=dependent_id,
         dedupe_key=f"{p['alarm_id']}:stop", extra={"alarm_id": p["alarm_id"]},

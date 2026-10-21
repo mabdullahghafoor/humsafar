@@ -68,7 +68,7 @@ def set_access(
     if changed:
         db.add(AuditLog(
             actor_id=user.user_id, action="record_category_shown" if visible else "record_category_hidden",
-            target_type="guardian_dependent_link", target_id=link.link_id,
+            target_type="guardian_dependent_link", target_id=link.link_id, dependent_id=dependent_id,
         ))
     db.commit()
     hidden = hidden_categories(db, link.link_id)

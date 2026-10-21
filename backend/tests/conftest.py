@@ -87,3 +87,15 @@ def client(engine, db):
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
+
+
+# Task 6.6 (FR-N3): every audit row must say which Dependent it is about, or the Primary cannot read it.
+# This guard runs in every test of the suite, so a new write site that forgets `dependent_id` fails at once.
+from sqlalchemy import event as _event  # noqa: E402
+from app.models import AuditLog as _AuditLog  # noqa: E402
+
+
+@_event.listens_for(_AuditLog, "before_insert")
+def _audit_needs_dependent(mapper, connection, target):
+    if target.dependent_id is None:
+        raise AssertionError(f"audit row '{target.action}' was written without dependent_id (Task 6.6)")

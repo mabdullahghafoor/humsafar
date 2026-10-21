@@ -52,7 +52,7 @@ def put(db: Session, user: User, dependent_id: uuid.UUID, body: ContactIn) -> Co
         .returning(EmergencyContact.contact_id)
     )
     cid = db.execute(stmt).scalar()
-    db.add(AuditLog(actor_id=user.user_id, action="emergency_contact_set", target_type="emergency_contact", target_id=cid))
+    db.add(AuditLog(actor_id=user.user_id, action="emergency_contact_set", target_type="emergency_contact", target_id=cid, dependent_id=dependent_id))
     db.commit()
     return _out(db.get(EmergencyContact, cid))
 
@@ -70,6 +70,6 @@ def delete(db: Session, user: User, dependent_id: uuid.UUID) -> None:
     linkage_service._lock_dependent(db, dependent_id)
     c = get_for(db, dependent_id)
     if c is not None:
-        db.add(AuditLog(actor_id=user.user_id, action="emergency_contact_removed", target_type="emergency_contact", target_id=c.contact_id))
+        db.add(AuditLog(actor_id=user.user_id, action="emergency_contact_removed", target_type="emergency_contact", target_id=c.contact_id, dependent_id=dependent_id))
         db.delete(c)
     db.commit()
