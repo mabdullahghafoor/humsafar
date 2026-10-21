@@ -30,6 +30,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `booking_contract.md` | Home-care booking requests and the shared Activity Timeline (6.2) |
 | `camera_contract.md` | Camera pairing, on-demand live viewing, permission gate (6.3) |
 | `audit_contract.md` | Activity history / audit log, Primary Guardian only (6.6) |
+| `account_contract.md` | Close and reopen accounts, 60-day retention (6.7) |
 | `directory_contract.md` | Healthcare directory and home-care provider directory: search, filters, nearby, details (6.1) |
 | `wearable_contract.md` | Wearable band (mock data first): pair, sync readings, status, "no data" notice, demo data (5.4) |
 | `vitals_contract.md` | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, separate / combined PDF (5.3) |
@@ -160,7 +161,7 @@ Every error has the same shape; branch on `error.code`, never on `message`:
 | 429 | `TOO_MANY_REQUESTS` (Task 6.5): too many wrong passwords for one email (8 in 5 minutes), too many wrong phone codes (5 in 5 minutes), or too many login / register calls from one address (60 per minute). `Retry-After` header and `details.retry_after_s` say how long to wait; show "try again in N seconds" |
 | 400 | `HTTPS_REQUIRED` (only when the server runs with `ENFORCE_HTTPS=true`): use https |
 | 401 | `NOT_AUTHENTICATED`, `INVALID_CREDENTIALS`, `TOKEN_EXPIRED` (call refresh, retry once), `TOKEN_INVALID`, `TOKEN_WRONG_TYPE` |
-| 403 | `RECORD_MODIFY_DENIED`, `SHARE_MODIFY_DENIED`, `CATEGORY_NOT_ALLOWED`, `ACCOUNT_NOT_ACTIVATED`, `FORBIDDEN`, `GUARDIAN_NOT_VERIFIED`, `INVITE_NOT_FOR_YOU`, `MODULE_ACCESS_DENIED`, `NOT_LINKED_TO_DEPENDENT`, `NOT_PRIMARY_GUARDIAN`, `PRIMARY_CANNOT_ACCEPT_INVITE`, `SECONDARY_CANNOT_LINK` |
+| 403 | `RECORD_MODIFY_DENIED`, `SHARE_MODIFY_DENIED`, `CATEGORY_NOT_ALLOWED`, `ACCOUNT_NOT_ACTIVATED`, `ACCOUNT_CLOSED` (Task 6.7), `WRONG_PASSWORD` (Task 6.7), `FORBIDDEN`, `GUARDIAN_NOT_VERIFIED`, `INVITE_NOT_FOR_YOU`, `MODULE_ACCESS_DENIED`, `NOT_LINKED_TO_DEPENDENT`, `NOT_PRIMARY_GUARDIAN`, `PRIMARY_CANNOT_ACCEPT_INVITE`, `SECONDARY_CANNOT_LINK` |
 | 404 | `RECORD_NOT_FOUND`, `NO_FILE`, `FILE_NOT_FOUND`, `SHARE_NOT_FOUND`, `APPOINTMENT_NOT_FOUND`, `NOT_FOUND`, `DEPENDENT_NOT_FOUND`, `DOSE_NOT_FOUND`, `EMERGENCY_CONTACT_NOT_FOUND`, `GEOFENCE_NOT_FOUND`, `MEDICATION_NOT_FOUND`, `NO_DOSE_DUE`, `NOTIFICATION_NOT_FOUND`, `SECONDARY_NOT_FOUND`, `ESCALATION_NOT_FOUND`, `WELLNESS_CHECK_NOT_FOUND` |
 | 409 | `RECORDS_LIMIT`, `SHARE_LIMIT`, `APPOINTMENT_EXISTS`, `APPOINTMENTS_LIMIT`, `APPOINTMENT_CANCELLED`, `ALREADY_ESCALATED`, `ALREADY_LINKED`, `ALREADY_REGISTERED`, `ALREADY_VERIFIED`, `CNIC_ALREADY_REGISTERED`, `DOSE_ALREADY_CONFIRMED`, `EMAIL_ALREADY_REGISTERED`, `GEOFENCE_LIMIT_REACHED`, `GUARDIAN_CAP_REACHED`, `INVITEE_NOT_ELIGIBLE`, `MEDICATION_LIMIT_REACHED`, `NO_ACTIVE_ALARM`, `NO_ACTIVE_PANIC`, `NO_OPEN_ALERT`, `SCHEDULE_ALREADY_EXISTS`, `WELLNESS_LIMIT_REACHED`, `WELLNESS_TIME_EXISTS`, `PHONE_ALREADY_REGISTERED`, `PRIMARY_ALREADY_EXISTS` |
 | 410 | `SHARE_EXPIRED`, `SHARE_REVOKED` (the doctor link) |

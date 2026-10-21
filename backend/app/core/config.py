@@ -114,6 +114,9 @@ class Settings(BaseSettings):
     CAMERA_ONLINE_S: int = 30  # the camera phone counts as online this long after its last heartbeat
     CAMERA_MAX_VIEWERS: int = 3  # Guardians watching one camera at the same time
     CAMERA_POLL_IDLE_S: int = 10  # how often the camera phone asks "is anyone watching?"
+    RETENTION_DAYS: int = 60  # Task 6.7 (FR-O1): a closed account's data is deleted / anonymized this many days after closure
+    AUDIT_RETENTION_DAYS: int = 365  # the audit trail of a deleted Dependent is kept this many days after the deletion, then removed
+    RETENTION_BATCH: int = 50  # accounts handled per background run
     CLIPS_STORAGE_DIR: str = ""  # Task 6.4: where emergency clips are saved (encrypted). Empty = ~/humsafar_uploads/clips (outside the repo)
     CLIP_DURATION_S: int = 20  # how long the camera phone is asked to record after Panic Mode / Remote Alarm
     CLIP_REQUEST_TTL_S: int = 180  # the phone must pick up the request and upload the clip within this time, else it is `missed`

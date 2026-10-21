@@ -105,6 +105,16 @@ def is_account_active(db: Session, user: User) -> bool:
     return primary_link is not None
 
 
+def _require_open(user: User) -> None:
+    """Task 6.7: a closed account cannot sign in. Only said to someone who proved they know the password."""
+    if user.closed_at is not None:
+        who = "Use 'reopen account' to get it back." if user.role == "guardian" else "Ask the Primary Guardian to reopen it."
+        raise AppError(
+            403, "ACCOUNT_CLOSED", f"This account has been closed. {who}",
+            details={"delete_after": user.delete_after.isoformat() if user.delete_after else None, "role": user.role},
+        )
+
+
 def _require_active(db: Session, user: User) -> None:
     if not is_account_active(db, user):
         raise AppError(
@@ -127,6 +137,7 @@ def authenticate(db: Session, email: str, password: str) -> User:
         ratelimit.fail("login_fail", key)
         raise AppError(401, "INVALID_CREDENTIALS", "Incorrect email or password.")
     ratelimit.clear("login_fail", key)
+    _require_open(user)
     # Only reveal activation state to someone who proved they know the password.
     _require_active(db, user)
     return user
@@ -150,5 +161,6 @@ def refresh_tokens(db: Session, refresh_token: str) -> dict:
         user = None
     if user is None:
         raise AppError(401, "TOKEN_INVALID", "Invalid authentication token.", headers={"WWW-Authenticate": "Bearer"})
+    _require_open(user)
     _require_active(db, user)
     return issue_token_pair(db, user)  # rotation: a fresh pair every refresh

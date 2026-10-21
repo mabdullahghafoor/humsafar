@@ -38,6 +38,8 @@ def get_current_user(
         raise AppError(
             401, "TOKEN_INVALID", "Invalid authentication token.", headers={"WWW-Authenticate": "Bearer"}
         )
+    if user.closed_at is not None:  # Task 6.7: a closed account stops working at once, whatever token it still holds
+        raise AppError(403, "ACCOUNT_CLOSED", "This account has been closed.")
     return user
 
 
