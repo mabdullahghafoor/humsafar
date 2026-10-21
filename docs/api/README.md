@@ -27,6 +27,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `emergency_contact_contract.md` | External Emergency Contact: the ONE person outside the app, texted when no Guardian answers |
 | `messaging_contract.md` | Text and priority voice messages between a Guardian and a Dependent: send, history, conversations, read receipts, safe retry, audio download |
 | `call_contract.md` | Voice and video calls: start, ring, accept / decline / end, join token for ZegoCloud, history, timeouts |
+| `directory_contract.md` | Healthcare directory and home-care provider directory: search, filters, nearby, details (6.1) |
 | `wearable_contract.md` | Wearable band (mock data first): pair, sync readings, status, "no data" notice, demo data (5.4) |
 | `vitals_contract.md` | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, separate / combined PDF (5.3) |
 | `records_contract.md` | Medical Vault: records with files (encrypted), notes, PDF export (complete / year / month), doctor-shareable 72 h link, per-category access for a Secondary (5.2) |
@@ -121,6 +122,10 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | POST / GET / DELETE `/dependents/{id}/wearable` | Dependent or Primary (GET: health-data readers) | Pair the band / band status / unpair (5.4) |
 | POST `/dependents/{id}/wearable/sync` | the Dependent's own phone | Send a batch of band readings |
 | POST `/dependents/{id}/wearable/mock` | Dependent or Primary | Demo: make fake heart-rate readings |
+| GET `/directory/organizations` | any signed-in user | Healthcare directory: search (`q`), `type`, `city`, `open_24h`, nearby (`lat`+`lng`, `radius_km`), paging (6.1) |
+| GET `/directory/organizations/types` / `/{org_id}` | same | Types with counts / one organization |
+| GET `/directory/providers` | same | Home-care providers: `q`, `specialization`, `city`, `min_charge`, `max_charge`, `sort`, paging |
+| GET `/directory/providers/specializations` / `/{provider_id}` | same | Specializations with counts / one provider |
 | GET `/shared/records/{token}` | **anyone with the link (no login)** | The doctor's read-only PDF |
 | POST / GET `/dependents/{id}/appointments` | the Dependent, or a Guardian with `health_records` | Add / list appointments (`when` = `upcoming` / `past` / `all`) |
 | GET / PATCH / DELETE `/dependents/{id}/appointments/{appointment_id}` | same | One / change / delete |
