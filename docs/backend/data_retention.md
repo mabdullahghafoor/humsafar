@@ -10,7 +10,7 @@
 ## What happens to what
 | Data | At deletion |
 |---|---|
-| Dependent: location, vitals and band readings, medical records and their files, camera clips and their files, messages and voice files, call history, medication and wellness schedules and answers, appointments, booking requests, activity timeline, geofences, emergency contact, wearable and camera pairings, alerts, notifications about them, push tokens, links, permissions, doctor links | **deleted** (files removed from disk after the commit) |
+| Dependent: location, vitals and band readings, medical records and their files, camera clips and their files, messages and voice files, call history, medication and wellness schedules and answers, appointments, booking requests, activity timeline, geofences, emergency contact, wearable and camera pairings, summary reports and report schedules (and their files; a closed Guardian's own too), alerts, notifications about them, push tokens, links, permissions, doctor links | **deleted** (files removed from disk after the commit) |
 | The Dependent's identity (name, email, phone, ID number, birth date, notes) | **anonymized** ("Deleted user", `deleted-<random>@deleted.invalid`, password unusable) |
 | Guardian | personal details **anonymized**; links, permissions, notifications, push tokens deleted. Messages and calls with a Dependent who stays are kept, shown as from "Deleted user" |
 | Audit trail (FR-N3) | **kept** `AUDIT_RETENTION_DAYS` (365) after the deletion, then removed. It holds ids, action names and times only |

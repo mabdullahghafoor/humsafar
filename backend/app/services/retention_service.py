@@ -30,7 +30,7 @@ from app.models import (
     ActivityLog, Appointment, AuditLog, BookingRequest, CallLog, CameraClip, CameraDevice, CameraSession, DependentProfile,
     EmergencyContact, EscalationEvent, Geofence, GuardianDependentLink, GuardianProfile, LocationLog, MedicalRecord,
     MedicationConfirmation, MedicationSchedule, Message, Notification, PermissionGrant, PushToken, RecordCategoryRestriction,
-    RecordShare, User, VitalReading, WearableDevice, WellnessCheckResponse, WellnessCheckSchedule,
+    RecordShare, ReportSchedule, SummaryReport, User, VitalReading, WearableDevice, WellnessCheckResponse, WellnessCheckSchedule,
 )
 from app.services import storage_service
 
@@ -39,7 +39,7 @@ log = logging.getLogger(__name__)
 # Tables whose rows carry a `dependent_id` and are deleted with the Dependent.
 DEPENDENT_TABLES = [
     ActivityLog, Appointment, BookingRequest, CameraClip, CameraDevice, CameraSession, EmergencyContact, EscalationEvent,
-    Geofence, LocationLog, MedicalRecord, RecordShare, VitalReading, WearableDevice,
+    Geofence, LocationLog, MedicalRecord, RecordShare, ReportSchedule, SummaryReport, VitalReading, WearableDevice,
 ]
 # Every table in the database and what happens to it. Anything missing here fails the test.
 HANDLED = {
@@ -56,6 +56,8 @@ HANDLED = {
     "call_logs": "Dependent's call history deleted; a closed Guardian's stay with the caller anonymized",
     "notifications": "the closed person's own, and every one that is about the Dependent, deleted",
     "push_tokens": "deleted",
+    "report_schedules": "dependent data: deleted (a closed Guardian's too)",
+    "summary_reports": "dependent data: deleted with its file (a closed Guardian's too)",
     # the identity rows are anonymized, not deleted
     "users": "anonymized",
     "dependent_profiles": "anonymized",
@@ -97,6 +99,7 @@ def _purge_dependent(db: Session, user: User, now: datetime) -> list[tuple[str, 
             )
         )
     ]
+    files += [("reports", k) for k in db.scalars(select(SummaryReport.file_url).where(SummaryReport.dependent_id == dep))]
     link_ids = select(GuardianDependentLink.link_id).where(GuardianDependentLink.dependent_id == dep)
     _delete_link_children(db, link_ids)
     sched = select(MedicationSchedule.schedule_id).where(MedicationSchedule.dependent_id == dep)
@@ -120,6 +123,9 @@ def _purge_dependent(db: Session, user: User, now: datetime) -> list[tuple[str, 
 
 def _purge_guardian(db: Session, user: User, now: datetime) -> list[tuple[str, str]]:
     gid = user.user_id
+    files = [("reports", k) for k in db.scalars(select(SummaryReport.file_url).where(SummaryReport.guardian_id == gid))]
+    db.execute(delete(SummaryReport).where(SummaryReport.guardian_id == gid))
+    db.execute(delete(ReportSchedule).where(ReportSchedule.guardian_id == gid))
     link_ids = select(GuardianDependentLink.link_id).where(GuardianDependentLink.guardian_id == gid)
     _delete_link_children(db, link_ids)
     db.execute(delete(GuardianDependentLink).where(GuardianDependentLink.guardian_id == gid))
@@ -128,7 +134,7 @@ def _purge_guardian(db: Session, user: User, now: datetime) -> list[tuple[str, s
     profile = db.get(GuardianProfile, gid)
     profile.cnic_verified = profile.phone_verified = False
     _anonymize(user, now)
-    return []
+    return files
 
 
 def purge_user(db: Session, user_id: uuid.UUID, now: datetime) -> bool:

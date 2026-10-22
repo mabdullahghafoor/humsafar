@@ -37,6 +37,7 @@ from app.models.medical import (
     VitalReading,
     WearableDevice,
 )
+from app.models.reports import ReportSchedule, SummaryReport
 from app.models.security import AuditLog, CameraClip, CameraDevice, CameraSession
 
 __all__ = [
@@ -67,6 +68,8 @@ __all__ = [
     "User",
     "RecordCategoryRestriction",
     "RecordShare",
+    "ReportSchedule",
+    "SummaryReport",
     "VitalReading",
     "WearableDevice",
     "WellnessCheckResponse",
