@@ -1,10 +1,10 @@
 # 2.10 / 3.18 — Updated architecture and new workflow diagrams
 
-**Tasks:** 2.10 and 3.18 (continue / update diagrams), covering everything merged up to Phase 4 (D1: up to Phase 5 and Task 6.1) · **Owner:** Sarim · Each diagram is a PNG (slides, report) plus an SVG (editable: Figma, Inkscape or draw.io). Same style as `../1.14_diagrams/`.
+**Tasks:** 2.10 and 3.18 (continue / update diagrams), covering everything merged up to Phase 4 (D1: up to Phase 7) · **Owner:** Sarim · Each diagram is a PNG (slides, report) plus an SVG (editable: Figma, Inkscape or draw.io). Same style as `../1.14_diagrams/`.
 
 | # | Diagram | Version | Based on |
 |---|---|---|---|
-| D1 | System Architecture (as built, Phases 1–5 + 6.1) | **v0.3** (replaces v0.2; v0.1 in 1.14) | code on `dev` up to PR #64, migrations 0001–0016 |
+| D1 | System Architecture (as built, Phases 1–7) | **v0.4** (replaces v0.3; v0.1 in 1.14) | code on `dev` up to PR #80, migrations 0001–0022 |
 | D6 | Workflow — Panic Mode and Remote alarm | v0.1 | `panic_contract.md`, `alarm_contract.md` |
 | D7 | Workflow — Wellness check "Are you OK?" | v0.1 | `wellness_contract.md` |
 | D8 | Workflow — Location, safe zones and device health | v0.1 | `location_contract.md`, `geofence_contract.md`, `device_health_contract.md` |
@@ -12,6 +12,14 @@
 | D10 | Workflow — Voice / video call lifecycle | v0.1 | `call_contract.md` |
 
 D3 (onboarding), D4 (escalation chain) and D5 (medication) in `../1.14_diagrams/` are still correct and are not repeated here.
+
+## What changed in D1 (v0.3 → v0.4)
+- All eight modules are built: **Directory & Marketplace** (requests, Activity Timeline, 6.2) and **Security & Surveillance** (camera, clips, audit log, retention, 6.3–6.7).
+- **Medication & Records** also holds analytics and summary reports (7.1, 7.2).
+- Interface: HSTS / https-only option and rate limits (429) from 6.5.
+- Database: 33 tables, migrations **0001–0022**. File storage also holds camera clips and reports, encrypted.
+- Scheduler also runs camera sessions, clip expiry, account retention and summary reports.
+- ZegoCloud carries calls **and** the camera video (in-transit encryption, not end-to-end; drift D-38).
 
 ## What changed in D1 (v0.2 → v0.3)
 - **Medication & Records** now also holds the medical vault, appointments, vitals and band sync (Tasks 5.1–5.4).
