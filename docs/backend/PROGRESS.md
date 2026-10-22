@@ -45,6 +45,7 @@ Statuses: Done = merged into `dev`.
 | 6.5 | Encryption and transport formalization: https-only option, HSTS and security headers, production start-up checks, rate limits on login / OTP / KYC (SDS 17), encryption audit script and data inventory (`docs/backend/security_encryption.md`) | In review (PR) |
 | 6.6 | Audit log reading (FR-N3): every audit row now names its Dependent (migration 0020, old rows filled in); `GET /dependents/{id}/audit-log` for the Primary Guardian only, newest first, filters and paging (contract `audit_contract.md`) | In review (PR) |
 | 6.7 | Data retention job (FR-O1): a Guardian closes their account, the Primary closes a Dependent's; closed accounts stop working at once and the background job deletes / anonymizes the data after 60 days (audit trail kept 365 days longer, hold flag for disputes), reopen within the period (migration 0021; contract `account_contract.md`, guide `data_retention.md`) | In review (PR) |
+| 7.1 | Analytics aggregation (FR-Q1): adherence rate, per-day and per-medicine, change against the previous period, streak; vitals min / max / average / latest / daily / trend for blood pressure, sugar, SpO2, temperature, heart rate (manual and band together); Guardians only, by permission; one combined call for the dashboard (no migration; contract `analytics_contract.md`) | In review (PR) |
 | 2.4 | BLE integration spike | **Open, parked**: needs a real Android phone (planned at a teammate's home with the camera-phone setup, 6.10) |
 
 ## Frontend (Talha) — kept in his own repo `humsafar-talha-frontend`
