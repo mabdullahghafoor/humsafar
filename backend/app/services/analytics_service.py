@@ -50,11 +50,13 @@ def _rate(taken: int, missed: int) -> float | None:
     return round(taken * 100 / (taken + missed), 1) if taken + missed else None
 
 
-def _window(days: int) -> tuple[date, date, datetime]:
-    """(first local day, today, UTC moment the first day starts)."""
+def _window(days: int, end: date | None = None) -> tuple[date, date, datetime, datetime]:
+    """(first local day, last local day, UTC moment the first day starts, UTC moment the last day ends).
+    `end` = the last day of the period (default: today). The summary reports (Task 7.2) ask for finished weeks and months."""
     today = datetime.now(timezone.utc).astimezone(medication_service.tz()).date()
-    first = today - timedelta(days=days - 1)
-    return first, today, medication_service.occurrence(first, time(0, 0))
+    last = end or today
+    first = last - timedelta(days=days - 1)
+    return first, last, medication_service.occurrence(first, time(0, 0)), medication_service.occurrence(last + timedelta(days=1), time(0, 0))
 
 
 def _guardian_only(user: User) -> None:
@@ -87,9 +89,9 @@ def adherence(db: Session, user: User, dependent_id: uuid.UUID, days: int = 30) 
     return _adherence(db, dependent_id, days)
 
 
-def _adherence(db: Session, dependent_id: uuid.UUID, days: int) -> AdherenceReport:
-    first, today, start = _window(days)
-    now = datetime.now(timezone.utc)
+def _adherence(db: Session, dependent_id: uuid.UUID, days: int, end: date | None = None) -> AdherenceReport:
+    first, today, start, day_end = _window(days, end)
+    now = min(datetime.now(timezone.utc), day_end)
     prev_start = medication_service.occurrence(first - timedelta(days=days), time(0, 0))
     local = medication_service.tz()
 
@@ -177,8 +179,8 @@ def _trend(daily: list[tuple[date, int, float]], mid: date) -> tuple[str, float 
     return ("rising" if pct > 0 else "falling"), pct
 
 
-def _vitals(db: Session, dependent_id: uuid.UUID, days: int, metric: str | None) -> VitalsReport:
-    first, today, start = _window(days)
+def _vitals(db: Session, dependent_id: uuid.UUID, days: int, metric: str | None, end: date | None = None) -> VitalsReport:
+    first, today, start, day_end = _window(days, end)
     local = medication_service.tz()
     day = cast(func.timezone(str(local), VitalReading.recorded_at), Date)
     wearable = func.sum(case((VitalReading.source == "wearable", 1), else_=0))
@@ -188,7 +190,7 @@ def _vitals(db: Session, dependent_id: uuid.UUID, days: int, metric: str | None)
             func.avg(VitalReading.value), func.min(VitalReading.value), func.max(VitalReading.value),
             func.avg(VitalReading.diastolic), func.min(VitalReading.diastolic), func.max(VitalReading.diastolic),
         )
-        .where(VitalReading.dependent_id == dependent_id, VitalReading.recorded_at >= start)
+        .where(VitalReading.dependent_id == dependent_id, VitalReading.recorded_at >= start, VitalReading.recorded_at < day_end)
         .group_by(VitalReading.metric_type, day)
         .order_by(day)
     )
@@ -210,7 +212,7 @@ def _vitals(db: Session, dependent_id: uuid.UUID, days: int, metric: str | None)
         latest = None
         if total:
             lr = db.scalar(
-                select(VitalReading).where(VitalReading.dependent_id == dependent_id, VitalReading.metric_type == m, VitalReading.recorded_at >= start)
+                select(VitalReading).where(VitalReading.dependent_id == dependent_id, VitalReading.metric_type == m, VitalReading.recorded_at >= start, VitalReading.recorded_at < day_end)
                 .order_by(VitalReading.recorded_at.desc()).limit(1)
             )
             latest = VitalLatest(value=lr.value, diastolic=lr.diastolic, recorded_at=lr.recorded_at, source=lr.source)

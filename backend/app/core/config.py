@@ -118,6 +118,9 @@ class Settings(BaseSettings):
     AUDIT_RETENTION_DAYS: int = 365  # the audit trail of a deleted Dependent is kept this many days after the deletion, then removed
     RETENTION_BATCH: int = 50  # accounts handled per background run
     CLIPS_STORAGE_DIR: str = ""  # Task 6.4: where emergency clips are saved (encrypted). Empty = ~/humsafar_uploads/clips (outside the repo)
+    REPORTS_STORAGE_DIR: str = ""  # Task 7.2: where summary report PDFs are saved (encrypted). Empty = ~/humsafar_uploads/reports (outside the repo)
+    REPORTS_MAX_PER_PAIR: int = 60  # reports kept per Guardian and Dependent (Task 7.2); the job also removes reports older than REPORT_KEEP_DAYS
+    REPORT_KEEP_DAYS: int = 180
     CLIP_DURATION_S: int = 20  # how long the camera phone is asked to record after Panic Mode / Remote Alarm
     CLIP_REQUEST_TTL_S: int = 180  # the phone must pick up the request and upload the clip within this time, else it is `missed`
     CLIP_MAX_BYTES: int = 30_000_000  # about 30 MB per clip

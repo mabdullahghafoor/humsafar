@@ -32,6 +32,7 @@ All bodies are JSON. The server is Abdullah's `backend/`.
 | `audit_contract.md` | Activity history / audit log, Primary Guardian only (6.6) |
 | `account_contract.md` | Close and reopen accounts, 60-day retention (6.7) |
 | `analytics_contract.md` | Adherence and vitals trends for the Guardian dashboard (7.1) |
+| `reports_contract.md` | Weekly / monthly summary reports as PDF (7.2) |
 | `directory_contract.md` | Healthcare directory and home-care provider directory: search, filters, nearby, details (6.1) |
 | `wearable_contract.md` | Wearable band (mock data first): pair, sync readings, status, "no data" notice, demo data (5.4) |
 | `vitals_contract.md` | Manual vitals (blood pressure, sugar, SpO2, temperature): save, list, latest, delete, separate / combined PDF (5.3) |

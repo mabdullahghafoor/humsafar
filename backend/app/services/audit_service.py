@@ -29,6 +29,8 @@ LABELS = {
     "vital_added": "Added a vital reading by hand",
     "vital_deleted": "Deleted a vital reading",
     "vitals_exported": "Exported the vitals report",
+    "summary_report_created": "Made a summary report",
+    "summary_report_downloaded": "Downloaded a summary report",
     "record_added": "Added a medical record",
     "record_downloaded": "Downloaded a medical record",
     "record_changed": "Changed a medical record",
