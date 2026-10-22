@@ -16,7 +16,7 @@
 | `Humsafar_QA_6.12_Camera_Directory_Test_Cases_v0.4.pdf` | 6.12 | Camera live view and viewing notice (K-01–K-11) and emergency clips (K-12–K-17) from the 6.3 / 6.4 contract; directory (D-01–D-08) and requests / Activity Timeline (D-09–D-18) |
 | `Humsafar_QA_6.13_Security_Review_v0.2.pdf` | 6.13 | Security review checklist from SDS 17 and the 6.5 security guide: 29 checks (13 pass by code review, 3 more passed in the 7.7 run, 6 still to run), 5 findings (1 High: app privacy notice field names; 2 Medium: no end-to-end A/V, host disk encryption) |
 | `Humsafar_QA_NFR-08_Contrast_Check_v1.0.pdf` | 3.16 (prep) | Colour contrast of the style guide, all hi-fi screens and the app's colours against WCAG AA; two token fixes |
-| `Humsafar_QA_8.1_E2E_Test_Plan_v0.2.pdf` | 8.1 | End-to-end test plan draft (v0.2: backend status for Tasks 5.1–5.4 and 6.1) |
+| `Humsafar_QA_8.1_E2E_Test_Plan_v0.3.pdf` | 8.1 | End-to-end test plan draft (v0.3: all 22 use cases now have their backend, Tasks 6.2–7.2) |
 
 **Versions:** v1.0 = matched to merged contracts and ready to run. v0.x = draft written ahead of time; it is updated when the matching backend contract lands, and the old version is removed from this folder.
 
