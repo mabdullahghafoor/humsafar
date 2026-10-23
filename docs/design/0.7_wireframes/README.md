@@ -2,6 +2,8 @@
 
 **Task:** 0.7 · **Owner:** Sarim · **Source file:** Figma *Humsafar – App Design*, page `01 · Wireframes (Low-Fi)`
 
+> **Superseded.** These greyscale wireframes were the first sketch. The high-fidelity screens (other folders in `docs/design/` and Figma page `02 · App Designs (Hi-Fi)`) are the final design. Do not build from the wireframes; see `docs/design/handoff/`.
+
 Covers every screen in SDS §10.1, plus screens the API contracts in `docs/api/` require but SDS §10.1 does not list (marked —).
 
 Conventions shown on every screen:

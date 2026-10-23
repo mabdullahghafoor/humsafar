@@ -17,7 +17,7 @@ Every functional requirement group in SRS v1.0 was compared with the 57 hi-fi sc
 | 31 | Audit log (**v0.2**, `audit_contract.md`, Task 6.6) — newest first, the server's readable `label` + who did it + time, filters Who (actor) and When (period); Primary only, read-only; messages, locations and band readings are not listed | Guardian | FR-N3 | Built (Task 6.6) |
 | 32 | My settings — big Language and Text size buttons, Show my ID (opens 05), who looks after me, log out with confirmation | Dependent | FR-P1, FR-P2, FR-P4 | Exists (`/auth/me`, linkage) |
 
-Files: `Humsafar_Design_<number>_<Screen>_v0.1.png` (16 is v0.3; 16b, 30b, 30c, 31 are v0.2) and `Humsafar_Design_Coverage_Overview_v0.1.png`.
+Files: `Humsafar_Design_<number>_<Screen>_v0.1.png` (16 is v0.3; 16b, 30b, 30c, 31 are v0.2) and `Humsafar_Design_Coverage_Overview_v0.2.png` (rebuilt from the latest versions).
 
 ## Coverage matrix (SRS v1.0 → screens)
 
