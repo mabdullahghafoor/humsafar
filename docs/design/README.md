@@ -8,7 +8,8 @@ The working design lives in Figma (file: *Humsafar – App Design*). This folder
 
 | Folder | Task | What is in it | For Talha's task |
 |---|---|---|---|
-| `0.7_wireframes/` | 0.7 | Low-fidelity wireframes, 24 screens (v0.1) | reference only |
+| `handoff/` | — | **Start here for integration.** Design handoff v1.0: theme tokens (also as `humsafar_design_tokens.dart`), rules, design → app screen map, theme fixes, screens not built yet | integration, 7.5 |
+| `0.7_wireframes/` | 0.7 | Low-fidelity wireframes, 24 screens (v0.1). **Superseded by the hi-fi screens; do not build from them** | history only |
 | `1.12_identity_access/` | 1.12 | Welcome, log in, create account, KYC, share ID, verify account, link a Dependent, permissions + style guide (v0.1) | 1.8–1.11, 2.5 |
 | `2.8_map_geofence/` | 2.8 | Live Map, location history, safe zones, edit safe zone (v0.1) | 2.6 |
 | `3.9_safety_screens/` | 3.9 | Dependent Mode (home, panic, wellness check, medicine time, alarm) + Guardian home, alerts, care schedules, emergency settings (v0.1; 20 Home and 21b Help is coming v0.2) | 3.10–3.15 |
@@ -17,6 +18,8 @@ The working design lives in Figma (file: *Humsafar – App Design*). This folder
 | `6.11_directory_camera/` | 6.11 | Directory, home care, request a visit, activity log, camera screens (v0.2: 18–18e and 19–19d, 29, 29b, matched to `directory_contract.md`, `booking_contract.md` and `camera_contract.md`) | 6.8–6.10 |
 | `coverage/` | — | Design coverage check (every SRS requirement → screen) + screens that were missing: 07b Switch Dependent, 16 Analytics (v0.3), 16b Summary reports, 30 Settings, 30b Close my account, 30c Close Dependent, 31 Audit log (v0.2), 32 My settings | 7.3 and later |
 | `ui_text/` | — | All fixed screen text in English and Urdu with suggested localisation keys (v0.6, 626 lines) | 7.4 |
+
+**Colours:** the style guide v0.2 tokens are the reference. Some older PNGs (v0.1) still show the earlier red `#DC2626` and grey `#64748B`; build with `#B91C1C` and `#475569` (NFR-08 contrast fix). Layouts are unchanged.
 
 **File naming:** `Humsafar_Design_<number>_<Screen>_v<version>.png`, e.g. `Humsafar_Design_15f_Doctor_links_v0.2.png`. Screen numbers match the Figma frame names (page *02 · App Designs (Hi-Fi)*).
 
