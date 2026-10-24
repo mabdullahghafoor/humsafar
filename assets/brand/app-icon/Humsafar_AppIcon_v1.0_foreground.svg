@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024">
+  <defs>
+    <style>
+      .cls-1 {
+        filter: url(#drop-shadow-2);
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 50px;
+      }
+
+      .cls-3 {
+        fill: #0e7490;
+      }
+
+      .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        fill: #f59e0b;
+      }
+
+      .cls-2 {
+        filter: url(#drop-shadow-1);
+      }
+    </style>
+    <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+      <feOffset dx="7" dy="7"/>
+      <feGaussianBlur result="blur" stdDeviation="5"/>
+      <feFlood flood-color="#000" flood-opacity=".1"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="drop-shadow-2" filterUnits="userSpaceOnUse">
+      <feOffset dx="7" dy="7"/>
+      <feGaussianBlur result="blur-2" stdDeviation="5"/>
+      <feFlood flood-color="#000" flood-opacity=".1"/>
+      <feComposite in2="blur-2" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.6.0, SVG Export Plug-In . SVG Version: 1.2.0 Build 709)  -->
+  <g>
+    <g id="Layer_1">
+      
+      <g>
+        <path class="cls-5" d="M546.53,478.14c9.54,10.43,9.53,27.34,0,37.77l-34.53,37.77-34.53-37.77c-9.53-10.43-9.54-27.33,0-37.77,9.53-10.43,24.99-10.43,34.53,0,9.53-10.43,24.99-10.43,34.53,0Z"/>
+        <g>
+          <rect class="cls-4" x="643.03" y="417.17" width="125.03" height="350.89" rx="62.51" ry="62.51"/>
+          <ellipse class="cls-4" cx="705.54" cy="343.1" rx="62.51" ry="58.48"/>
+        </g>
+        <path class="cls-2" d="M573.58,529.16c12.3,6.65,45.8,21.8,86.19,2.61,38.83-18.45,61.96-58.15,70.53-74.48"/>
+        <g>
+          <rect class="cls-4" x="255.94" y="385.88" width="125.03" height="382.18" rx="62.51" ry="62.51"/>
+          <ellipse class="cls-4" cx="318.46" cy="313.27" rx="62.51" ry="57.33"/>
+        </g>
+        <path class="cls-1" d="M446.69,523.13c-13.67,3.92-50.32,11.67-87.04-16.03-35.3-26.62-50.61-70.85-55.96-88.85"/>
+      </g>
+    </g>
+  </g>
+</svg>
