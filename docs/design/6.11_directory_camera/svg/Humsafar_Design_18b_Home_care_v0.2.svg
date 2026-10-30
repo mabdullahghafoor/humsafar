@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>18b Home care</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Home care</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="44" rx="12" fill="#E2E8F0"/>
+<rect x="180.0" y="100" width="156.0" height="36" rx="10" fill="#FFFFFF"/>
+<text x="102.0" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#475569" text-anchor="middle">Emergency help</text>
+<text x="258.0" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">Home care</text>
+<rect x="20" y="154" width="45.6" height="32" rx="16" fill="#0E7490"/>
+<text x="42.8" y="175" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">All</text>
+<rect x="73.6" y="154" width="60.0" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="103.6" y="175" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Nurse</text>
+<rect x="141.6" y="154" width="67.2" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="175.2" y="175" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Physio</text>
+<rect x="216.8" y="154" width="88.8" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="261.2" y="175" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Attendant</text>
+<text x="20" y="210" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#155E75" text-anchor="start">Sort: Lowest charge</text>
+<text x="340" y="210" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="end">Lahore</text>
+<rect x="20" y="224" width="320" height="112" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="52" cy="262" r="20" fill="#ECFEFF"/>
+<text x="52" y="267.76" font-family="Inter, Arial, sans-serif" font-size="16.0" font-weight="800" fill="#0E7490" text-anchor="middle">R</text>
+<text x="82" y="257" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Rubina K.</text>
+<text x="82" y="277" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Nurse · 6 years</text>
+<rect x="268" y="240" width="56" height="20" rx="10" fill="#E2E8F0"/>
+<text x="296" y="254" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">Sample</text>
+<text x="36" y="316" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#155E75" text-anchor="start">Rs 2,500 / visit</text>
+<rect x="228" y="294" width="96" height="34" rx="17" fill="#0E7490"/>
+<text x="276" y="316" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="middle">Request</text>
+<rect x="20" y="346" width="320" height="112" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="52" cy="384" r="20" fill="#ECFEFF"/>
+<text x="52" y="389.76" font-family="Inter, Arial, sans-serif" font-size="16.0" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="82" y="379" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Ahmed R.</text>
+<text x="82" y="399" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Physiotherapist · 4 years</text>
+<rect x="268" y="362" width="56" height="20" rx="10" fill="#E2E8F0"/>
+<text x="296" y="376" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">Sample</text>
+<text x="36" y="438" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#155E75" text-anchor="start">Rs 1,200 / hour</text>
+<rect x="228" y="416" width="96" height="34" rx="17" fill="#0E7490"/>
+<text x="276" y="438" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="middle">Request</text>
+<rect x="20" y="468" width="320" height="112" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="52" cy="506" r="20" fill="#ECFEFF"/>
+<text x="52" y="511.76" font-family="Inter, Arial, sans-serif" font-size="16.0" font-weight="800" fill="#0E7490" text-anchor="middle">S</text>
+<text x="82" y="501" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Shazia B.</text>
+<text x="82" y="521" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Attendant · 8 years</text>
+<rect x="268" y="484" width="56" height="20" rx="10" fill="#E2E8F0"/>
+<text x="296" y="498" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">Sample</text>
+<text x="36" y="560" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#475569" text-anchor="start">Ask for price</text>
+<rect x="228" y="538" width="96" height="34" rx="17" fill="#0E7490"/>
+<text x="276" y="560" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="middle">Request</text>
+<rect x="20" y="590" width="320" height="64" rx="12" fill="#ECFEFF"/>
+<circle cx="42" cy="613" r="9.0" fill="none" stroke="#0E7490" stroke-width="1.8"/>
+<line x1="42" y1="612" x2="42" y2="617" stroke="#0E7490" stroke-width="2"/>
+<circle cx="42" cy="608.5" r="1.2" fill="#0E7490"/>
+<text x="62" y="618" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Request only — no payment in the app</text>
+<text x="62" y="638" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Charges in PKR, set by the provider</text>
+</svg>

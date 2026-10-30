@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>30 Settings</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Settings</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="92" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="58" cy="142" r="24" fill="#ECFEFF"/>
+<text x="58" y="148.912" font-family="Inter, Arial, sans-serif" font-size="19.200000000000003" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="94" y="130" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="800" fill="#0F172A" text-anchor="start">Ali Khan</text>
+<text x="94" y="152" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">0300 1234567</text>
+<text x="94" y="170" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">ali@example.com</text>
+<rect x="248" y="110" width="76" height="26" rx="13" fill="#DCFCE7"/>
+<text x="286" y="127" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#15803D" text-anchor="middle">Verified</text>
+<text x="20" y="216" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="start">APP</text>
+<rect x="20" y="228" width="320" height="168" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="261.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Language</text>
+<text x="302" y="261.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#475569" text-anchor="end">English</text>
+<path d="M 316 250.0 L 322 256.0 L 316 262.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="36" y1="284" x2="324" y2="284" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="309" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Large text and high contrast</text>
+<text x="36" y="327" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Same as the Aa button</text>
+<rect x="276" y="300" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="314" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="340" x2="324" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="366.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Notifications</text>
+<text x="36" y="384.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Critical alerts always ring</text>
+<path d="M 316 362.0 L 322 368.0 L 316 374.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="420" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="start">AMMI</text>
+<rect x="20" y="432" width="320" height="112" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="458.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Audit log</text>
+<text x="36" y="476.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Who changed or viewed what · Primary only</text>
+<path d="M 316 454.0 L 322 460.0 L 316 466.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="36" y1="488" x2="324" y2="488" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="521.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Permissions and emergency</text>
+<path d="M 316 510.0 L 322 516.0 L 316 522.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="568" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="start">ACCOUNT</text>
+<rect x="20" y="580" width="320" height="52" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="611.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">About Humsafar</text>
+<text x="302" y="611.0" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#475569" text-anchor="end">v1.0</text>
+<path d="M 316 600.0 L 322 606.0 L 316 612.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="20" y="646" width="320" height="48" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="676.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Log out</text>
+<text x="180.0" y="718" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#B45309" text-anchor="middle">Close my account</text>
+</svg>

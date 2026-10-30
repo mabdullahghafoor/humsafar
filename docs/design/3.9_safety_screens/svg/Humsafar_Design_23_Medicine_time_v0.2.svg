@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>23 Medicine time</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Medicine time</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="250" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="180.0" cy="168" r="50" fill="#ECFEFF"/>
+<g transform="rotate(-40 180.0 168)"><rect x="146.0" y="154" width="68" height="28" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="2.5"/><path d="M 180.0 154 L 200.0 154 A 14 14 0 0 1 200.0 182 L 180.0 182 Z" fill="#0E7490"/></g>
+<text x="180.0" y="256" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#0F172A" text-anchor="middle">Metformin</text>
+<text x="180.0" y="286" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="500" fill="#475569" text-anchor="middle">500 mg · 1 tablet</text>
+<text x="180.0" y="318" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Due 2:00 PM</text>
+<rect x="20" y="366" width="24" height="24" rx="12" fill="#0E7490"/>
+<text x="32" y="383" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="54" y="384" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#475569" text-anchor="start">Step 1 of 2</text>
+<rect x="20" y="406" width="320" height="120" rx="22" fill="#0E7490"/>
+<text x="180.0" y="476.0" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF" text-anchor="middle">I took it</text>
+<text x="180.0" y="546" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="middle">You will confirm once more, so a wrong</text>
+<text x="180.0" y="566" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="middle">tap never marks it as taken.</text>
+</svg>

@@ -19,3 +19,16 @@ The third screen named in 2.8, **Dependent Mode home**, is already designed in 3
 - Battery chip turns amber at 15% or lower (low-battery alert rule, closes above 20%).
 - "Updated … ago / moving / stationary" uses the latest fix; the next update follows `next_update_interval_s`.
 - Map tiles are placeholders; any map package (e.g. Google Maps / OpenStreetMap) can sit underneath.
+
+## Colour update (30 Oct 2026)
+All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
+
+| # | Screen | Version |
+|---|---|---|
+| 11 | Live Map | v0.1 → **v0.2** |
+| 11b | Live Map | v0.1 → **v0.2** |
+| 11c | Location history | v0.1 → **v0.2** |
+| 12 | Safe zones | v0.1 → **v0.2** |
+| 12b | Edit safe zone | v0.1 → **v0.2** |
+
+Overview rebuilt from the latest versions: v0.1 → **v0.2**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.

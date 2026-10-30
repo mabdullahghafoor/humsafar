@@ -41,3 +41,22 @@ Built against what is actually merged: `docs/api/messaging_contract.md` (4.2 tex
 3. **Quick replies on the Dependent chat** ("I am fine", "Call me", "Yes", "No") send normal text messages. They are a design idea only; the backend needs no change.
 4. **"Ask Ali for access" (17g)** has no backend endpoint yet. It could send a normal message to the Primary, or be removed.
 5. Call screens are full screen without the app bar, so **Aa / EN|UR are not shown there** (they follow the setting chosen elsewhere).
+
+## Colour update (30 Oct 2026)
+All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
+
+| # | Screen | Version |
+|---|---|---|
+| 17 | Messages | v0.1 → **v0.2** |
+| 17b | Chat | v0.1 → **v0.2** |
+| 17c | Urgent voice message | v0.1 → **v0.2** |
+| 17d | Calls | v0.1 → **v0.2** |
+| 17e | Calling | v0.1 → **v0.2** |
+| 17f | In call | v0.1 → **v0.2** |
+| 17g | Chat | v0.1 → **v0.2** |
+| 25 | Messages | v0.1 → **v0.2** |
+| 25b | Ali son | v0.1 → **v0.2** |
+| 25c | Urgent message | v0.1 → **v0.2** |
+| 25d | Incoming call | v0.1 → **v0.2** |
+
+Overview rebuilt from the latest versions: v0.1 → **v0.2**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.

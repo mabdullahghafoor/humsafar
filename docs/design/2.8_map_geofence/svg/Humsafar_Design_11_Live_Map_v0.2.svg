@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>11 Live Map</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Live Map</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<clipPath id="clip87520"><rect x="0" y="87" width="360" height="433"/></clipPath><g clip-path="url(#clip87520)">
+<rect x="0" y="87" width="360" height="433" rx="0" fill="#EEF2F0"/>
+<rect x="10" y="97" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="187" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="277" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="367" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="457" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="97" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="100" y="187" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="100" y="277" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="367" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="457" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="97" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="187" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="277" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="367" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="457" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="97" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="280" y="187" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="277" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="367" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="457" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="250" y="107" width="140" height="90" rx="30" fill="#D4E9F7"/>
+<rect x="-5" y="87" width="10" height="433" rx="0" fill="#FFFFFF"/>
+<rect x="85" y="87" width="10" height="433" rx="0" fill="#FFFFFF"/>
+<rect x="175" y="87" width="10" height="433" rx="0" fill="#FFFFFF"/>
+<rect x="265" y="87" width="10" height="433" rx="0" fill="#FFFFFF"/>
+<rect x="355" y="87" width="10" height="433" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="82" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="172" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="262" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="352" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="442" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<path d="M -10 387 Q 180 287 370 447" fill="none" stroke="#FFFFFF" stroke-width="16"/>
+<path d="M -10 387 Q 180 287 370 447" fill="none" stroke="#FDE68A" stroke-width="4"/>
+</g>
+<circle cx="150" cy="290" r="95" fill="#0E7490" fill-opacity="0.14" stroke="#0E7490" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="126.2" y="181" width="47.6" height="24" rx="12" fill="#FFFFFF" stroke="#0E7490" stroke-width="1"/>
+<text x="150" y="198" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#155E75" text-anchor="middle">Home</text>
+<circle cx="300" cy="470" r="55" fill="#0E7490" fill-opacity="0.14" stroke="#0E7490" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="268.8" y="401" width="62.400000000000006" height="24" rx="12" fill="#FFFFFF" stroke="#0E7490" stroke-width="1"/>
+<text x="300" y="418" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#155E75" text-anchor="middle">Mosque</text>
+<circle cx="175" cy="310" r="26" fill="#0E7490" fill-opacity="0.18"/>
+<circle cx="175" cy="310" r="16" fill="#FFFFFF" stroke="#0E7490" stroke-width="3"/>
+<text x="175" y="315" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<rect x="16" y="100" width="150" height="34" rx="17" fill="#DCFCE7" stroke="#15803D" stroke-width="1"/>
+<circle cx="34" cy="117" r="5" fill="#15803D"/>
+<text x="46" y="122" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800" fill="#15803D" text-anchor="start">Inside: Home</text>
+<rect x="304" y="100" width="40" height="40" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="324" cy="120" r="8" fill="none" stroke="#0E7490" stroke-width="2"/>
+<circle cx="324" cy="120" r="2" fill="#0E7490"/>
+<rect x="0" y="500" width="360" height="230" rx="22" fill="#FFFFFF"/>
+<line x1="0" y1="500.5" x2="0" y2="500.5" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="160.0" y="508" width="40" height="5" rx="3" fill="#CBD5E1"/>
+<circle cx="44" cy="552" r="18" fill="#ECFEFF"/>
+<text x="44" y="558" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="72" y="548" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="800" fill="#0F172A" text-anchor="start">Ammi</text>
+<text x="72" y="568" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Updated 20 s ago · stationary</text>
+<rect x="268" y="538" width="43" height="26" rx="13" fill="#DCFCE7"/>
+<text x="289.5" y="555" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#15803D" text-anchor="middle">64%</text>
+<rect x="20" y="592" width="77.19999999999999" height="36" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="58.599999999999994" y="615" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="middle">History</text>
+<rect x="105.19999999999999" y="592" width="100.0" height="36" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="155.2" y="615" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="middle">Safe zones</text>
+<rect x="213.2" y="592" width="54.4" height="36" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="240.39999999999998" y="615" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="middle">Call</text>
+<text x="20" y="656" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Accuracy ± 12 m · next update in 60 s</text>
+<rect x="0" y="710" width="360" height="70" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="710" x2="360" y2="710" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="27.0" y="724" width="18" height="18" rx="5" fill="none" stroke="#475569" stroke-width="1.6"/>
+<text x="36.0" y="764" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">Home</text>
+<rect x="82.0" y="718" width="52" height="30" rx="15" fill="#ECFEFF"/>
+<rect x="99.0" y="724" width="18" height="18" rx="5" fill="#0E7490"/>
+<text x="108.0" y="764" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#0E7490" text-anchor="middle">Map</text>
+<rect x="171.0" y="724" width="18" height="18" rx="5" fill="none" stroke="#475569" stroke-width="1.6"/>
+<text x="180.0" y="764" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">Chat</text>
+<rect x="243.0" y="724" width="18" height="18" rx="5" fill="none" stroke="#475569" stroke-width="1.6"/>
+<text x="252.0" y="764" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">Vault</text>
+<rect x="315.0" y="724" width="18" height="18" rx="5" fill="none" stroke="#475569" stroke-width="1.6"/>
+<text x="324.0" y="764" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">Analytics</text>
+</svg>

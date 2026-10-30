@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>05 Share my ID</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Share my ID</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="64" rx="12" fill="#DCFCE7"/>
+<path d="M 36.0 119 L 41.0 124.0 L 49.0 114.0" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="62" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#15803D" text-anchor="start">Identity verified</text>
+<text x="62" y="144" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Now your Guardian needs to link you</text>
+<rect x="20" y="174" width="320" height="330" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="180.0" y="204" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="middle">Show this to your Guardian</text>
+<rect x="90.0" y="222" width="180" height="180" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="99.0" y="276" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="99.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="99.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="99.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="99.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="108.0" y="276" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="108.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="108.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="108.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="108.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="108.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="108.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="117.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="117.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="117.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="126.0" y="276" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="126.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="126.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="126.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="126.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="135.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="135.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="135.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="135.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="135.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="144.0" y="240" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="144.0" y="267" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="144.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="144.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="144.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="144.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="144.0" y="375" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="153.0" y="258" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="153.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="153.0" y="384" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="231" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="249" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="267" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="276" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="162.0" y="348" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="231" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="240" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="249" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="276" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="348" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="171.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="258" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="348" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="366" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="375" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="180.0" y="384" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="231" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="240" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="249" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="258" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="267" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="375" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="189.0" y="384" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="231" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="240" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="258" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="267" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="366" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="198.0" y="375" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="249" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="258" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="348" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="366" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="207.0" y="375" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="216.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="216.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="216.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="216.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="216.0" y="348" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="216.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="225.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="225.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="225.0" y="375" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="234.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="234.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="234.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="234.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="234.0" y="339" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="234.0" y="366" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="243.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="243.0" y="303" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="243.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="243.0" y="357" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="243.0" y="384" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="276" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="285" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="294" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="312" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="321" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="330" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="348" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="252.0" y="384" width="8" height="8" rx="1" fill="#0F172A"/>
+<rect x="99.0" y="231" width="44" height="44" rx="2" fill="none" stroke="#0F172A" stroke-width="4"/>
+<rect x="112.5" y="244.5" width="18" height="18" rx="2" fill="#0F172A"/>
+<rect x="216.0" y="231" width="44" height="44" rx="2" fill="none" stroke="#0F172A" stroke-width="4"/>
+<rect x="229.5" y="244.5" width="18" height="18" rx="2" fill="#0F172A"/>
+<rect x="99.0" y="348" width="44" height="44" rx="2" fill="none" stroke="#0F172A" stroke-width="4"/>
+<rect x="112.5" y="361.5" width="18" height="18" rx="2" fill="#0F172A"/>
+<text x="180.0" y="430" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="middle">Your ID</text>
+<rect x="44" y="440" width="272" height="44" rx="10" fill="#ECFEFF"/>
+<text x="180.0" y="468" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#155E75" text-anchor="middle">3f2a8c1e · 9c1b</text>
+<rect x="20" y="518" width="154.0" height="50" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<rect x="58" y="540" width="10" height="12" rx="2" fill="none" stroke="#0E7490" stroke-width="1.8"/>
+<path d="M 62 540 L 62 536 L 72 536 L 72 548 L 68 548" fill="none" stroke="#0E7490" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="109.0" y="549" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0E7490" text-anchor="middle">Copy ID</text>
+<rect x="186.0" y="518" width="154.0" height="50" rx="14" fill="#0E7490"/>
+<path d="M 230.0 548 L 230.0 534 M 225.0 539 L 230.0 534 L 235.0 539 M 222.0 543 L 222.0 551 L 238.0 551 L 238.0 543" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="275.0" y="549" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">Share</text>
+<text x="20" y="597" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">You can log in once a Guardian links you.</text>
+</svg>

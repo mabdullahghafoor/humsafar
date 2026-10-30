@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>18d Activity log</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Activity log</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="109" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Calls and visit requests for Ammi, by everyone.</text>
+<rect x="20" y="122" width="50.5" height="32" rx="16" fill="#0E7490"/>
+<text x="45.25" y="143" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">All</text>
+<rect x="78.5" y="122" width="65.5" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="111.25" y="143" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Calls</text>
+<rect x="152.0" y="122" width="88.0" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="196.0" y="143" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Requests</text>
+<text x="20" y="182" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">Today</text>
+<circle cx="32" cy="214" r="6" fill="#0E7490"/>
+<line x1="32" y1="222" x2="32" y2="264" stroke="#CBD5E1" stroke-width="2"/>
+<text x="48" y="212" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">10:12 AM</text>
+<text x="48" y="232" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Visit requested · Rubina K.</text>
+<text x="48" y="251" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Ali (Primary)</text>
+<rect x="269" y="198" width="71" height="26" rx="13" fill="#FEF3C7"/>
+<text x="304.5" y="215" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#B45309" text-anchor="middle">Pending</text>
+<circle cx="32" cy="290" r="6" fill="#0E7490"/>
+<line x1="32" y1="298" x2="32" y2="340" stroke="#CBD5E1" stroke-width="2"/>
+<text x="48" y="288" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">9:43 AM</text>
+<text x="48" y="308" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Called Rescue 1122</text>
+<text x="48" y="327" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Ammi</text>
+<text x="20" y="364" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">Mon 13 Oct</text>
+<circle cx="32" cy="396" r="6" fill="#0E7490"/>
+<line x1="32" y1="404" x2="32" y2="446" stroke="#CBD5E1" stroke-width="2"/>
+<text x="48" y="394" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">4:20 PM</text>
+<text x="48" y="414" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Visit completed · Ahmed R.</text>
+<text x="48" y="433" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Sara (Secondary)</text>
+<rect x="255" y="380" width="85" height="26" rx="13" fill="#DCFCE7"/>
+<text x="297.5" y="397" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#15803D" text-anchor="middle">Completed</text>
+<circle cx="32" cy="472" r="6" fill="#0E7490"/>
+<line x1="32" y1="480" x2="32" y2="522" stroke="#CBD5E1" stroke-width="2"/>
+<text x="48" y="470" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">11:05 AM</text>
+<text x="48" y="490" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Visit confirmed · Ahmed R.</text>
+<text x="48" y="509" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Sara (Secondary)</text>
+<rect x="255" y="456" width="85" height="26" rx="13" fill="#DCFCE7"/>
+<text x="297.5" y="473" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#15803D" text-anchor="middle">Completed</text>
+<circle cx="32" cy="548" r="6" fill="#0E7490"/>
+<line x1="32" y1="556" x2="32" y2="598" stroke="#CBD5E1" stroke-width="2"/>
+<text x="48" y="546" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">9:30 AM</text>
+<text x="48" y="566" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Called City Care Pharmacy</text>
+<text x="48" y="585" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Ali (Primary)</text>
+<text x="20" y="620" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Chip = the request&#x27;s status now. &quot;Called&quot; = Call</text>
+<text x="20" y="639" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">was tapped; the call itself is not recorded.</text>
+</svg>

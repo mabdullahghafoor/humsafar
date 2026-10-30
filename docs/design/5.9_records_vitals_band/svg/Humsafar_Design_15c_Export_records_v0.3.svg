@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>15c Export records</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Export records</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="110" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Make a PDF to print or show a doctor.</text>
+<text x="20" y="137" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">What to include</text>
+<rect x="20" y="149" width="320" height="62" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="44" cy="180" r="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="66" y="176" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Complete history</text>
+<text x="66" y="195" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">All records since the start</text>
+<rect x="20" y="219" width="320" height="62" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="44" cy="250" r="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+<text x="66" y="246" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">One year</text>
+<text x="66" y="265" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">2026</text>
+<rect x="20" y="289" width="320" height="62" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="44" cy="320" r="10" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="44" cy="320" r="5" fill="#0E7490"/>
+<text x="66" y="316" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">One month</text>
+<text x="66" y="335" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">October 2026</text>
+<rect x="20" y="359" width="320" height="56" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="36" y="377" width="20" height="20" rx="5" fill="#0E7490"/>
+<path d="M 41.2 387 L 45.2 391.0 L 51.6 383.0" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="68" y="384" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Add vitals</text>
+<text x="68" y="402" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Typed readings + band (one line per day)</text>
+<rect x="20" y="427" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="460.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Make PDF</text>
+<text x="20" y="511" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">Share with a doctor</text>
+<rect x="252" y="495" width="78" height="26" rx="13" fill="#ECFEFF"/>
+<text x="291.0" y="512" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#0E7490" text-anchor="middle">Optional</text>
+<rect x="20" y="523" width="320" height="84" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="551" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Read-only link</text>
+<text x="36" y="571" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">No login · stops after 72 hours</text>
+<text x="36" y="589" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Vitals included if ticked above</text>
+<rect x="228" y="547" width="96" height="36" rx="12" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="570" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800" fill="#0E7490" text-anchor="middle">Create link</text>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>21 Panic</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Panic</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="180.0" y="126" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#0F172A" text-anchor="middle">Need help?</text>
+<text x="180.0" y="154" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#475569" text-anchor="middle">Press and hold the button for 2 seconds</text>
+<circle cx="180.0" cy="346" r="140" fill="#FEE2E2"/>
+<circle cx="180.0" cy="346" r="122" fill="none" stroke="#B91C1C" stroke-width="8" stroke-dasharray="460 1000" transform="rotate(-90 180.0 346)" stroke-linecap="round"/>
+<circle cx="180.0" cy="346" r="110" fill="#B91C1C"/>
+<text x="180.0" y="342" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" fill="#FFFFFF" text-anchor="middle">HOLD</text>
+<text x="180.0" y="376" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="600" fill="#FEE2E2" text-anchor="middle">to send help</text>
+<text x="180.0" y="516" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="middle">All your Guardians will be told at once.</text>
+<text x="180.0" y="540" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="middle">Holding stops accidental alerts.</text>
+<rect x="20" y="566" width="320" height="56" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="600.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Cancel</text>
+</svg>

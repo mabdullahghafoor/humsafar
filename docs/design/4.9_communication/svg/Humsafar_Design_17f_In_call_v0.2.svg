@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>17f In call</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">In call</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#0F172A"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="end">100%</text>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#155E75"/>
+<rect x="0" y="0" width="360" height="780" fill="#0F172A" fill-opacity="0.45"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="start">9:41</text>
+<rect x="110.0" y="48" width="140" height="30" rx="15" fill="#FFFFFF" fill-opacity="0.13"/>
+<circle cx="122.0" cy="63" r="4" fill="#4ADE80"/>
+<text x="186.0" y="68" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Connected 04:12</text>
+<text x="180.0" y="130" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#CFFAFE" text-anchor="middle">Video call · Ammi</text>
+<rect x="20" y="150" width="320" height="380" rx="20" fill="#0F172A" fill-opacity="0.53"/>
+<circle cx="180.0" cy="330" r="64" fill="#FFFFFF"/>
+<text x="180.0" y="348.72" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="180.0" y="430" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#CFFAFE" text-anchor="middle">Ammi&#x27;s camera</text>
+<rect x="228" y="166" width="96" height="128" rx="14" fill="#1E293B" stroke="#FFFFFF" stroke-opacity="0.40" stroke-width="1"/>
+<text x="276" y="236" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle">You</text>
+<circle cx="70" cy="600" r="28" fill="#FFFFFF" fill-opacity="0.20"/>
+<rect x="65.6923076923077" y="589.2307692307693" width="8.615384615384615" height="15.076923076923077" rx="4.3076923076923075" fill="#FFFFFF"/>
+<path d="M 61.38461538461539 600 Q 61.38461538461539 608.6153846153846 70 608.6153846153846 Q 78.61538461538461 608.6153846153846 78.61538461538461 600" fill="none" stroke="#FFFFFF" stroke-width="2.1538461538461537" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="70" y1="608.6153846153846" x2="70" y2="612.9230769230769" stroke="#FFFFFF" stroke-width="2.1538461538461537"/>
+<text x="70" y="650" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Mute</text>
+<circle cx="180" cy="600" r="28" fill="#FFFFFF" fill-opacity="0.20"/>
+<rect x="168.33333333333334" y="593.0" width="16.333333333333336" height="14.0" rx="3.5" fill="#FFFFFF"/>
+<path d="M 185.83333333333334 598.8333333333334 L 192.83333333333334 594.1666666666666 L 192.83333333333334 605.8333333333334 L 185.83333333333334 601.1666666666666 Z" fill="#FFFFFF"/>
+<text x="180" y="650" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Camera</text>
+<circle cx="290" cy="600" r="28" fill="#FFFFFF" fill-opacity="0.20"/>
+<path d="M 281 595 L 286 595 L 293 589 L 293 611 L 286 605 L 281 605 Z" fill="#FFFFFF"/>
+<path d="M 297 594 Q 302 600 297 606" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="290" y="650" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Speaker</text>
+<circle cx="180.0" cy="690" r="34" fill="#B91C1C"/>
+<path d="M 168.1 676.4 L 174.9 674.7 L 178.3 683.2 L 174.05 686.6 Q 178.3 695.1 185.1 697.65 L 188.5 693.4 L 196.15 696.8 L 194.45 704.45 Q 166.4 703.6 168.1 676.4 Z" fill="#FFFFFF" transform="rotate(135 180.0 690)"/>
+<text x="180.0" y="746" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">End call</text>
+</svg>

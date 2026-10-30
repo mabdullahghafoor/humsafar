@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>09 Link a Dependent</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Link a Dependent</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="230" rx="16" fill="#0F172A"/>
+<path d="M 100.0 157 L 100.0 131 L 126.0 131" fill="none" stroke="#CFFAFE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 260.0 157 L 260.0 131 L 234.0 131" fill="none" stroke="#CFFAFE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 100.0 265 L 100.0 291 L 126.0 291" fill="none" stroke="#CFFAFE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 260.0 265 L 260.0 291 L 234.0 291" fill="none" stroke="#CFFAFE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="110.0" y1="211.0" x2="250.0" y2="211.0" stroke="#B91C1C" stroke-width="2"/>
+<text x="180.0" y="316" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#E2E8F0" text-anchor="middle">Point at the QR on their phone</text>
+<text x="180.0" y="348" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">or type their ID</text>
+<text x="20" y="369" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Dependent ID</text>
+<rect x="20" y="377" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="33.0" y="395.0" width="6.0" height="6.0" rx="1" fill="none" stroke="#475569" stroke-width="2"/>
+<rect x="43.0" y="395.0" width="6.0" height="6.0" rx="1" fill="none" stroke="#475569" stroke-width="2"/>
+<rect x="33.0" y="405.0" width="6.0" height="6.0" rx="1" fill="none" stroke="#475569" stroke-width="2"/>
+<rect x="44.0" y="406.0" width="3.0" height="3.0" rx="0" fill="#475569"/>
+<text x="60" y="407" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#475569" text-anchor="start">3f2a8c1e-…</text>
+<rect x="20" y="435" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="468.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Link as Primary Guardian</text>
+<text x="20" y="517" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Linked Dependents</text>
+<rect x="20" y="529" width="320" height="58" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="50" cy="558" r="17" fill="#ECFEFF"/>
+<text x="50" y="564" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0E7490" text-anchor="middle">A</text>
+<text x="78" y="563" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Ammi</text>
+<rect x="230" y="545" width="71" height="26" rx="13" fill="#DCFCE7"/>
+<text x="265.5" y="562" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#15803D" text-anchor="middle">Primary</text>
+<rect x="20" y="595" width="320" height="58" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="50" cy="624" r="17" fill="#ECFEFF"/>
+<text x="50" y="630" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0E7490" text-anchor="middle">A</text>
+<text x="78" y="629" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Abbu</text>
+<rect x="230" y="611" width="85" height="26" rx="13" fill="#ECFEFF"/>
+<text x="272.5" y="628" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#0E7490" text-anchor="middle">Secondary</text>
+</svg>

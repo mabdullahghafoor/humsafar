@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>18 Directory</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Directory</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="44" rx="12" fill="#E2E8F0"/>
+<rect x="24.0" y="100" width="156.0" height="36" rx="10" fill="#FFFFFF"/>
+<text x="102.0" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">Emergency help</text>
+<text x="258.0" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#475569" text-anchor="middle">Home care</text>
+<rect x="20" y="154" width="320" height="46" rx="23" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="44" cy="176" r="7" fill="none" stroke="#475569" stroke-width="2"/>
+<line x1="49" y1="181" x2="54" y2="186" stroke="#475569" stroke-width="2"/>
+<text x="64" y="183" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Search hospital, pharmacy, blood bank</text>
+<rect x="20" y="212" width="45.6" height="32" rx="16" fill="#0E7490"/>
+<text x="42.8" y="233" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">All</text>
+<rect x="73.6" y="212" width="81.6" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="114.39999999999999" y="233" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Hospital</text>
+<rect x="163.2" y="212" width="81.6" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="204.0" y="233" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Pharmacy</text>
+<rect x="252.79999999999998" y="212" width="88.8" height="32" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="297.2" y="233" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="middle">Ambulance</text>
+<circle cx="30" cy="265" r="6" fill="none" stroke="#0E7490" stroke-width="2"/>
+<circle cx="30" cy="265" r="2" fill="#0E7490"/>
+<text x="44" y="270" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#155E75" text-anchor="start">Near you · Lahore</text>
+<text x="340" y="270" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="end">Open 24 h only</text>
+<text x="20" y="296" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="800" fill="#475569" text-anchor="start">EMERGENCY NUMBERS · NATIONWIDE</text>
+<rect x="20.0" y="304" width="77.0" height="58" rx="12" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="58.5" y="329" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#155E75" text-anchor="middle">1122</text>
+<text x="58.5" y="349" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="middle">Rescue</text>
+<rect x="101.0" y="304" width="77.0" height="58" rx="12" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="139.5" y="329" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#155E75" text-anchor="middle">115</text>
+<text x="139.5" y="349" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="middle">Edhi</text>
+<rect x="182.0" y="304" width="77.0" height="58" rx="12" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="220.5" y="329" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#155E75" text-anchor="middle">1020</text>
+<text x="220.5" y="349" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="middle">Chhipa</text>
+<rect x="263.0" y="304" width="77.0" height="58" rx="12" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="301.5" y="329" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#155E75" text-anchor="middle">15</text>
+<text x="301.5" y="349" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="middle">Police</text>
+<text x="20" y="386" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="800" fill="#475569" text-anchor="start">NEAREST FIRST</text>
+<rect x="20" y="394" width="320" height="76" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="422" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">City Care Pharmacy</text>
+<text x="36" y="441" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Pharmacy · open 24 h</text>
+<text x="36" y="460" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#155E75" text-anchor="start">0.8 km</text>
+<rect x="80" y="447" width="56" height="20" rx="10" fill="#E2E8F0"/>
+<text x="108" y="461" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">Sample</text>
+<rect x="242" y="414" width="82" height="36" rx="18" fill="#E2E8F0"/>
+<text x="283" y="437" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#475569" text-anchor="middle">Call</text>
+<rect x="20" y="478" width="320" height="76" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="506" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">Demo City General Hospital</text>
+<text x="36" y="525" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Hospital · emergency, surgery</text>
+<text x="36" y="544" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#155E75" text-anchor="start">1.2 km</text>
+<rect x="80" y="531" width="56" height="20" rx="10" fill="#E2E8F0"/>
+<text x="108" y="545" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">Sample</text>
+<rect x="242" y="498" width="82" height="36" rx="18" fill="#E2E8F0"/>
+<text x="283" y="521" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#475569" text-anchor="middle">Call</text>
+<rect x="20" y="562" width="320" height="76" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="590" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">Model Diagnostic Lab</text>
+<text x="36" y="609" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Laboratory · home sample</text>
+<text x="36" y="628" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#155E75" text-anchor="start">2.4 km</text>
+<rect x="80" y="615" width="56" height="20" rx="10" fill="#E2E8F0"/>
+<text x="108" y="629" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">Sample</text>
+<rect x="242" y="582" width="82" height="36" rx="18" fill="#E2E8F0"/>
+<text x="283" y="605" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#475569" text-anchor="middle">Call</text>
+<text x="20" y="658" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Sample entries cannot be called in the demo.</text>
+<text x="20" y="677" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Calls go from your phone and are logged.</text>
+</svg>

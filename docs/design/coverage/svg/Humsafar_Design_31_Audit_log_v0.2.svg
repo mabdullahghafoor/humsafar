@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>31 Audit log</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Audit log</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="121.60000000000001" height="34" rx="17" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="80.80000000000001" y="118" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="middle">Who: Everyone</text>
+<rect x="149.60000000000002" y="96" width="150.4" height="34" rx="17" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="224.8" y="118" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="middle">When: Last 7 days</text>
+<text x="20" y="158" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="start">TODAY</text>
+<rect x="20" y="168" width="320" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="193" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="start">Stopped watching the camera</text>
+<text x="36" y="212" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Sara Khan</text>
+<text x="324" y="212" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="end">10:03 AM</text>
+<rect x="20" y="236" width="320" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="261" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="start">Started watching the camera</text>
+<text x="36" y="280" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Sara Khan</text>
+<text x="324" y="280" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="end">9:58 AM</text>
+<rect x="20" y="304" width="320" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="329" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="start">Emergency clip saved</text>
+<text x="36" y="348" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Ammi</text>
+<text x="324" y="348" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="end">9:42 AM</text>
+<rect x="20" y="372" width="320" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="397" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="start">Downloaded a medical record</text>
+<text x="36" y="416" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Sara Khan</text>
+<text x="324" y="416" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="end">9:40 AM</text>
+<rect x="20" y="440" width="320" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="465" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="start">Hid a record category</text>
+<text x="36" y="484" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Ali</text>
+<text x="324" y="484" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="end">9:12 AM</text>
+<rect x="20" y="508" width="320" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="533" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="start">Gave a permission</text>
+<text x="36" y="552" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">by Ali</text>
+<text x="324" y="552" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="end">9:10 AM</text>
+<text x="20" y="588" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Only the Primary sees this list. Entries cannot be</text>
+<text x="20" y="607" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">changed or deleted. Messages, locations and band</text>
+<text x="20" y="626" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">readings are not listed.</text>
+</svg>

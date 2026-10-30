@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>02 Log in</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Log in</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="134" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#0F172A" text-anchor="start">Welcome back</text>
+<text x="20" y="160" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Log in with the email or phone you registered.</text>
+<text x="20" y="186" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Email or phone</text>
+<rect x="20" y="194" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="40" cy="215.0" r="4.5" fill="none" stroke="#475569" stroke-width="2"/>
+<path d="M 32.0 228.0 Q 40 218.0 48.0 228.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="60" y="224" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">ali@example.com</text>
+<text x="20" y="265" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Password</text>
+<rect x="20" y="273" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="33.0" y="296.0" width="14.0" height="11.0" rx="2" fill="none" stroke="#475569" stroke-width="2"/>
+<path d="M 36.0 296.0 L 36.0 292.0 Q 40 287.0 44.0 292.0 L 44.0 296.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="60" y="303" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">••••••••••</text>
+<path d="M 307 298 Q 316 290 325 298 Q 316 306 307 298 Z" fill="none" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="316" cy="298" r="2.5" fill="#475569"/>
+<rect x="20" y="331" width="320" height="64" rx="12" fill="#FEE2E2"/>
+<circle cx="42" cy="354" r="9.0" fill="none" stroke="#B91C1C" stroke-width="1.8"/>
+<line x1="42" y1="353" x2="42" y2="358" stroke="#B91C1C" stroke-width="2"/>
+<circle cx="42" cy="349.5" r="1.2" fill="#B91C1C"/>
+<text x="62" y="359" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#B91C1C" text-anchor="start">Email or password is incorrect</text>
+<text x="62" y="379" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Same message for both, on purpose</text>
+<rect x="20" y="409" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="442.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Log in</text>
+<text x="48.25" y="495" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">New to Humsafar? </text>
+<text x="174.05" y="495" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Create an account</text>
+<text x="180.0" y="690" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">Error state shown for reference. Session stays signed</text>
+<text x="180.0" y="706" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">in: token refreshes quietly, no forced logout.</text>
+</svg>

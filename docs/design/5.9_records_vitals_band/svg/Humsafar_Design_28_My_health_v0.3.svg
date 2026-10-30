@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>28 My health</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">My health</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="112" rx="18" fill="#0E7490"/>
+<text x="36" y="126" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#CFFAFE" text-anchor="start">Next doctor visit</text>
+<text x="36" y="158" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#FFFFFF" text-anchor="start">Thursday, 5:00 PM</text>
+<text x="36" y="184" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#CFFAFE" text-anchor="start">Dr. Hamid · Aga Khan Hospital</text>
+<rect x="20" y="222" width="320" height="88" rx="18" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="58" cy="266" r="22" fill="#ECFEFF"/>
+<text x="58" y="274" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#0E7490" text-anchor="middle">+</text>
+<text x="94" y="262" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#0F172A" text-anchor="start">Add my blood pressure</text>
+<text x="94" y="286" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Last: 138/88 today</text>
+<rect x="20" y="322" width="320" height="88" rx="18" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="58" cy="366" r="22" fill="#ECFEFF"/>
+<text x="58" y="374" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#0E7490" text-anchor="middle">+</text>
+<text x="94" y="362" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#0F172A" text-anchor="start">Add my sugar</text>
+<text x="94" y="386" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Last: 112 today</text>
+<rect x="20" y="422" width="320" height="88" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="51.7" y="449.8" width="12.6" height="32.4" rx="3.6" fill="none" stroke="#0E7490" stroke-width="2"/>
+<rect x="48.1" y="457.9" width="19.8" height="16.2" rx="4.5" fill="#0E7490"/>
+<rect x="51.7" y="461.5" width="12.6" height="9.0" rx="1.8" fill="#FFFFFF"/>
+<text x="94" y="462" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#0F172A" text-anchor="start">My band</text>
+<circle cx="100" cy="482" r="5" fill="#15803D"/>
+<text x="112" y="487" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#15803D" text-anchor="start">Connected · heart 78</text>
+<rect x="20" y="522" width="320" height="72" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="36" y="534" width="40" height="48" rx="8" fill="#ECFEFF"/>
+<path d="M 64 534 L 76 546 L 64 546 Z" fill="#CFFAFE"/>
+<text x="56" y="566" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#0E7490" text-anchor="middle">Rx</text>
+<text x="94" y="564" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#0F172A" text-anchor="start">My records</text>
+<path d="M 316 552 L 322 558 L 316 564" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

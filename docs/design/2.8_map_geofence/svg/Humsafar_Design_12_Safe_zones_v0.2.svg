@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>12 Safe zones</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Safe zones</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="110" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Ammi is safe inside any of these zones.</text>
+<text x="20" y="131" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Leaving all of them alerts you.</text>
+<text x="20" y="154" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="start">3 of 10 zones</text>
+<rect x="232" y="138" width="106" height="26" rx="13" fill="#ECFEFF"/>
+<text x="285.0" y="155" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#0E7490" text-anchor="middle">Primary only</text>
+<rect x="20" y="170" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="52" cy="208" r="20" fill="#ECFEFF"/>
+<circle cx="52" cy="208" r="9" fill="none" stroke="#0E7490" stroke-width="2" stroke-dasharray="3 2"/>
+<circle cx="52" cy="208" r="2.5" fill="#0E7490"/>
+<text x="84" y="203" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Home</text>
+<text x="84" y="224" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Gulshan-e-Iqbal, Block 13</text>
+<rect x="256" y="195" width="57" height="26" rx="13" fill="#ECFEFF"/>
+<text x="284.5" y="212" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#0E7490" text-anchor="middle">300 m</text>
+<rect x="20" y="256" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="52" cy="294" r="20" fill="#ECFEFF"/>
+<circle cx="52" cy="294" r="9" fill="none" stroke="#0E7490" stroke-width="2" stroke-dasharray="3 2"/>
+<circle cx="52" cy="294" r="2.5" fill="#0E7490"/>
+<text x="84" y="289" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Mosque</text>
+<text x="84" y="310" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Masjid-e-Tooba</text>
+<rect x="256" y="281" width="57" height="26" rx="13" fill="#ECFEFF"/>
+<text x="284.5" y="298" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#0E7490" text-anchor="middle">150 m</text>
+<rect x="20" y="342" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="52" cy="380" r="20" fill="#ECFEFF"/>
+<circle cx="52" cy="380" r="9" fill="none" stroke="#0E7490" stroke-width="2" stroke-dasharray="3 2"/>
+<circle cx="52" cy="380" r="2.5" fill="#0E7490"/>
+<text x="84" y="375" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Daughter&#x27;s house</text>
+<text x="84" y="396" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">DHA Phase 6</text>
+<rect x="256" y="367" width="57" height="26" rx="13" fill="#ECFEFF"/>
+<text x="284.5" y="384" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#0E7490" text-anchor="middle">200 m</text>
+<rect x="20" y="428" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="461.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">+ Add safe zone</text>
+<rect x="20" y="494" width="320" height="64" rx="12" fill="#ECFEFF"/>
+<circle cx="42" cy="517" r="9.0" fill="none" stroke="#0E7490" stroke-width="1.8"/>
+<line x1="42" y1="516" x2="42" y2="521" stroke="#0E7490" stroke-width="2"/>
+<circle cx="42" cy="512.5" r="1.2" fill="#0E7490"/>
+<text x="62" y="522" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Secondary Guardians can only view</text>
+<text x="62" y="542" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">They need the Live location permission</text>
+</svg>

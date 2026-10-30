@@ -51,3 +51,14 @@
 3. **Exit camera mode with a PIN** on the spare phone, so a visitor cannot switch it off by accident.
 4. **Requests and the timeline use the `health_records` permission** for a Secondary (clarification 129, to confirm with the team).
 5. The viewing indicator uses **dark teal with a small red dot** (the dot follows the usual "recording" sign) rather than a full red bar, so it is not confused with Panic.
+
+## Colour update (30 Oct 2026)
+All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
+
+| # | Screen | Version |
+|---|---|---|
+| 19 | Camera | v0.2 → **v0.3** |
+| 19b | Emergency clips | v0.2 → **v0.3** |
+| 29b | Camera mode | v0.2 → **v0.3** |
+
+Overview rebuilt from the latest versions: v0.2 → **v0.3**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>19 Camera</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Camera</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="50" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="46" cy="121" r="14" fill="#ECFEFF"/>
+<text x="46" y="125.032" font-family="Inter, Arial, sans-serif" font-size="11.200000000000001" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="68" y="126" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#0F172A" text-anchor="start">Ammi&#x27;s room</text>
+<text x="324" y="126" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="end">2 of 3 watching</text>
+<rect x="20" y="158" width="320" height="280" rx="16" fill="#334155"/>
+<rect x="20" y="331.6" width="320" height="106.4" rx="0" fill="#475569"/>
+<rect x="45.6" y="208.4" width="89.60000000000001" height="84.0" rx="6" fill="#475569"/>
+<rect x="186.4" y="275.6" width="121.6" height="84.0" rx="10" fill="#94A3B8"/>
+<circle cx="218.4" cy="258.8" r="19.6" fill="#CBD5E1"/>
+<rect x="34" y="172" width="62" height="26" rx="13" fill="#B91C1C"/>
+<circle cx="49" cy="185" r="4" fill="#FFFFFF"/>
+<text x="72" y="190" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">LIVE</text>
+<rect x="260" y="172" width="66" height="26" rx="13" fill="#0F172A" fill-opacity="0.60"/>
+<text x="293" y="190" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">02:14</text>
+<rect x="20" y="452" width="320" height="64" rx="12" fill="#DCFCE7"/>
+<path d="M 33 475 Q 42 467 51 475 Q 42 483 33 475 Z" fill="none" stroke="#15803D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="42" cy="475" r="2.5" fill="#15803D"/>
+<text x="62" y="480" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#15803D" text-anchor="start">Ammi can see who is watching</text>
+<text x="62" y="500" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Her phone shows your name the whole time</text>
+<rect x="20" y="530" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="563.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Stop viewing</text>
+<rect x="20" y="596" width="320" height="50" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="627.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Emergency clips (2)</text>
+<text x="180.0" y="662" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="middle">Up to 3 Guardians can watch at once.</text>
+<text x="180.0" y="680" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="middle">Each viewing is written to the audit log.</text>
+</svg>

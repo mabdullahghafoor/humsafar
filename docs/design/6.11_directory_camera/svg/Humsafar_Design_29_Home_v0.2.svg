@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>29 Home</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Home</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="0" y="87" width="360" height="58" rx="0" fill="#155E75"/>
+<circle cx="30" cy="116" r="9" fill="#FFFFFF"/>
+<circle cx="30" cy="116" r="4" fill="#B91C1C"/>
+<text x="50" y="112" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="start">Ali and Sara are watching your camera</text>
+<text x="50" y="131" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#CFFAFE" text-anchor="start">Ali since 9:58 AM · Sara since 10:01 AM</text>
+<text x="20" y="180" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A" text-anchor="start">Assalam o Alaikum, Ammi</text>
+<rect x="20" y="200" width="320" height="190" rx="22" fill="#B91C1C"/>
+<text x="180.0" y="297.0" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#FFFFFF" text-anchor="middle">PANIC</text>
+<text x="180.0" y="323.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#FEE2E2" text-anchor="middle">Press for help</text>
+<circle cx="180.0" cy="250" r="22" fill="#FFFFFF"/>
+<path d="M 180.0 238 L 180.0 254" fill="none" stroke="#B91C1C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="180.0" cy="262" r="2.6" fill="#B91C1C"/>
+<rect x="20" y="406" width="320" height="120" rx="22" fill="#FFFFFF" stroke="#0E7490" stroke-width="2.5"/>
+<text x="180.0" y="468.0" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#155E75" text-anchor="middle">I am OK</text>
+<text x="180.0" y="494.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569" text-anchor="middle">Next check: 2:00 PM</text>
+<rect x="20" y="542" width="320" height="120" rx="22" fill="#FFFFFF" stroke="#0E7490" stroke-width="2.5"/>
+<text x="180.0" y="604.0" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#155E75" text-anchor="middle">My medicine</text>
+<text x="180.0" y="630.0" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569" text-anchor="middle">Next: Metformin at 2:00 PM</text>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>26 Vitals</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Vitals</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="44" rx="12" fill="#E2E8F0"/>
+<text x="76.0" y="124" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">Today</text>
+<rect x="128.0" y="100" width="104.0" height="36" rx="10" fill="#FFFFFF"/>
+<text x="180.0" y="124" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">7 days</text>
+<text x="284.0" y="124" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">30 days</text>
+<rect x="20" y="152" width="320" height="150" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="178" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#475569" text-anchor="start">Blood pressure</text>
+<text x="36" y="210" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#0F172A" text-anchor="start">138/88</text>
+<text x="140" y="210" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="start">mmHg</text>
+<text x="324" y="182" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="end">Today 8:10 AM</text>
+<text x="324" y="200" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="end">by Ammi</text>
+<path d="M 36.0 254.2 L 84.0 249.2 L 132.0 257.5 L 180.0 245.9 L 228.0 252.5 L 276.0 242.6 L 324.0 237.6" fill="none" stroke="#0E7490" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="36.0" cy="254.17142857142858" r="3.5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="84.0" cy="249.2" r="3.5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="132.0" cy="257.48571428571427" r="3.5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="180.0" cy="245.8857142857143" r="3.5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="228.0" cy="252.5142857142857" r="3.5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="276.0" cy="242.57142857142856" r="3.5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="324.0" cy="237.6" r="3.5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<rect x="20.0" y="312" width="154.0" height="96" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="34.0" y="336" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#475569" text-anchor="start">Blood sugar</text>
+<text x="34.0" y="372" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#0F172A" text-anchor="start">112</text>
+<text x="85.0" y="372" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">mg/dL</text>
+<text x="34.0" y="394" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">Fasting · 8:12 AM</text>
+<rect x="186.0" y="312" width="154.0" height="96" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="200.0" y="336" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#475569" text-anchor="start">SpO2</text>
+<text x="200.0" y="372" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#0F172A" text-anchor="start">97</text>
+<text x="236.0" y="372" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">%</text>
+<text x="200.0" y="394" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">Typed · 8:12 AM</text>
+<rect x="20.0" y="418" width="154.0" height="96" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="34.0" y="442" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#475569" text-anchor="start">Temperature</text>
+<text x="34.0" y="478" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#0F172A" text-anchor="start">36.9</text>
+<text x="100.0" y="478" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">°C</text>
+<text x="34.0" y="500" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">Typed · yesterday</text>
+<rect x="186.0" y="418" width="154.0" height="96" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="200.0" y="442" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#475569" text-anchor="start">Heart rate</text>
+<path d="M 318.0 444.3 C 307.2 437.1 310.8 428.1 318.0 433.5 C 325.2 428.1 328.8 437.1 318.0 444.3 Z" fill="#0E7490"/>
+<text x="200.0" y="478" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#0F172A" text-anchor="start">78</text>
+<text x="236.0" y="478" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="start">bpm</text>
+<text x="200.0" y="500" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="600" fill="#0E7490" text-anchor="start">Band · 2 min ago</text>
+<text x="180.0" y="530" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="middle">Numbers only. Ask the doctor what they mean.</text>
+<rect x="20" y="544" width="320" height="50" rx="14" fill="#0E7490"/>
+<text x="180.0" y="575.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">+ Add reading</text>
+<text x="180.0" y="612" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">Export vitals PDF</text>
+</svg>
