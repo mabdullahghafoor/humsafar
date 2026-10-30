@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>00 Style guide</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#FFFFFF"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Style guide</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="112" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Colours</text>
+<rect x="20" y="124" width="100" height="36" rx="8" fill="#0E7490" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Primary</text>
+<text x="20" y="187" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#0E7490</text>
+<rect x="130" y="124" width="100" height="36" rx="8" fill="#155E75" stroke="#CBD5E1" stroke-width="1"/>
+<text x="130" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Primary dark</text>
+<text x="130" y="187" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#155E75</text>
+<rect x="240" y="124" width="100" height="36" rx="8" fill="#ECFEFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="240" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Primary tint</text>
+<text x="240" y="187" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#ECFEFF</text>
+<rect x="20" y="194" width="100" height="36" rx="8" fill="#0F172A" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="244" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Text</text>
+<text x="20" y="257" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#0F172A</text>
+<rect x="130" y="194" width="100" height="36" rx="8" fill="#475569" stroke="#CBD5E1" stroke-width="1"/>
+<text x="130" y="244" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Muted text</text>
+<text x="130" y="257" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#475569</text>
+<rect x="240" y="194" width="100" height="36" rx="8" fill="#CBD5E1" stroke="#CBD5E1" stroke-width="1"/>
+<text x="240" y="244" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Border</text>
+<text x="240" y="257" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#CBD5E1</text>
+<rect x="20" y="264" width="100" height="36" rx="8" fill="#15803D" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="314" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Success</text>
+<text x="20" y="327" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#15803D</text>
+<rect x="130" y="264" width="100" height="36" rx="8" fill="#B45309" stroke="#CBD5E1" stroke-width="1"/>
+<text x="130" y="314" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Warning</text>
+<text x="130" y="327" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#B45309</text>
+<rect x="240" y="264" width="100" height="36" rx="8" fill="#B91C1C" stroke="#CBD5E1" stroke-width="1"/>
+<text x="240" y="314" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="600" fill="#0F172A" text-anchor="start">Danger · Panic only</text>
+<text x="240" y="327" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">#B91C1C</text>
+<text x="20" y="360" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Type — Inter</text>
+<text x="20" y="398" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#0F172A" text-anchor="start">Title 26 Bold</text>
+<text x="20" y="428" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Heading 18 Bold</text>
+<text x="20" y="455" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">Body 15 Regular</text>
+<text x="20" y="479" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Caption 12 Regular</text>
+<text x="20" y="515" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Buttons · 54 px tall, 14 px radius</text>
+<rect x="20" y="527" width="320" height="48" rx="14" fill="#0E7490"/>
+<text x="180.0" y="557.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Primary</text>
+<rect x="20" y="587" width="320" height="48" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="617.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Secondary</text>
+<text x="20" y="663" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Rules</text>
+<circle cx="26" cy="681" r="3" fill="#0E7490"/>
+<text x="36" y="685" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Touch targets at least 48 × 48</text>
+<circle cx="26" cy="701" r="3" fill="#0E7490"/>
+<text x="36" y="705" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Text contrast at least 4.5 : 1 (AA)</text>
+<circle cx="26" cy="721" r="3" fill="#0E7490"/>
+<text x="36" y="725" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Red only for Panic and critical alerts</text>
+<circle cx="26" cy="741" r="3" fill="#0E7490"/>
+<text x="36" y="745" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Aa + EN|UR in every app bar</text>
+<text x="20" y="770" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="start">v0.2 · danger and muted darkened for AA contrast (NFR-08)</text>
+</svg>

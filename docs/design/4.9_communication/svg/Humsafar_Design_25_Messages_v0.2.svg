@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>25 Messages</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Messages</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="111" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#475569" text-anchor="start">Tap a name to write, or Call to talk.</text>
+<rect x="20" y="124" width="320" height="104" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="58" cy="164" r="24" fill="#ECFEFF"/>
+<text x="58" y="170.912" font-family="Inter, Arial, sans-serif" font-size="19.200000000000003" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="94" y="160" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="800" fill="#0F172A" text-anchor="start">Ali (son)</text>
+<text x="94" y="184" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">See you at 5</text>
+<circle cx="314" cy="158" r="13" fill="#0E7490"/>
+<text x="314" y="163" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle">1</text>
+<rect x="228" y="182" width="96" height="38" rx="19" fill="#0E7490"/>
+<path d="M 247.1 195.4 L 249.9 194.7 L 251.3 198.2 L 249.55 199.6 Q 251.3 203.1 254.1 204.15 L 255.5 202.4 L 258.65 203.8 L 257.95 206.95 Q 246.4 206.6 247.1 195.4 Z" fill="#FFFFFF"/>
+<text x="286" y="206" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#FFFFFF" text-anchor="middle">Call</text>
+<rect x="20" y="240" width="320" height="104" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="58" cy="280" r="24" fill="#ECFEFF"/>
+<text x="58" y="286.912" font-family="Inter, Arial, sans-serif" font-size="19.200000000000003" font-weight="800" fill="#0E7490" text-anchor="middle">S</text>
+<text x="94" y="276" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="800" fill="#0F172A" text-anchor="start">Sara (daughter)</text>
+<text x="94" y="300" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#B45309" text-anchor="start">Urgent voice · 0:18</text>
+<rect x="228" y="298" width="96" height="38" rx="19" fill="#0E7490"/>
+<path d="M 247.1 311.4 L 249.9 310.7 L 251.3 314.2 L 249.55 315.6 Q 251.3 319.1 254.1 320.15 L 255.5 318.4 L 258.65 319.8 L 257.95 322.95 Q 246.4 322.6 247.1 311.4 Z" fill="#FFFFFF"/>
+<text x="286" y="322" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#FFFFFF" text-anchor="middle">Call</text>
+<rect x="20" y="356" width="320" height="104" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="58" cy="396" r="24" fill="#ECFEFF"/>
+<text x="58" y="402.912" font-family="Inter, Arial, sans-serif" font-size="19.200000000000003" font-weight="800" fill="#0E7490" text-anchor="middle">B</text>
+<text x="94" y="392" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="800" fill="#0F172A" text-anchor="start">Bilal (nephew)</text>
+<text x="94" y="416" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#475569" text-anchor="start">Okay Ammi</text>
+<rect x="228" y="414" width="96" height="38" rx="19" fill="#0E7490"/>
+<path d="M 247.1 427.4 L 249.9 426.7 L 251.3 430.2 L 249.55 431.6 Q 251.3 435.1 254.1 436.15 L 255.5 434.4 L 258.65 435.8 L 257.95 438.95 Q 246.4 438.6 247.1 427.4 Z" fill="#FFFFFF"/>
+<text x="286" y="438" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#FFFFFF" text-anchor="middle">Call</text>
+<text x="20" y="485" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Only your Guardians are listed here.</text>
+</svg>

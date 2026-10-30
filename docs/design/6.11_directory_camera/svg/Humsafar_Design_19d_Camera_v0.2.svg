@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>19d Camera</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Camera</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<circle cx="180.0" cy="172" r="48" fill="#ECFEFF"/>
+<rect x="162.0" y="159.4" width="36.0" height="27.0" rx="3" fill="none" stroke="#0E7490" stroke-width="2"/>
+<circle cx="180.0" cy="172" r="7.2" fill="none" stroke="#0E7490" stroke-width="2"/>
+<text x="180.0" y="244" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="800" fill="#0F172A" text-anchor="middle">No camera set up yet</text>
+<text x="20" y="274" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#0F172A" text-anchor="start">To set it up</text>
+<circle cx="32" cy="306" r="11" fill="#0E7490"/>
+<text x="32" y="310" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="52" y="311" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#0F172A" text-anchor="start">Sign in as Ammi on a spare Android phone</text>
+<circle cx="32" cy="338" r="11" fill="#0E7490"/>
+<text x="32" y="342" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="52" y="343" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#0F172A" text-anchor="start">Open Camera mode and tap Pair</text>
+<circle cx="32" cy="370" r="11" fill="#0E7490"/>
+<text x="32" y="374" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="52" y="375" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#0F172A" text-anchor="start">Place it on charge, pointing at the room</text>
+<rect x="20" y="396" width="320" height="60" rx="14" fill="#FEF3C7"/>
+<text x="36" y="421" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="start">When 3 Guardians are already watching</text>
+<text x="36" y="441" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">you see &quot;Camera busy, try again shortly&quot;.</text>
+<rect x="20" y="470" width="320" height="64" rx="12" fill="#ECFEFF"/>
+<circle cx="42" cy="493" r="9.0" fill="none" stroke="#0E7490" stroke-width="1.8"/>
+<line x1="42" y1="492" x2="42" y2="497" stroke="#0E7490" stroke-width="2"/>
+<circle cx="42" cy="488.5" r="1.2" fill="#0E7490"/>
+<text x="62" y="498" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Only Ammi or the Primary can pair</text>
+<text x="62" y="518" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Video starts only while someone watches</text>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>10 Permissions</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Permissions</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="109" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Secondary Guardian</text>
+<rect x="20" y="117" width="320" height="56" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="48" cy="145" r="16" fill="#ECFEFF"/>
+<text x="48" y="151" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">S</text>
+<text x="74" y="142" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Sara (sister)</text>
+<text x="74" y="160" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#15803D" text-anchor="start">Verified · Secondary</text>
+<path d="M 312 141 L 318 147 L 324 141" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="201" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Choose what Sara can see and do for Ammi.</text>
+<rect x="20" y="214" width="320" height="352" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="240" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Live location</text>
+<text x="36" y="259" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Map and safe zones</text>
+<rect x="276" y="232" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="246" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="274" x2="324" y2="274" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="297" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Health records</text>
+<text x="36" y="316" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Medical vault</text>
+<rect x="276" y="289" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="303" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="331" x2="324" y2="331" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="354" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Communication</text>
+<text x="36" y="373" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Messages and calls</text>
+<rect x="276" y="346" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="360" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="388" x2="324" y2="388" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="411" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Emergency alerts</text>
+<text x="36" y="430" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Missed dose, wellness, zones</text>
+<rect x="276" y="403" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="417" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="445" x2="324" y2="445" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="468" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Camera viewing</text>
+<text x="36" y="487" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Live camera</text>
+<rect x="276" y="460" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="474" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="502" x2="324" y2="502" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="525" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Medication</text>
+<text x="36" y="544" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Edit medicine schedules</text>
+<rect x="276" y="517" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="531" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="559" x2="324" y2="559" stroke="#E2E8F0" stroke-width="1"/>
+<rect x="20" y="578" width="320" height="46" rx="12" fill="#ECFEFF"/>
+<path d="M 42 592.0 L 50.0 596.0 L 50.0 602.0 Q 50.0 609.0 42 612.0 Q 34.0 609.0 34.0 602.0 L 34.0 596.0 Z" fill="none" stroke="#0E7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="62" y="606" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Panic always reaches every Guardian</text>
+<rect x="20" y="638" width="320" height="50" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="669.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Invite a Secondary Guardian (1 left)</text>
+</svg>

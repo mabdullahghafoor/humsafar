@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>13 Care schedules</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Care schedules</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="44" rx="12" fill="#E2E8F0"/>
+<rect x="24" y="100" width="156.0" height="36" rx="10" fill="#FFFFFF"/>
+<text x="100.0" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">Medicines</text>
+<text x="260.0" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#475569" text-anchor="middle">Wellness checks</text>
+<rect x="20" y="154" width="320" height="92" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="184" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Metformin</text>
+<text x="36" y="204" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">500 mg · 1 tablet</text>
+<text x="36" y="226" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0E7490" text-anchor="start">8:00 AM · 2:00 PM · 8:00 PM</text>
+<rect x="276" y="170" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="184" r="11" fill="#FFFFFF"/>
+<rect x="20" y="256" width="320" height="92" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="286" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Panadol</text>
+<text x="36" y="306" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">500 mg · 1 tablet</text>
+<text x="36" y="328" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0E7490" text-anchor="start">8:00 AM · daily</text>
+<rect x="276" y="272" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="286" r="11" fill="#FFFFFF"/>
+<rect x="20" y="358" width="320" height="92" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="388" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#475569" text-anchor="start">Vitamin D</text>
+<text x="36" y="408" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">1 capsule</text>
+<text x="36" y="430" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="start">Sun 9:00 AM</text>
+<rect x="276" y="374" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="388" r="11" fill="#FFFFFF"/>
+<rect x="20" y="460" width="320" height="52" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="492.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">+ Add medicine</text>
+<rect x="20" y="524" width="320" height="64" rx="12" fill="#ECFEFF"/>
+<circle cx="42" cy="547" r="9.0" fill="none" stroke="#0E7490" stroke-width="1.8"/>
+<line x1="42" y1="546" x2="42" y2="551" stroke="#0E7490" stroke-width="2"/>
+<circle cx="42" cy="542.5" r="1.2" fill="#0E7490"/>
+<text x="62" y="552" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Reminder 15 min before each dose</text>
+<text x="62" y="572" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Missed after 30 min → you are alerted</text>
+</svg>

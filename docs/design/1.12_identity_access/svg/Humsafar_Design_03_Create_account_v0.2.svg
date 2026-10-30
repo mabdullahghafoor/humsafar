@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>03 Create account</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Create account</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="46" rx="12" fill="#E2E8F0"/>
+<rect x="24" y="100" width="156.0" height="38" rx="10" fill="#FFFFFF"/>
+<text x="100.0" y="125" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">Guardian</text>
+<text x="260.0" y="125" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#475569" text-anchor="middle">Dependent</text>
+<text x="20" y="169" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Full name</text>
+<rect x="20" y="177" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#15803D" stroke-width="2"/>
+<text x="36" y="207" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">Ali Khan</text>
+<path d="M 310.0 202 L 315.0 207.0 L 323.0 197.0" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="248" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Email</text>
+<rect x="20" y="256" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#15803D" stroke-width="2"/>
+<text x="36" y="286" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">ali@example.com</text>
+<path d="M 310.0 281 L 315.0 286.0 L 323.0 276.0" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="327" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Phone</text>
+<rect x="20" y="335" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#B91C1C" stroke-width="2"/>
+<text x="36" y="365" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">0300 1234567</text>
+<text x="20" y="397" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#B91C1C" text-anchor="start">Enter a Pakistani number, e.g. 0300 1234567</text>
+<text x="20" y="424" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Password</text>
+<rect x="20" y="432" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="33.0" y="455.0" width="14.0" height="11.0" rx="2" fill="none" stroke="#475569" stroke-width="2"/>
+<path d="M 36.0 455.0 L 36.0 451.0 Q 40 446.0 44.0 451.0 L 44.0 455.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="60" y="462" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">••••••••</text>
+<path d="M 307 457 Q 316 449 325 457 Q 316 465 307 457 Z" fill="none" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="316" cy="457" r="2.5" fill="#475569"/>
+<text x="20" y="494" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">At least 8 characters</text>
+<text x="20" y="521" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Invite code (optional)</text>
+<rect x="20" y="529" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="559" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#475569" text-anchor="start">Only if a Guardian invited you</text>
+<rect x="20" y="587" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="620.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Create account</text>
+</svg>

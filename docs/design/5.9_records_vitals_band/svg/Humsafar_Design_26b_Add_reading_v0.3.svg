@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>26b Add reading</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Add reading</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="110" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">What are you measuring?</text>
+<rect x="20.0" y="120" width="154.0" height="46" rx="12" fill="#ECFEFF" stroke="#0E7490" stroke-width="2"/>
+<text x="97.0" y="149" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#155E75" text-anchor="middle">Blood pressure</text>
+<rect x="186.0" y="120" width="154.0" height="46" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="263.0" y="149" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="middle">Blood sugar</text>
+<rect x="20.0" y="176" width="154.0" height="46" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="97.0" y="205" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="middle">SpO2</text>
+<rect x="186.0" y="176" width="154.0" height="46" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="263.0" y="205" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A" text-anchor="middle">Temperature</text>
+<text x="20.0" y="257" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Top number</text>
+<rect x="20.0" y="265" width="152.0" height="64" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
+<text x="96.0" y="308" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#0F172A" text-anchor="middle">138</text>
+<text x="188.0" y="257" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Bottom number</text>
+<rect x="188.0" y="265" width="152.0" height="64" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="264.0" y="308" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#0F172A" text-anchor="middle">88</text>
+<text x="180.0" y="350" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">mmHg</text>
+<text x="20" y="379" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">When measured</text>
+<rect x="20" y="387" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="417" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">Today · 8:10 AM</text>
+<text x="20" y="458" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Note (optional)</text>
+<rect x="20" y="466" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="496" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#475569" text-anchor="start">After breakfast</text>
+<text x="20" y="536" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Sugar: mg/dL or mmol/L · Temperature: °C or °F</text>
+<text x="20" y="555" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">(always saved and shown in mg/dL and °C)</text>
+<rect x="20" y="568" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="601.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Save reading</text>
+</svg>

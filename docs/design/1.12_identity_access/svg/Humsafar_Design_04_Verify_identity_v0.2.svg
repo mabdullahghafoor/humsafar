@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>04 Verify identity</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Verify identity</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20.0" y="96" width="156.0" height="6" rx="3" fill="#0E7490"/>
+<rect x="184.0" y="96" width="156.0" height="6" rx="3" fill="#CBD5E1"/>
+<text x="20" y="140" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#0F172A" text-anchor="start">Verify it&#x27;s you</text>
+<text x="20" y="166" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Needed before your Guardian can link you.</text>
+<text x="20" y="187" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#475569" text-anchor="start">Your photo is checked, then deleted.</text>
+<text x="20" y="213" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">CNIC number</text>
+<rect x="20" y="221" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#15803D" stroke-width="2"/>
+<text x="36" y="251" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">42101-1234567-1</text>
+<path d="M 310.0 246 L 315.0 251.0 L 323.0 241.0" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="292" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Live photo</text>
+<rect x="20" y="301" width="320" height="190" rx="16" fill="#0F172A"/>
+<ellipse cx="180.0" cy="385" rx="58" ry="68" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="7 5"/>
+<text x="180.0" y="479" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#E2E8F0" text-anchor="middle">Fit your face inside the oval</text>
+<rect x="20" y="505" width="320" height="50" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="536.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Take photo</text>
+<rect x="20" y="567" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="600.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Submit for verification</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>17e Calling</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Calling</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#155E75"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="end">100%</text>
+<text x="180.0" y="112" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#CFFAFE" text-anchor="middle">Voice call</text>
+<circle cx="180.0" cy="250" r="86" fill="#FFFFFF"/>
+<circle cx="180.0" cy="250" r="104" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="2"/>
+<circle cx="180.0" cy="250" r="124" fill="none" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="2"/>
+<text x="180.0" y="274" font-family="Inter, Arial, sans-serif" font-size="64" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="180.0" y="420" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#FFFFFF" text-anchor="middle">Ammi</text>
+<text x="180.0" y="452" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#CFFAFE" text-anchor="middle">Ringing… 0:12</text>
+<text x="180.0" y="476" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#CFFAFE" text-anchor="middle">Rings for up to 30 seconds</text>
+<circle cx="80" cy="600" r="30" fill="#FFFFFF" fill-opacity="0.20"/>
+<rect x="75.38461538461539" y="588.4615384615385" width="9.23076923076923" height="16.153846153846153" rx="4.615384615384615" fill="#FFFFFF"/>
+<path d="M 70.76923076923077 600 Q 70.76923076923077 609.2307692307693 80 609.2307692307693 Q 89.23076923076923 609.2307692307693 89.23076923076923 600" fill="none" stroke="#FFFFFF" stroke-width="2.3076923076923075" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="80" y1="609.2307692307693" x2="80" y2="613.8461538461538" stroke="#FFFFFF" stroke-width="2.3076923076923075"/>
+<text x="80" y="652" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Mute</text>
+<circle cx="280" cy="600" r="30" fill="#FFFFFF" fill-opacity="0.20"/>
+<path d="M 271 595 L 276 595 L 283 589 L 283 611 L 276 605 L 271 605 Z" fill="#FFFFFF"/>
+<path d="M 287 594 Q 292 600 287 606" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="280" y="652" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Speaker</text>
+<circle cx="180.0" cy="680" r="36" fill="#B91C1C"/>
+<path d="M 167.4 665.6 L 174.6 663.8 L 178.2 672.8 L 173.7 676.4 Q 178.2 685.4 185.4 688.1 L 189.0 683.6 L 197.1 687.2 L 195.3 695.3 Q 165.6 694.4 167.4 665.6 Z" fill="#FFFFFF" transform="rotate(135 180.0 680)"/>
+<text x="180.0" y="738" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Cancel</text>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>26c Band not sending</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Band not sending</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="64" rx="12" fill="#FEF3C7"/>
+<circle cx="42" cy="119" r="9.0" fill="none" stroke="#B45309" stroke-width="1.8"/>
+<line x1="42" y1="118" x2="42" y2="123" stroke="#B45309" stroke-width="2"/>
+<circle cx="42" cy="114.5" r="1.2" fill="#B45309"/>
+<text x="62" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#B45309" text-anchor="start">No new band data for 35 minutes</text>
+<text x="62" y="144" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">The band may be off, far away or not charged.</text>
+<rect x="20" y="174" width="320" height="120" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="47.7" y="197.8" width="12.6" height="32.4" rx="3.6" fill="none" stroke="#475569" stroke-width="2"/>
+<rect x="44.1" y="205.9" width="19.8" height="16.2" rx="4.5" fill="#475569"/>
+<rect x="47.7" y="209.5" width="12.6" height="9.0" rx="1.8" fill="#FFFFFF"/>
+<text x="84" y="208" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Band 7A2F</text>
+<text x="84" y="228" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Last reading 2:05 PM · heart 76</text>
+<rect x="36" y="248" width="288" height="30" rx="10" fill="#FEF3C7"/>
+<text x="180.0" y="268" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#B45309" text-anchor="middle">Status: no data</text>
+<text x="20" y="326" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#0F172A" text-anchor="start">What you can do</text>
+<circle cx="28" cy="347" r="3" fill="#0E7490"/>
+<text x="40" y="352" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#0F172A" text-anchor="start">Call Ammi and ask her to check the band</text>
+<circle cx="28" cy="369" r="3" fill="#0E7490"/>
+<text x="40" y="374" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#0F172A" text-anchor="start">Look at the 3 lights on the band</text>
+<circle cx="28" cy="391" r="3" fill="#0E7490"/>
+<text x="40" y="396" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#0F172A" text-anchor="start">Nothing else is blocked: Panic, medicine</text>
+<text x="40" y="418" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#0F172A" text-anchor="start">and messages still work</text>
+<rect x="20" y="438" width="320" height="52" rx="14" fill="#0E7490"/>
+<text x="180.0" y="470.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Call Ammi</text>
+<text x="20" y="514" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">This notice closes by itself when the band sends</text>
+<text x="20" y="533" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">again. It is a standard alert and never escalates.</text>
+</svg>

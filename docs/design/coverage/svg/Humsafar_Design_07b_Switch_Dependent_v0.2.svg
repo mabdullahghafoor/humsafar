@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>07b Switch Dependent</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Switch Dependent</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="0" y="86" width="360" height="694" rx="0" fill="#0F172A" fill-opacity="0.45"/>
+<rect x="0" y="330" width="360" height="470" rx="24" fill="#FFFFFF"/>
+<rect x="158.0" y="340" width="44" height="5" rx="3" fill="#CBD5E1"/>
+<text x="20" y="378" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#0F172A" text-anchor="start">Whose care are you viewing?</text>
+<rect x="20" y="396" width="320" height="72" rx="16" fill="#ECFEFF" stroke="#0E7490" stroke-width="2"/>
+<circle cx="56" cy="432" r="20" fill="#ECFEFF"/>
+<text x="56" y="437.76" font-family="Inter, Arial, sans-serif" font-size="16.0" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="88" y="428" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Ammi</text>
+<text x="88" y="448" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">You are Primary · 2 alerts open</text>
+<circle cx="312" cy="432" r="12" fill="#0E7490"/>
+<path d="M 307.2 432 L 311.2 436.0 L 317.6 428.0" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="20" y="478" width="320" height="72" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="56" cy="514" r="20" fill="#ECFEFF"/>
+<text x="56" y="519.76" font-family="Inter, Arial, sans-serif" font-size="16.0" font-weight="800" fill="#0E7490" text-anchor="middle">B</text>
+<text x="88" y="510" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Abba</text>
+<text x="88" y="530" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">You are Secondary · all fine</text>
+<rect x="20" y="560" width="320" height="54" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="180.0" y="593" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0E7490" text-anchor="middle">+ Link another Dependent</text>
+<text x="20" y="638" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">A Guardian can look after more than one</text>
+<text x="20" y="657" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">person (FR-B4). Alerts from everyone still</text>
+<text x="20" y="676" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">reach you, whoever is shown.</text>
+</svg>

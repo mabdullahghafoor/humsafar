@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>12b Edit safe zone</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Edit safe zone</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<clipPath id="clip87357"><rect x="0" y="87" width="360" height="270"/></clipPath><g clip-path="url(#clip87357)">
+<rect x="0" y="87" width="360" height="270" rx="0" fill="#EEF2F0"/>
+<rect x="10" y="97" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="187" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="277" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="97" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="187" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="277" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="190" y="97" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="190" y="187" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="277" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="97" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="187" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="277" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="250" y="107" width="140" height="90" rx="30" fill="#D4E9F7"/>
+<rect x="-5" y="87" width="10" height="270" rx="0" fill="#FFFFFF"/>
+<rect x="85" y="87" width="10" height="270" rx="0" fill="#FFFFFF"/>
+<rect x="175" y="87" width="10" height="270" rx="0" fill="#FFFFFF"/>
+<rect x="265" y="87" width="10" height="270" rx="0" fill="#FFFFFF"/>
+<rect x="355" y="87" width="10" height="270" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="82" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="172" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="262" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="352" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<path d="M -10 387 Q 180 287 370 447" fill="none" stroke="#FFFFFF" stroke-width="16"/>
+<path d="M -10 387 Q 180 287 370 447" fill="none" stroke="#FDE68A" stroke-width="4"/>
+</g>
+<circle cx="180.0" cy="227" r="90" fill="#0E7490" fill-opacity="0.16" stroke="#0E7490" stroke-width="2.5"/>
+<circle cx="270.0" cy="227" r="9" fill="#FFFFFF" stroke="#0E7490" stroke-width="3"/>
+<path d="M 180.0 227 m -14 -30 a 14 14 0 1 1 28 0 c 0 12 -14 26 -14 26 c 0 0 -14 -14 -14 -26 z" fill="#0E7490"/>
+<circle cx="180.0" cy="197" r="5" fill="#FFFFFF"/>
+<rect x="88.0" y="325" width="184" height="24" rx="12" fill="#FFFFFF"/>
+<text x="180.0" y="342" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="middle">Drag the pin or the edge</text>
+<text x="20" y="384" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Zone name</text>
+<rect x="20" y="392" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#15803D" stroke-width="2"/>
+<text x="36" y="422" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">Home</text>
+<path d="M 310.0 417 L 315.0 422.0 L 323.0 412.0" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="464" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Radius</text>
+<text x="340" y="464" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0E7490" text-anchor="end">300 m</text>
+<rect x="20" y="476" width="320" height="6" rx="3" fill="#CBD5E1"/>
+<rect x="20" y="476" width="80" height="6" rx="3" fill="#0E7490"/>
+<circle cx="100" cy="479" r="11" fill="#FFFFFF" stroke="#0E7490" stroke-width="3"/>
+<text x="20" y="506" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">50 m</text>
+<text x="340" y="506" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">50 km</text>
+<rect x="20" y="522" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="555.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Save zone</text>
+<text x="180.0" y="600" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#B91C1C" text-anchor="middle">Delete zone</text>
+</svg>

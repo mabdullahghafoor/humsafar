@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>11c Location history</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Location history</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="44" rx="12" fill="#E2E8F0"/>
+<rect x="24.0" y="100" width="104.0" height="36" rx="10" fill="#FFFFFF"/>
+<text x="76.0" y="124" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Today</text>
+<text x="180.0" y="124" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">Yesterday</text>
+<text x="284.0" y="124" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#475569" text-anchor="middle">Pick date</text>
+<clipPath id="clip152452"><rect x="0" y="152" width="360" height="300"/></clipPath><g clip-path="url(#clip152452)">
+<rect x="0" y="152" width="360" height="300" rx="0" fill="#EEF2F0"/>
+<rect x="10" y="162" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="252" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="342" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="10" y="432" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="162" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="100" y="252" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="100" y="342" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="100" y="432" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="162" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="252" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="342" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="190" y="432" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="162" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="252" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="342" width="70" height="70" rx="6" fill="#E2E8E4"/>
+<rect x="280" y="432" width="70" height="70" rx="6" fill="#D9F0DF"/>
+<rect x="250" y="172" width="140" height="90" rx="30" fill="#D4E9F7"/>
+<rect x="-5" y="152" width="10" height="300" rx="0" fill="#FFFFFF"/>
+<rect x="85" y="152" width="10" height="300" rx="0" fill="#FFFFFF"/>
+<rect x="175" y="152" width="10" height="300" rx="0" fill="#FFFFFF"/>
+<rect x="265" y="152" width="10" height="300" rx="0" fill="#FFFFFF"/>
+<rect x="355" y="152" width="10" height="300" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="147" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="237" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="327" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<rect x="0" y="417" width="360" height="10" rx="0" fill="#FFFFFF"/>
+<path d="M -10 452 Q 180 352 370 512" fill="none" stroke="#FFFFFF" stroke-width="16"/>
+<path d="M -10 452 Q 180 352 370 512" fill="none" stroke="#FDE68A" stroke-width="4"/>
+</g>
+<circle cx="110" cy="342" r="70" fill="#0E7490" fill-opacity="0.06" stroke="#0E7490" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="86.2" y="258" width="47.6" height="24" rx="12" fill="#FFFFFF" stroke="#0E7490" stroke-width="1"/>
+<text x="110" y="275" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#155E75" text-anchor="middle">Home</text>
+<path d="M 110 342 L 160 302 L 210 287 L 260 247 L 300 222" fill="none" stroke="#0E7490" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="160" cy="302" r="5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2.5"/>
+<circle cx="210" cy="287" r="5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2.5"/>
+<circle cx="260" cy="247" r="5" fill="#FFFFFF" stroke="#0E7490" stroke-width="2.5"/>
+<circle cx="300" cy="222" r="26" fill="#0E7490" fill-opacity="0.18"/>
+<circle cx="300" cy="222" r="16" fill="#FFFFFF" stroke="#0E7490" stroke-width="3"/>
+<text x="300" y="227" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="20" y="482" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">9:00 AM</text>
+<text x="340" y="482" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="end">Now</text>
+<rect x="20" y="492" width="320" height="6" rx="3" fill="#CBD5E1"/>
+<rect x="20" y="492" width="210" height="6" rx="3" fill="#0E7490"/>
+<circle cx="230" cy="495" r="11" fill="#FFFFFF" stroke="#0E7490" stroke-width="3"/>
+<text x="230" y="524" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#0E7490" text-anchor="middle">11:05 AM</text>
+<circle cx="32" cy="552" r="5" fill="#0E7490"/>
+<text x="48" y="557" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="start">11:20 AM</text>
+<text x="130" y="557" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Left Home</text>
+<circle cx="32" cy="582" r="5" fill="#0E7490"/>
+<text x="48" y="587" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="start">10:30 AM</text>
+<text x="130" y="587" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Arrived Home</text>
+<circle cx="32" cy="612" r="5" fill="#0E7490"/>
+<text x="48" y="617" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="start">9:00 AM</text>
+<text x="130" y="617" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Started tracking</text>
+</svg>

@@ -30,3 +30,21 @@
 - **Missed dose "Give more time"** uses the contract default of 30 min (`extend`, 5–120 allowed); "Tell other Guardians now" = `escalate`.
 - **"I've seen it"** = acknowledge; it stops the escalation chain.
 - Red is used only for Panic and critical states. Dependent screens use 22–38 px text and 96–200 px tall buttons.
+
+## Colour update (30 Oct 2026)
+All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
+
+| # | Screen | Version |
+|---|---|---|
+| 07 | Home | v0.1 → **v0.2** |
+| 08 | Alerts | v0.1 → **v0.2** |
+| 08b | Missed dose | v0.1 → **v0.2** |
+| 13 | Care schedules | v0.1 → **v0.2** |
+| 13b | Wellness checks | v0.1 → **v0.2** |
+| 14 | Emergency settings | v0.1 → **v0.2** |
+| 21 | Panic | v0.1 → **v0.2** |
+| 22 | Wellness check | v0.1 → **v0.2** |
+| 23 | Medicine time | v0.1 → **v0.2** |
+| 23b | Confirm medicine | v0.1 → **v0.2** |
+
+Overview rebuilt from the latest versions: v0.2 → **v0.3**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.

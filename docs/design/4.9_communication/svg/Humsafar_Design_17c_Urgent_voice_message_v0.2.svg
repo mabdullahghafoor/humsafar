@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>17c Urgent voice message</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Urgent voice message</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="64" rx="12" fill="#FEF3C7"/>
+<circle cx="42" cy="119" r="9.0" fill="none" stroke="#B45309" stroke-width="1.8"/>
+<line x1="42" y1="118" x2="42" y2="123" stroke="#B45309" stroke-width="2"/>
+<circle cx="42" cy="114.5" r="1.2" fill="#B45309"/>
+<text x="62" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#B45309" text-anchor="start">This rings Ammi&#x27;s phone as critical</text>
+<text x="62" y="144" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Use it for urgent things only</text>
+<text x="180.0" y="204" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="600" fill="#475569" text-anchor="middle">Recording…</text>
+<text x="180.0" y="256" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="800" fill="#0F172A" text-anchor="middle">0:23</text>
+<text x="180.0" y="282" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#475569" text-anchor="middle">of 2:00 max</text>
+<rect x="44" y="314.14484764076394" width="3" height="19.710304718472084" rx="1.5" fill="#B45309"/>
+<rect x="50" y="317.5823408491442" width="3" height="12.835318301711547" rx="1.5" fill="#B45309"/>
+<rect x="56" y="309.5322836919641" width="3" height="28.935432616071854" rx="1.5" fill="#B45309"/>
+<rect x="62" y="307.4823854918968" width="3" height="33.03522901620634" rx="1.5" fill="#B45309"/>
+<rect x="68" y="312.31642411344274" width="3" height="23.36715177311458" rx="1.5" fill="#B45309"/>
+<rect x="74" y="312.23728208858745" width="3" height="23.5254358228251" rx="1.5" fill="#B45309"/>
+<rect x="80" y="315.47899400513074" width="3" height="17.042011989738512" rx="1.5" fill="#B45309"/>
+<rect x="86" y="317.74526220942687" width="3" height="12.509475581146317" rx="1.5" fill="#B45309"/>
+<rect x="92" y="307.18935655909644" width="3" height="33.62128688180712" rx="1.5" fill="#B45309"/>
+<rect x="98" y="307.38790222203875" width="3" height="33.22419555592248" rx="1.5" fill="#B45309"/>
+<rect x="104" y="319.1646053049612" width="3" height="9.670789390077683" rx="1.5" fill="#B45309"/>
+<rect x="110" y="308.8439813806058" width="3" height="30.312037238788434" rx="1.5" fill="#B45309"/>
+<rect x="116" y="307.39400412827365" width="3" height="33.21199174345276" rx="1.5" fill="#B45309"/>
+<rect x="122" y="317.9677242670303" width="3" height="12.064551465939457" rx="1.5" fill="#B45309"/>
+<rect x="128" y="316.8507272733372" width="3" height="14.298545453325556" rx="1.5" fill="#B45309"/>
+<rect x="134" y="311.57470106781506" width="3" height="24.8505978643699" rx="1.5" fill="#B45309"/>
+<rect x="140" y="313.9215228071817" width="3" height="20.15695438563662" rx="1.5" fill="#B45309"/>
+<rect x="146" y="319.33738610416674" width="3" height="9.325227791666546" rx="1.5" fill="#B45309"/>
+<rect x="152" y="314.26818322078896" width="3" height="19.463633558422103" rx="1.5" fill="#B45309"/>
+<rect x="158" y="307.2711708016335" width="3" height="33.45765839673304" rx="1.5" fill="#B45309"/>
+<rect x="164" y="316.7831545495729" width="3" height="14.433690900854192" rx="1.5" fill="#B45309"/>
+<rect x="170" y="317.3772578714045" width="3" height="13.24548425719106" rx="1.5" fill="#B45309"/>
+<rect x="176" y="316.70781208275235" width="3" height="14.58437583449528" rx="1.5" fill="#B45309"/>
+<rect x="182" y="315.5959255568432" width="3" height="16.808148886313532" rx="1.5" fill="#B45309"/>
+<rect x="188" y="313.2872380805796" width="3" height="21.42552383884087" rx="1.5" fill="#B45309"/>
+<rect x="194" y="312.8334611109843" width="3" height="22.33307777803142" rx="1.5" fill="#B45309"/>
+<rect x="200" y="308.18939327914046" width="3" height="31.621213441719096" rx="1.5" fill="#B45309"/>
+<rect x="206" y="312.26145795207964" width="3" height="23.47708409584072" rx="1.5" fill="#B45309"/>
+<rect x="212" y="317.55033594474276" width="3" height="12.899328110514453" rx="1.5" fill="#B45309"/>
+<rect x="218" y="309.6698349885391" width="3" height="28.66033002292181" rx="1.5" fill="#B45309"/>
+<rect x="224" y="316.38574481854465" width="3" height="15.228510362910654" rx="1.5" fill="#B45309"/>
+<rect x="230" y="311.8346427785622" width="3" height="24.330714442875568" rx="1.5" fill="#B45309"/>
+<rect x="236" y="314.83131335563746" width="3" height="18.337373288725118" rx="1.5" fill="#B45309"/>
+<rect x="242" y="318.9517165459257" width="3" height="10.09656690814858" rx="1.5" fill="#B45309"/>
+<rect x="248" y="308.3689563985194" width="3" height="31.26208720296117" rx="1.5" fill="#B45309"/>
+<rect x="254" y="317.2356426715816" width="3" height="13.528714656836755" rx="1.5" fill="#B45309"/>
+<rect x="260" y="314.5913257948798" width="3" height="18.817348410240314" rx="1.5" fill="#B45309"/>
+<rect x="266" y="307.82699168058446" width="3" height="32.346016638831045" rx="1.5" fill="#B45309"/>
+<rect x="272" y="320.21066171565855" width="3" height="7.578676568682897" rx="1.5" fill="#B45309"/>
+<rect x="278" y="309.9482910475454" width="3" height="28.103417904909154" rx="1.5" fill="#B45309"/>
+<rect x="284" y="312.11993634487345" width="3" height="23.760127310253097" rx="1.5" fill="#B45309"/>
+<rect x="290" y="308.350575263395" width="3" height="31.298849473209984" rx="1.5" fill="#B45309"/>
+<rect x="296" y="308.3030324081345" width="3" height="31.39393518373094" rx="1.5" fill="#B45309"/>
+<rect x="302" y="319.5974151434904" width="3" height="8.805169713019195" rx="1.5" fill="#B45309"/>
+<rect x="308" y="320.1091828767741" width="3" height="7.781634246451788" rx="1.5" fill="#B45309"/>
+<circle cx="180.0" cy="436" r="70" fill="#FEF3C7"/>
+<circle cx="180.0" cy="436" r="52" fill="#B45309"/>
+<rect x="167.0" y="423" width="26" height="26" rx="5" fill="#FFFFFF"/>
+<text x="180.0" y="532" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#475569" text-anchor="middle">Tap to stop</text>
+<rect x="20" y="560" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="593.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Send to Ammi</text>
+<rect x="20" y="626" width="320" height="50" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="657.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Record again</text>
+<text x="180.0" y="700" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#475569" text-anchor="middle">Cancel</text>
+</svg>

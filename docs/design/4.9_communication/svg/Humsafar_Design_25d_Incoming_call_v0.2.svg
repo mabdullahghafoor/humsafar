@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>25d Incoming call</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Incoming call</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#155E75"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="end">100%</text>
+<text x="180.0" y="118" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" fill="#CFFAFE" text-anchor="middle">Voice call</text>
+<circle cx="180.0" cy="250" r="86" fill="#FFFFFF"/>
+<circle cx="180.0" cy="250" r="106" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="2"/>
+<text x="180.0" y="274" font-family="Inter, Arial, sans-serif" font-size="64" font-weight="800" fill="#0E7490" text-anchor="middle">A</text>
+<text x="180.0" y="410" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="800" fill="#FFFFFF" text-anchor="middle">Ali (son)</text>
+<text x="180.0" y="444" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="500" fill="#CFFAFE" text-anchor="middle">is calling you</text>
+<circle cx="92" cy="610" r="46" fill="#B91C1C"/>
+<path d="M 75.9 591.6 L 85.1 589.3 L 89.7 600.8 L 83.95 605.4 Q 89.7 616.9 98.9 620.35 L 103.5 614.6 L 113.85 619.2 L 111.55 629.55 Q 73.6 628.4 75.9 591.6 Z" fill="#FFFFFF" transform="rotate(135 92 610)"/>
+<text x="92" y="678" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle"></text>
+<text x="92" y="686" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Decline</text>
+<circle cx="268" cy="610" r="46" fill="#15803D"/>
+<path d="M 251.9 591.6 L 261.1 589.3 L 265.7 600.8 L 259.95 605.4 Q 265.7 616.9 274.9 620.35 L 279.5 614.6 L 289.85 619.2 L 287.55 629.55 Q 249.6 628.4 251.9 591.6 Z" fill="#FFFFFF"/>
+<text x="268" y="678" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle"></text>
+<text x="268" y="686" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Answer</text>
+<text x="180.0" y="740" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#CFFAFE" text-anchor="middle">Rings for 30 seconds</text>
+</svg>

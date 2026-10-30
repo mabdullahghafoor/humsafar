@@ -15,7 +15,7 @@
 | 10 | Permissions per Secondary Guardian | Primary Guardian | FR-A4 | Guardian App |
 
 ## Design direction (decided 2026-10-19)
-- **Colours:** calm teal-blue. Primary `#0E7490`, dark `#155E75`, tint `#ECFEFF`; text `#0F172A`, muted `#475569`, border `#CBD5E1`; success `#15803D`, warning `#B45309`. **Red `#B91C1C` is reserved for Panic and critical alerts only.** *(Style guide v0.2, 21 Oct 2026: danger `#DC2626` → `#B91C1C` and muted `#64748B` → `#475569` so all text meets WCAG AA contrast, NFR-08; see `docs/qa/Humsafar_QA_NFR-08_Contrast_Check_v1.0.pdf`. The other mockup PNGs keep the old two colours until their next version; the style guide is the reference for the app.)*
+- **Colours:** calm teal-blue. Primary `#0E7490`, dark `#155E75`, tint `#ECFEFF`; text `#0F172A`, muted `#475569`, border `#CBD5E1`; success `#15803D`, warning `#B45309`. **Red `#B91C1C` is reserved for Panic and critical alerts only.** *(Style guide v0.2, 21 Oct 2026: danger `#DC2626` → `#B91C1C` and muted `#64748B` → `#475569` so all text meets WCAG AA contrast, NFR-08; see `docs/qa/Humsafar_QA_NFR-08_Contrast_Check_v1.0.pdf`. Since 30 Oct 2026 every mockup PNG uses these colours too, see "Colour update" below.)*
 - **Type:** Inter — title 26 bold, heading 18 bold, body 15, caption 12.
 - **Components:** buttons 54 px tall, 14 px radius; inputs 50 px, 12 px radius; touch targets at least 48 × 48; text contrast at least 4.5 : 1 (WCAG 2.1 AA).
 - Every app bar keeps the **Aa** (large text / high contrast) toggle and the **EN|UR** language switch (team UI convention).
@@ -25,3 +25,19 @@
 - Log in shows one message for wrong email and wrong password (by design, auth contract).
 - Screen 05/09: the Dependent's `user_id` is shared as QR or text (linkage contract §3).
 - The logo is a **placeholder** until the team picks one.
+
+## Colour update (30 Oct 2026)
+All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
+
+| # | Screen | Version |
+|---|---|---|
+| 01 | Welcome | v0.1 → **v0.2** |
+| 02 | Log in | v0.1 → **v0.2** |
+| 03 | Create account | v0.1 → **v0.2** |
+| 04 | Verify identity | v0.1 → **v0.2** |
+| 05 | Share my ID | v0.1 → **v0.2** |
+| 06 | Verify your account | v0.1 → **v0.2** |
+| 09 | Link a Dependent | v0.1 → **v0.2** |
+| 10 | Permissions | v0.1 → **v0.2** |
+
+Overview rebuilt from the latest versions: v0.2 → **v0.3**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.

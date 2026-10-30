@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>19b Emergency clips</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Emergency clips</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="109" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">A 20-second clip is recorded by the room phone</text>
+<text x="20" y="129" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">when Panic or the remote alarm is used.</text>
+<rect x="20" y="142" width="320" height="92" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="32" y="154" width="100" height="68" rx="16" fill="#334155"/>
+<rect x="32" y="196.16" width="100" height="25.84" rx="0" fill="#475569"/>
+<rect x="40.0" y="166.24" width="28.000000000000004" height="20.4" rx="6" fill="#475569"/>
+<rect x="84.0" y="182.56" width="38.0" height="20.4" rx="10" fill="#94A3B8"/>
+<circle cx="94.0" cy="178.48" r="4.760000000000001" fill="#CBD5E1"/>
+<circle cx="82" cy="188" r="15" fill="#FFFFFF" fill-opacity="0.80"/>
+<path d="M 77 180 L 90 188 L 77 196 Z" fill="#0F172A"/>
+<text x="146" y="176" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#B91C1C" text-anchor="start">Panic</text>
+<text x="146" y="196" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Today 9:42 AM · 20 s</text>
+<rect x="146" y="202" width="57" height="26" rx="13" fill="#DCFCE7"/>
+<text x="174.5" y="219" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#15803D" text-anchor="middle">Saved</text>
+<rect x="20" y="242" width="320" height="92" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="32" y="254" width="100" height="68" rx="16" fill="#334155"/>
+<rect x="32" y="296.15999999999997" width="100" height="25.84" rx="0" fill="#475569"/>
+<rect x="40.0" y="266.24" width="28.000000000000004" height="20.4" rx="6" fill="#475569"/>
+<rect x="84.0" y="282.56" width="38.0" height="20.4" rx="10" fill="#94A3B8"/>
+<circle cx="94.0" cy="278.48" r="4.760000000000001" fill="#CBD5E1"/>
+<circle cx="82" cy="288" r="15" fill="#FFFFFF" fill-opacity="0.80"/>
+<path d="M 77 280 L 90 288 L 77 296 Z" fill="#0F172A"/>
+<text x="146" y="276" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#0F172A" text-anchor="start">Remote alarm</text>
+<text x="146" y="296" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Sat 18 Oct · 4:05 PM · 20 s</text>
+<rect x="146" y="302" width="57" height="26" rx="13" fill="#DCFCE7"/>
+<text x="174.5" y="319" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#15803D" text-anchor="middle">Saved</text>
+<rect x="20" y="342" width="320" height="92" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="32" y="354" width="100" height="68" rx="10" fill="#E2E8F0"/>
+<text x="82" y="393" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">No video</text>
+<text x="146" y="376" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800" fill="#B91C1C" text-anchor="start">Panic</text>
+<text x="146" y="396" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Thu 16 Oct · 11:20 AM</text>
+<rect x="146" y="402" width="64" height="26" rx="13" fill="#E2E8F0"/>
+<text x="178.0" y="419" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="middle">Missed</text>
+<text x="20" y="454" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Missed = the room phone was offline or did not</text>
+<text x="20" y="473" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">send the clip within 3 minutes. Opening a clip</text>
+<text x="20" y="492" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">is written to the audit log.</text>
+<rect x="20" y="505" width="320" height="64" rx="12" fill="#ECFEFF"/>
+<circle cx="42" cy="528" r="9.0" fill="none" stroke="#0E7490" stroke-width="1.8"/>
+<line x1="42" y1="527" x2="42" y2="532" stroke="#0E7490" stroke-width="2"/>
+<circle cx="42" cy="523.5" r="1.2" fill="#0E7490"/>
+<text x="62" y="533" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Kept while the account is active</text>
+<text x="62" y="553" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Only Ammi or the Primary can delete one.</text>
+</svg>

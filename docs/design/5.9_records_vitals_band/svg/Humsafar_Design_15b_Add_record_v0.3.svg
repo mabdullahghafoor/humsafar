@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>15b Add record</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Add record</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="110" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Type</text>
+<rect x="20.0" y="120" width="154.0" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="30.0" y="126" width="40" height="48" rx="8" fill="#ECFEFF"/>
+<path d="M 58.0 126 L 70.0 138 L 58.0 138 Z" fill="#CFFAFE"/>
+<text x="50.0" y="158" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#0E7490" text-anchor="middle">Rx</text>
+<text x="78.0" y="155" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="start">Prescriptions</text>
+<rect x="186.0" y="120" width="154.0" height="60" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="2"/>
+<rect x="196.0" y="126" width="40" height="48" rx="8" fill="#ECFEFF"/>
+<path d="M 224.0 126 L 236.0 138 L 224.0 138 Z" fill="#CFFAFE"/>
+<text x="216.0" y="158" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="800" fill="#0E7490" text-anchor="middle">Lab</text>
+<text x="244.0" y="155" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#155E75" text-anchor="start">Lab reports</text>
+<rect x="20.0" y="190" width="154.0" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="30.0" y="196" width="40" height="48" rx="8" fill="#ECFEFF"/>
+<path d="M 58.0 196 L 70.0 208 L 58.0 208 Z" fill="#CFFAFE"/>
+<text x="50.0" y="228" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#0E7490" text-anchor="middle">X</text>
+<text x="78.0" y="225" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="start">X-rays &amp; scans</text>
+<rect x="186.0" y="190" width="154.0" height="60" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="196.0" y="196" width="40" height="48" rx="8" fill="#ECFEFF"/>
+<path d="M 224.0 196 L 236.0 208 L 224.0 208 Z" fill="#CFFAFE"/>
+<text x="216.0" y="228" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="800" fill="#0E7490" text-anchor="middle">...</text>
+<text x="244.0" y="225" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0F172A" text-anchor="start">Other</text>
+<text x="20" y="283" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Title</text>
+<rect x="20" y="291" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#15803D" stroke-width="2"/>
+<text x="36" y="321" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">HbA1c blood test</text>
+<path d="M 310.0 316 L 315.0 321.0 L 323.0 311.0" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="362" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Date of the report</text>
+<rect x="20" y="370" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="400" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">05 / 10 / 2026</text>
+<text x="20" y="441" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Note (optional)</text>
+<rect x="20" y="449" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<text x="36" y="479" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">Fasting sample, result 7.1%</text>
+<text x="20" y="520" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">File (optional if you write a note)</text>
+<rect x="20" y="529" width="320" height="92" rx="14" fill="#F8FAFC" stroke="#0E7490" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="78.0" y="558.6" width="24.0" height="18.0" rx="3" fill="none" stroke="#0E7490" stroke-width="2"/>
+<circle cx="90" cy="567" r="4.8" fill="none" stroke="#0E7490" stroke-width="2"/>
+<text x="90" y="601" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Take photo</text>
+<line x1="180.0" y1="547" x2="180.0" y2="603" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 270 573 L 270 559 M 265 564 L 270 559 L 275 564 M 262 568 L 262 576 L 278 576 L 278 568" fill="none" stroke="#0E7490" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="601" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Upload PDF / image</text>
+<text x="20" y="639" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">PDF, JPG or PNG · up to 10 MB · stored encrypted</text>
+<rect x="20" y="655" width="320" height="54" rx="14" fill="#0E7490"/>
+<text x="180.0" y="688.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Save record</text>
+</svg>

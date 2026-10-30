@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>25c Urgent message</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Urgent message</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="0" y="87" width="360" height="250" rx="0" fill="#FEF3C7"/>
+<circle cx="180.0" cy="160" r="42" fill="#FFFFFF"/>
+<text x="180.0" y="172.24" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#B45309" text-anchor="middle">S</text>
+<text x="180.0" y="240" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#B45309" text-anchor="middle">Urgent message</text>
+<text x="180.0" y="270" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="600" fill="#0F172A" text-anchor="middle">from Sara (daughter)</text>
+<text x="180.0" y="296" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#475569" text-anchor="middle">9:20 AM · 0:18</text>
+<circle cx="180.0" cy="440" r="76" fill="#ECFEFF"/>
+<circle cx="180.0" cy="440" r="60" fill="#0E7490"/>
+<path d="M 172.0 420.8 L 203.2 440 L 172.0 459.2 Z" fill="#FFFFFF"/>
+<text x="180.0" y="540" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#0F172A" text-anchor="middle">Tap to listen</text>
+<rect x="50" y="569.1069588848733" width="3" height="13.78608223025336" rx="1.5" fill="#0E7490"/>
+<rect x="56" y="570.6212220823602" width="3" height="10.7575558352797" rx="1.5" fill="#0E7490"/>
+<rect x="62" y="563.1022903163804" width="3" height="25.795419367239177" rx="1.5" fill="#0E7490"/>
+<rect x="68" y="570.0418960417874" width="3" height="11.916207916425348" rx="1.5" fill="#0E7490"/>
+<rect x="74" y="571.8588321656176" width="3" height="8.282335668764693" rx="1.5" fill="#0E7490"/>
+<rect x="80" y="563.2191261503511" width="3" height="25.561747699297605" rx="1.5" fill="#0E7490"/>
+<rect x="86" y="566.4929686881297" width="3" height="19.014062623740482" rx="1.5" fill="#0E7490"/>
+<rect x="92" y="564.5775463537541" width="3" height="22.844907292491854" rx="1.5" fill="#0E7490"/>
+<rect x="98" y="572.3543142819677" width="3" height="7.291371436064459" rx="1.5" fill="#0E7490"/>
+<rect x="104" y="564.708992500238" width="3" height="22.58201499952396" rx="1.5" fill="#0E7490"/>
+<rect x="110" y="565.1048504737726" width="3" height="21.790299052454795" rx="1.5" fill="#0E7490"/>
+<rect x="116" y="570.9352785004633" width="3" height="10.129442999073568" rx="1.5" fill="#0E7490"/>
+<rect x="122" y="567.6086068657432" width="3" height="16.78278626851357" rx="1.5" fill="#0E7490"/>
+<rect x="128" y="564.8074844049607" width="3" height="22.38503119007855" rx="1.5" fill="#0E7490"/>
+<rect x="134" y="572.4568234667762" width="3" height="7.086353066447498" rx="1.5" fill="#0E7490"/>
+<rect x="140" y="570.8895467246754" width="3" height="10.220906550649339" rx="1.5" fill="#0E7490"/>
+<rect x="146" y="573.322165845959" width="3" height="5.355668308082029" rx="1.5" fill="#CBD5E1"/>
+<rect x="152" y="563.5304577694335" width="3" height="24.93908446113293" rx="1.5" fill="#CBD5E1"/>
+<rect x="158" y="565.6645353612829" width="3" height="20.670929277434134" rx="1.5" fill="#CBD5E1"/>
+<rect x="164" y="571.3520165025641" width="3" height="9.295966994871932" rx="1.5" fill="#CBD5E1"/>
+<rect x="170" y="573.688157335942" width="3" height="4.6236853281159025" rx="1.5" fill="#CBD5E1"/>
+<rect x="176" y="565.845872791266" width="3" height="20.308254417468014" rx="1.5" fill="#CBD5E1"/>
+<rect x="182" y="565.6109671145424" width="3" height="20.778065770915283" rx="1.5" fill="#CBD5E1"/>
+<rect x="188" y="566.0371696207292" width="3" height="19.925660758541724" rx="1.5" fill="#CBD5E1"/>
+<rect x="194" y="573.0445930635262" width="3" height="5.91081387294758" rx="1.5" fill="#CBD5E1"/>
+<rect x="200" y="563.9143252524426" width="3" height="24.17134949511482" rx="1.5" fill="#CBD5E1"/>
+<rect x="206" y="572.0068518185515" width="3" height="7.986296362896955" rx="1.5" fill="#CBD5E1"/>
+<rect x="212" y="569.1489266733105" width="3" height="13.70214665337913" rx="1.5" fill="#CBD5E1"/>
+<rect x="218" y="567.1787508304574" width="3" height="17.64249833908515" rx="1.5" fill="#CBD5E1"/>
+<rect x="224" y="573.4057831595846" width="3" height="5.188433680830783" rx="1.5" fill="#CBD5E1"/>
+<rect x="230" y="564.2156417324562" width="3" height="23.568716535087518" rx="1.5" fill="#CBD5E1"/>
+<rect x="236" y="572.0696307812814" width="3" height="7.860738437437323" rx="1.5" fill="#CBD5E1"/>
+<rect x="242" y="572.4450945692441" width="3" height="7.109810861511765" rx="1.5" fill="#CBD5E1"/>
+<rect x="248" y="564.6741271044737" width="3" height="22.651745791052765" rx="1.5" fill="#CBD5E1"/>
+<rect x="254" y="569.1890151307445" width="3" height="13.621969738510996" rx="1.5" fill="#CBD5E1"/>
+<rect x="260" y="568.6315018287332" width="3" height="14.736996342533462" rx="1.5" fill="#CBD5E1"/>
+<rect x="266" y="572.8913006928213" width="3" height="6.217398614357238" rx="1.5" fill="#CBD5E1"/>
+<rect x="272" y="563.6236561096911" width="3" height="24.75268778061792" rx="1.5" fill="#CBD5E1"/>
+<rect x="278" y="569.587426958982" width="3" height="12.82514608203618" rx="1.5" fill="#CBD5E1"/>
+<rect x="284" y="563.2106281985026" width="3" height="25.578743602994717" rx="1.5" fill="#CBD5E1"/>
+<rect x="290" y="570.0490345280854" width="3" height="11.901930943829278" rx="1.5" fill="#CBD5E1"/>
+<rect x="296" y="566.6483090364999" width="3" height="18.703381927000237" rx="1.5" fill="#CBD5E1"/>
+<rect x="302" y="564.8701511970173" width="3" height="22.259697605965464" rx="1.5" fill="#CBD5E1"/>
+<text x="50" y="606" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">0:06</text>
+<text x="310" y="606" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="end">0:18</text>
+<rect x="20" y="626" width="320" height="60" rx="14" fill="#0E7490"/>
+<text x="180.0" y="662.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">I heard it</text>
+<rect x="20" y="698" width="320" height="54" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="731.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Call Sara</text>
+</svg>

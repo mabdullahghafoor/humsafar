@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>27b Connect band</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Connect band</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="180.0" y="126" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A" text-anchor="middle">Turn on your band</text>
+<text x="180.0" y="152" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569" text-anchor="middle">Keep it close to your phone</text>
+<circle cx="180.0" cy="266" r="98" fill="#0E7490" fill-opacity="0.1"/>
+<circle cx="180.0" cy="266" r="74" fill="#0E7490" fill-opacity="0.18"/>
+<circle cx="180.0" cy="266" r="50" fill="#0E7490" fill-opacity="0.3"/>
+<circle cx="180.0" cy="266" r="30" fill="#0E7490"/>
+<path d="M 175.0 261 L 185.0 271 L 180.0 276 L 180.0 256 L 185.0 261 L 175.0 271" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="20" y="386" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">Bands found</text>
+<rect x="20" y="400" width="320" height="76" rx="16" fill="#ECFEFF" stroke="#0E7490" stroke-width="2"/>
+<rect x="44.4" y="423.6" width="11.200000000000001" height="28.8" rx="3.2" fill="none" stroke="#0E7490" stroke-width="2"/>
+<rect x="41.2" y="430.8" width="17.6" height="14.4" rx="4.0" fill="#0E7490"/>
+<rect x="44.4" y="434.0" width="11.200000000000001" height="8.0" rx="1.6" fill="#FFFFFF"/>
+<text x="78" y="434" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Band 7A2F</text>
+<text x="78" y="455" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Strong signal</text>
+<rect x="248" y="420" width="76" height="36" rx="18" fill="#0E7490"/>
+<text x="286" y="443" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="middle">Connect</text>
+<rect x="20" y="486" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="44.4" y="509.6" width="11.200000000000001" height="28.8" rx="3.2" fill="none" stroke="#475569" stroke-width="2"/>
+<rect x="41.2" y="516.8" width="17.6" height="14.4" rx="4.0" fill="#475569"/>
+<rect x="44.4" y="520.0" width="11.200000000000001" height="8.0" rx="1.6" fill="#FFFFFF"/>
+<text x="78" y="520" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#475569" text-anchor="start">Unknown device</text>
+<text x="78" y="541" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Weak signal</text>
+<text x="180.0" y="586" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#475569" text-anchor="middle">Not working? Ask your Guardian to help.</text>
+</svg>

@@ -19,7 +19,9 @@ The working design lives in Figma (file: *Humsafar – App Design*). This folder
 | `coverage/` | — | Design coverage check (every SRS requirement → screen) + screens that were missing: 07b Switch Dependent, 16 Analytics (v0.3), 16b Summary reports, 30 Settings, 30b Close my account, 30c Close Dependent, 31 Audit log (v0.2), 32 My settings | 7.3 and later |
 | `ui_text/` | — | All fixed screen text in English and Urdu with suggested localisation keys (v0.6, 626 lines) | 7.4 |
 
-**Colours:** the style guide v0.2 tokens are the reference. Some older PNGs (v0.1) still show the earlier red `#DC2626` and grey `#64748B`; build with `#B91C1C` and `#475569` (NFR-08 contrast fix). Layouts are unchanged.
+**Colours:** the style guide v0.2 tokens are the reference. **Since 30 Oct 2026 all hi-fi screens use them**: the 47 screens that still showed the old red `#DC2626` and grey `#64748B` were updated to `#B91C1C` and `#475569` (NFR-08 contrast fix) as a new version, colours only, layouts unchanged (see "Colour update" in each folder README). The design handoff v1.0 note about 47 old-colour PNGs is now resolved.
+
+**SVG sources:** each hi-fi folder has an `svg/` subfolder with the editable source of every screen (same file name, `.svg`). Figma imports these as editable layers; the PNGs are the exported snapshots.
 
 **File naming:** `Humsafar_Design_<number>_<Screen>_v<version>.png`, e.g. `Humsafar_Design_15f_Doctor_links_v0.2.png`. Screen numbers match the Figma frame names (page *02 · App Designs (Hi-Fi)*).
 

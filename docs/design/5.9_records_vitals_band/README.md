@@ -60,3 +60,18 @@
 3. **Doctor link (FR-G3)** is now built by the backend (Task 5.1).
 4. ~~Reminder times~~ settled by the contract: 24 hours and 1 hour before.
 5. ~~Steps~~ removed in v0.3: the band does not send steps until the sensor list is known (clarification 89).
+
+## Colour update (30 Oct 2026)
+All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
+
+| # | Screen | Version |
+|---|---|---|
+| 15 | Medical Vault | v0.2 → **v0.3** |
+| 15b | Add record | v0.2 → **v0.3** |
+| 15d | Appointments | v0.2 → **v0.3** |
+| 15e | Record access | v0.2 → **v0.3** |
+| 15f | Doctor links | v0.2 → **v0.3** |
+| 27b | Connect band | v0.2 → **v0.3** |
+| 28 | My health | v0.2 → **v0.3** |
+
+Overview rebuilt from the latest versions: v0.3 → **v0.4**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.

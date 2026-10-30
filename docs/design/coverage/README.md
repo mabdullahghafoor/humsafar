@@ -17,7 +17,7 @@ Every functional requirement group in SRS v1.0 was compared with the 57 hi-fi sc
 | 31 | Audit log (**v0.2**, `audit_contract.md`, Task 6.6) — newest first, the server's readable `label` + who did it + time, filters Who (actor) and When (period); Primary only, read-only; messages, locations and band readings are not listed | Guardian | FR-N3 | Built (Task 6.6) |
 | 32 | My settings — big Language and Text size buttons, Show my ID (opens 05), who looks after me, log out with confirmation | Dependent | FR-P1, FR-P2, FR-P4 | Exists (`/auth/me`, linkage) |
 
-Files: `Humsafar_Design_<number>_<Screen>_v0.1.png` (16 is v0.3; 16b, 30b, 30c, 31 are v0.2) and `Humsafar_Design_Coverage_Overview_v0.2.png` (rebuilt from the latest versions).
+Files: `Humsafar_Design_<number>_<Screen>_v<version>.png` (07b, 30, 32 are v0.2 after the colour update; 16 is v0.3; 16b, 30b, 30c, 31 are v0.2) and `Humsafar_Design_Coverage_Overview_v0.3.png` (rebuilt from the latest versions).
 
 ## Coverage matrix (SRS v1.0 → screens)
 
@@ -74,3 +74,14 @@ Files: `Humsafar_Design_<number>_<Screen>_v0.1.png` (16 is v0.3; 16b, 30b, 30c, 
 3. ✅ **Analytics (16)** and **Summary reports (16b)** match Tasks 7.1 and 7.2.
 4. **How the Dependent reaches My settings (32):** suggested from the "More" link on Home (20); no gear icon, to keep the Dependent home simple.
 5. Urdu is shown as "Urdu" in the language buttons of 32 only because the PNG export has no Urdu font; in the app the button says اردو.
+
+## Colour update (30 Oct 2026)
+All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
+
+| # | Screen | Version |
+|---|---|---|
+| 07b | Switch Dependent | v0.1 → **v0.2** |
+| 30 | Settings | v0.1 → **v0.2** |
+| 32 | My settings | v0.1 → **v0.2** |
+
+Overview rebuilt from the latest versions: v0.2 → **v0.3**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.

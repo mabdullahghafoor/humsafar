@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>15e Record access</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Record access</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<text x="20" y="109" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Choose which record types each Secondary</text>
+<text x="20" y="129" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">Guardian can see. You always see everything.</text>
+<rect x="20" y="142" width="320" height="236" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="48" cy="172" r="16" fill="#ECFEFF"/>
+<text x="48" y="176.608" font-family="Inter, Arial, sans-serif" font-size="12.8" font-weight="800" fill="#0E7490" text-anchor="middle">S</text>
+<text x="74" y="169" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Sara</text>
+<text x="74" y="187" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">daughter · Secondary</text>
+<line x1="36" y1="200" x2="324" y2="200" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="230" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">Prescriptions</text>
+<rect x="276" y="212" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="226" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="244" x2="324" y2="244" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="274" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">Lab reports</text>
+<rect x="276" y="256" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="270" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="288" x2="324" y2="288" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="318" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">X-rays &amp; scans</text>
+<rect x="276" y="300" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="314" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="332" x2="324" y2="332" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="362" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">Other</text>
+<rect x="276" y="344" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="358" r="11" fill="#FFFFFF"/>
+<rect x="20" y="390" width="320" height="236" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<circle cx="48" cy="420" r="16" fill="#ECFEFF"/>
+<text x="48" y="424.608" font-family="Inter, Arial, sans-serif" font-size="12.8" font-weight="800" fill="#0E7490" text-anchor="middle">B</text>
+<text x="74" y="417" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" fill="#0F172A" text-anchor="start">Bilal</text>
+<text x="74" y="435" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">nephew · Secondary</text>
+<line x1="36" y1="448" x2="324" y2="448" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="478" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">Prescriptions</text>
+<rect x="276" y="460" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="474" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="492" x2="324" y2="492" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="522" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">Lab reports</text>
+<rect x="276" y="504" width="48" height="28" rx="14" fill="#0E7490"/>
+<circle cx="310" cy="518" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="536" x2="324" y2="536" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="566" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">X-rays &amp; scans</text>
+<rect x="276" y="548" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="562" r="11" fill="#FFFFFF"/>
+<line x1="36" y1="580" x2="324" y2="580" stroke="#E2E8F0" stroke-width="1"/>
+<text x="36" y="610" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#0F172A" text-anchor="start">Other</text>
+<rect x="276" y="592" width="48" height="28" rx="14" fill="#CBD5E1"/>
+<circle cx="290" cy="606" r="11" fill="#FFFFFF"/>
+<rect x="20" y="638" width="320" height="64" rx="12" fill="#ECFEFF"/>
+<circle cx="42" cy="661" r="9.0" fill="none" stroke="#0E7490" stroke-width="1.8"/>
+<line x1="42" y1="660" x2="42" y2="665" stroke="#0E7490" stroke-width="2"/>
+<circle cx="42" cy="656.5" r="1.2" fill="#0E7490"/>
+<text x="62" y="666" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Needs Health Records permission first</text>
+<text x="62" y="686" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Set on the Permissions screen</text>
+</svg>

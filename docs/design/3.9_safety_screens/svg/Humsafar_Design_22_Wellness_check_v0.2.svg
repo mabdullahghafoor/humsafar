@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>22 Wellness check</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<text x="20" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Wellness check</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="0" y="87" width="360" height="230" rx="0" fill="#ECFEFF"/>
+<text x="180.0" y="170" font-family="Inter, Arial, sans-serif" font-size="38" font-weight="800" fill="#155E75" text-anchor="middle">Are you OK?</text>
+<text x="180.0" y="208" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#0F172A" text-anchor="middle">Your family is checking on you</text>
+<rect x="88.0" y="236" width="184" height="40" rx="20" fill="#FFFFFF"/>
+<text x="180.0" y="262" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0E7490" text-anchor="middle">Answer within 29:12</text>
+<rect x="20" y="344" width="320" height="170" rx="22" fill="#0E7490"/>
+<text x="180.0" y="439.0" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF" text-anchor="middle">Yes, I am OK</text>
+<rect x="20" y="530" width="320" height="96" rx="22" fill="#FFFFFF" stroke="#B91C1C" stroke-width="2.5"/>
+<text x="180.0" y="588" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#B91C1C" text-anchor="middle">I need help</text>
+<text x="180.0" y="646" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="middle">&#x27;I need help&#x27; opens Panic.</text>
+<text x="180.0" y="666" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="middle">No answer → your Guardian is told.</text>
+</svg>

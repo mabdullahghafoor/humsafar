@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>30b Close my account</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Close my account</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="64" rx="12" fill="#FEF3C7"/>
+<circle cx="42" cy="119" r="9.0" fill="none" stroke="#B45309" stroke-width="1.8"/>
+<line x1="42" y1="118" x2="42" y2="123" stroke="#B45309" stroke-width="2"/>
+<circle cx="42" cy="114.5" r="1.2" fill="#B45309"/>
+<text x="62" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#B45309" text-anchor="start">You can reopen it for 60 days</text>
+<text x="62" y="144" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">After that your details are made anonymous.</text>
+<text x="20" y="192" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">What happens</text>
+<circle cx="28" cy="213" r="3" fill="#0F172A"/>
+<text x="40" y="218" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="start">You are signed out on every phone.</text>
+<circle cx="28" cy="235" r="3" fill="#0F172A"/>
+<text x="40" y="240" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="start">Your links to Dependents end; the Primary</text>
+<text x="40" y="262" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="start">is told. Ammi keeps her other Guardians.</text>
+<circle cx="28" cy="279" r="3" fill="#0F172A"/>
+<text x="40" y="284" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="500" fill="#0F172A" text-anchor="start">To reopen: sign in page → Reopen account.</text>
+<rect x="20" y="302" width="320" height="82" rx="14" fill="#FEF3C7"/>
+<text x="36" y="328" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" fill="#0F172A" text-anchor="start">You are Primary for Ammi</text>
+<text x="36" y="348" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Close Ammi&#x27;s account first, then yours.</text>
+<text x="36" y="370" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800" fill="#155E75" text-anchor="start">Close Ammi&#x27;s account  ›</text>
+<text x="20" y="411" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#0F172A" text-anchor="start">Your password</text>
+<rect x="20" y="419" width="320" height="50" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="33.0" y="442.0" width="14.0" height="11.0" rx="2" fill="none" stroke="#475569" stroke-width="2"/>
+<path d="M 36.0 442.0 L 36.0 438.0 Q 40 433.0 44.0 438.0 L 44.0 442.0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="60" y="449" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#0F172A" text-anchor="start">••••••••</text>
+<path d="M 307 444 Q 316 436 325 444 Q 316 452 307 444 Z" fill="none" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="316" cy="444" r="2.5" fill="#475569"/>
+<rect x="20" y="477" width="320" height="54" rx="14" fill="#B45309"/>
+<text x="180.0" y="510" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Close my account</text>
+<rect x="20" y="543" width="320" height="50" rx="14" fill="#FFFFFF" stroke="#0E7490" stroke-width="1.6"/>
+<text x="180.0" y="574.0" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E7490" text-anchor="middle">Keep my account</text>
+</svg>
