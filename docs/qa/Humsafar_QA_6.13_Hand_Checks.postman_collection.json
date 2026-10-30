@@ -1,0 +1,1540 @@
+{
+ "info": {
+  "name": "Humsafar 6.13 hand checks (S-09, S-12)",
+  "schema": "https://schema.getpostman.com/json/collections/v2.1.0/collection.json",
+  "description": "Two security checks from the 6.13 review that are not in the main collection. Run with the Humsafar - Local environment on a freshly started backend."
+ },
+ "item": [
+  {
+   "name": "S-12 Camera stream token is not cached",
+   "item": [
+    {
+     "name": "1. Register primary guardian",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/auth/register",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "auth",
+        "register"
+       ]
+      },
+      "description": "Create the Guardian who will be Primary.",
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"{{cm_p_email}}\",\n  \"phone\": \"{{cm_p_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      }
+     },
+     "event": [
+      {
+       "listen": "prerequest",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "const r = () => Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+         "const run = r();",
+         "pm.environment.set('cm_p_email','cmp'+run+'@humsafar-test.com'); pm.environment.set('cm_p_phone','03'+r());",
+         "pm.environment.set('cm_d_email','cmd'+run+'@humsafar-test.com'); pm.environment.set('cm_d_phone','03'+r());",
+         "pm.environment.set('cm_s_email','cms'+run+'@humsafar-test.com'); pm.environment.set('cm_s_phone','03'+r());",
+         "const d = Math.floor(Math.random()*1e11).toString().padStart(11,'0'); pm.environment.set('cm_d_cnic','4'+d+'1');",
+         "if (!pm.environment.get('test_password')) pm.environment.set('test_password','correct-horse-9');"
+        ]
+       }
+      },
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('201', () => pm.response.to.have.status(201));"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "2. Login primary",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/auth/login",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "auth",
+        "login"
+       ]
+      },
+      "description": "Log in the Primary.",
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"{{cm_p_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));",
+         "pm.environment.set('cm_p_token', pm.response.json().access_token);"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "3. Verify primary (CNIC)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       },
+       {
+        "key": "Authorization",
+        "value": "Bearer {{cm_p_token}}"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-cnic",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-cnic"
+       ]
+      },
+      "description": "Mock CNIC check.",
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"cnic\": \"42101-1234567-1\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "4. Register dependent",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/auth/register",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "auth",
+        "register"
+       ]
+      },
+      "description": "Create the Dependent account.",
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"{{cm_d_email}}\",\n  \"phone\": \"{{cm_d_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"dependent\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('201', () => pm.response.to.have.status(201));",
+         "pm.environment.set('cm_d_id', pm.response.json().user_id);"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "5. Dependent KYC",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/dependents/{{cm_d_id}}/kyc-verify",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "dependents",
+        "{{cm_d_id}}",
+        "kyc-verify"
+       ]
+      },
+      "description": "Mock KYC.",
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"password\": \"{{test_password}}\",\n  \"cnic\": \"{{cm_d_cnic}}\",\n  \"liveness_image\": \"VGhpcyBpcyBhIHBob3Rv\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "6. Primary links the dependent",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Authorization",
+        "value": "Bearer {{cm_p_token}}"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/dependents/{{cm_d_id}}/link",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "dependents",
+        "{{cm_d_id}}",
+        "link"
+       ]
+      },
+      "description": "Primary claims the Dependent."
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('201', () => pm.response.to.have.status(201));"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "7. Login dependent (the phone's token)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/auth/login",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "auth",
+        "login"
+       ]
+      },
+      "description": "The Dependent's phone gets its token.",
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"{{cm_d_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));",
+         "pm.environment.set('cm_d_token', pm.response.json().access_token);"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "12. Dependent's camera phone pairs itself",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       },
+       {
+        "key": "Authorization",
+        "value": "Bearer {{cm_d_token}}"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/dependents/{{cm_d_id}}/camera",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "dependents",
+        "{{cm_d_id}}",
+        "camera"
+       ]
+      },
+      "description": "FR-K1. The camera is a spare Android phone signed in as the Dependent, in camera mode. Pairing gives it a private video room. The Dependent or the Primary can pair; pairing again only changes the name (200). `name` is optional, max 60.",
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"name\": \"Hall phone\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('201', () => pm.response.to.have.status(201));",
+         "const j = pm.response.json();",
+         "pm.test('paired, not online yet', () => { pm.expect(j.paired).to.eql(true); pm.expect(j.name).to.eql('Hall phone'); pm.expect(j.online).to.eql(false); pm.expect(j.max_viewers).to.eql(3); });"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "201 Created",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{cm_d_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/dependents/{{cm_d_id}}/camera",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "dependents",
+          "{{cm_d_id}}",
+          "camera"
+         ]
+        },
+        "description": "FR-K1. The camera is a spare Android phone signed in as the Dependent, in camera mode. Pairing gives it a private video room. The Dependent or the Primary can pair; pairing again only changes the name (200). `name` is optional, max 60.",
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"Hall phone\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        }
+       },
+       "status": "Created",
+       "code": 201,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "Content-Type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"paired\": true,\n  \"camera_id\": \"5d6e7f80-9a0b-4c1d-8e2f-3a4b5c6d7e8f\",\n  \"name\": \"Hall phone\",\n  \"paired_at\": \"2026-10-21T10:00:00Z\",\n  \"online\": true,\n  \"last_seen_at\": \"2026-10-21T10:00:05Z\",\n  \"viewers_now\": 1,\n  \"max_viewers\": 3\n}"
+      }
+     ]
+    },
+    {
+     "name": "15. Camera phone checks in (nobody watching)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Authorization",
+        "value": "Bearer {{cm_d_token}}"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/dependents/{{cm_d_id}}/camera/heartbeat",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "dependents",
+        "{{cm_d_id}}",
+        "camera",
+        "heartbeat"
+       ]
+      },
+      "description": "Only the Dependent's own phone. Call every `next_poll_s` seconds. The phone sends video only when `should_publish` is true (privacy and battery)."
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));",
+         "pm.test('stay dark', () => { const j = pm.response.json(); pm.expect(j.should_publish).to.eql(false); pm.expect(j.next_poll_s).to.eql(10); });"
+        ]
+       }
+      }
+     ],
+     "response": []
+    },
+    {
+     "name": "17. Primary starts watching \u2014 check the token is not cached (S-12)",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Authorization",
+        "value": "Bearer {{cm_p_token}}"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/dependents/{{cm_d_id}}/camera/stream",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "dependents",
+        "{{cm_d_id}}",
+        "camera",
+        "stream"
+       ]
+      },
+      "description": "Starts a viewing session (90 seconds) and returns the room join token (a viewer token cannot send video). Call it again before `expires_at` (every `renew_every_s`) to keep watching; the app stops calling when the screen closes. At most 3 viewers at once (409 `TOO_MANY_VIEWERS`)."
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));",
+         "const j = pm.response.json();",
+         "pm.test('session and viewer token', () => { pm.expect(j.renewed).to.eql(false); pm.expect(j.join.token).to.be.a('string').and.not.empty; pm.expect(j.join.room_id).to.include('cam-'); pm.expect(j.renew_every_s).to.eql(30); });",
+         "pm.environment.set('cm_session', j.session_id);",
+         "pm.test('S-12: Cache-Control has no-store', () => pm.expect((pm.response.headers.get('Cache-Control')||'').toLowerCase()).to.include('no-store'));",
+         "pm.test('S-12: Cache-Control is private', () => pm.expect((pm.response.headers.get('Cache-Control')||'').toLowerCase()).to.include('private'));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "200 OK",
+       "originalRequest": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{cm_p_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/dependents/{{cm_d_id}}/camera/stream",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "dependents",
+          "{{cm_d_id}}",
+          "camera",
+          "stream"
+         ]
+        },
+        "description": "Starts a viewing session (90 seconds) and returns the room join token (a viewer token cannot send video). Call it again before `expires_at` (every `renew_every_s`) to keep watching; the app stops calling when the screen closes. At most 3 viewers at once (409 `TOO_MANY_VIEWERS`)."
+       },
+       "status": "OK",
+       "code": 200,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "Content-Type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"session_id\": \"6e7f8091-a0b1-4c2d-9e3f-4a5b6c7d8e9f\",\n  \"dependent_id\": \"00000000-0000-0000-0000-000000000002\",\n  \"camera_name\": \"Hall phone\",\n  \"started_at\": \"2026-10-21T10:00:00Z\",\n  \"expires_at\": \"2026-10-21T10:01:30Z\",\n  \"renew_every_s\": 30,\n  \"join\": {\n    \"provider\": \"zego\",\n    \"app_id\": \"123456789\",\n    \"room_id\": \"cam-00000000000000000000000000000002\",\n    \"stream_id\": \"cam-00000000000000000000000000000002-stream\",\n    \"user_id\": \"00000000-0000-0000-0000-000000000001\",\n    \"token\": \"<token for this viewer>\",\n    \"expires_at\": \"2026-10-21T10:01:30Z\"\n  },\n  \"renewed\": false\n}"
+      }
+     ]
+    },
+    {
+     "name": "30. Primary stops watching",
+     "request": {
+      "method": "DELETE",
+      "header": [
+       {
+        "key": "Authorization",
+        "value": "Bearer {{cm_p_token}}"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/dependents/{{cm_d_id}}/camera/stream",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "dependents",
+        "{{cm_d_id}}",
+        "camera",
+        "stream"
+       ]
+      },
+      "description": "Safe to repeat. Leaving never needs permission."
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('204', () => pm.response.to.have.status(204));"
+        ]
+       }
+      }
+     ],
+     "response": []
+    }
+   ]
+  },
+  {
+   "name": "S-09 Wrong phone codes are rate limited",
+   "item": [
+    {
+     "name": "1. Register guardian",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/auth/register",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "auth",
+        "register"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"{{kyc_guardian_email}}\",\n  \"phone\": \"{{kyc_guardian_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Test User\",\n  \"role\": \"guardian\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "description": "Create a Guardian or Dependent account.\n\n**Auth:** none. **Body:** email, phone, password, role (`guardian` | `dependent`); optional `invite_token` (Guardians only) joins as a Secondary.\n**Errors:** 409 EMAIL_ALREADY_REGISTERED / PHONE_ALREADY_REGISTERED, 400/403 invite errors, 422 VALIDATION_ERROR.\n\n**This example:** 1. Register guardian"
+     },
+     "event": [
+      {
+       "listen": "prerequest",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "const n = Math.floor(Math.random()*1e9).toString().padStart(9,'0');",
+         "pm.environment.set('kyc_guardian_email', 'kycg' + n + '@humsafar-test.com');",
+         "pm.environment.set('kyc_guardian_phone', '03' + n);",
+         "if (!pm.environment.get('test_password')) pm.environment.set('test_password', 'correct-horse-9');"
+        ]
+       }
+      },
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('201', () => pm.response.to.have.status(201));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "201 Created",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/auth/register",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "auth",
+          "register"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"email\": \"{{kyc_guardian_email}}\",\n  \"phone\": \"{{kyc_guardian_phone}}\",\n  \"password\": \"{{test_password}}\",\n  \"role\": \"guardian\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "Create a Guardian or Dependent account.\n\n**Auth:** none. **Body:** email, phone, password, role (`guardian` | `dependent`); optional `invite_token` (Guardians only) joins as a Secondary.\n**Errors:** 409 EMAIL_ALREADY_REGISTERED / PHONE_ALREADY_REGISTERED, 400/403 invite errors, 422 VALIDATION_ERROR.\n\n**This example:** 1. Register guardian"
+       },
+       "status": "Created",
+       "code": 201,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"user_id\": \"cf117efa-78f2-4cae-856e-a0d6538055b1\",\n  \"email\": \"kycg758266579@humsafar-test.com\",\n  \"phone\": \"+923758266579\",\n  \"role\": \"guardian\",\n  \"guardian_role\": \"primary\",\n  \"created_at\": \"2026-10-14T17:41:27.995946Z\"\n}"
+      }
+     ]
+    },
+    {
+     "name": "2. Login guardian",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/auth/login",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "auth",
+        "login"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"{{kyc_guardian_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "description": "Log in and receive an access token (15 min) and refresh token (7 days).\n\n**Auth:** none.\n**Errors:** 401 INVALID_CREDENTIALS, 403 ACCOUNT_NOT_ACTIVATED (Dependent not yet verified and linked).\n\n**This example:** 2. Login guardian"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));",
+         "pm.environment.set('access_token', pm.response.json().access_token);",
+         "pm.environment.set('refresh_token', pm.response.json().refresh_token);"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "200 OK",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/auth/login",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "auth",
+          "login"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"email\": \"{{kyc_guardian_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "Log in and receive an access token (15 min) and refresh token (7 days).\n\n**Auth:** none.\n**Errors:** 401 INVALID_CREDENTIALS, 403 ACCOUNT_NOT_ACTIVATED (Dependent not yet verified and linked).\n\n**This example:** 2. Login guardian"
+       },
+       "status": "OK",
+       "code": 200,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"access_token\": \"<jwt>\",\n  \"refresh_token\": \"<jwt>\",\n  \"token_type\": \"bearer\",\n  \"expires_in\": 900,\n  \"user\": {\n    \"user_id\": \"cf117efa-78f2-4cae-856e-a0d6538055b1\",\n    \"email\": \"kycg758266579@humsafar-test.com\",\n    \"phone\": \"+923758266579\",\n    \"role\": \"guardian\",\n    \"guardian_role\": \"primary\",\n    \"created_at\": \"2026-10-14T17:41:27.995946Z\"\n  }\n}"
+      }
+     ]
+    },
+    {
+     "name": "4. Request phone OTP",
+     "request": {
+      "method": "POST",
+      "header": [],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-phone/request",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-phone",
+        "request"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{access_token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "description": "Send a phone OTP (mocked). In development the code is returned as `dev_otp`; in production it is never returned.\n\n**Auth:** access token (Guardian).\n\n**This example:** 4. Request phone OTP"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('200', () => pm.response.to.have.status(200));",
+         "pm.environment.set('otp_code', pm.response.json().dev_otp);",
+         "pm.test('OTP sent', () => pm.expect(pm.response.json().sent).to.eql(true));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "200 OK",
+       "originalRequest": {
+        "method": "POST",
+        "header": [],
+        "url": {
+         "raw": "{{base_url}}/guardians/me/verify-phone/request",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "guardians",
+          "me",
+          "verify-phone",
+          "request"
+         ]
+        },
+        "auth": {
+         "type": "bearer",
+         "bearer": [
+          {
+           "key": "token",
+           "value": "{{access_token}}",
+           "type": "string"
+          }
+         ]
+        },
+        "description": "Send a phone OTP (mocked). In development the code is returned as `dev_otp`; in production it is never returned.\n\n**Auth:** access token (Guardian).\n\n**This example:** 4. Request phone OTP"
+       },
+       "status": "OK",
+       "code": 200,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"sent\": true,\n  \"expires_in\": 300,\n  \"dev_otp\": \"123456\"\n}"
+      }
+     ]
+    },
+    {
+     "name": "Wrong code 1 of 5 (expect 400)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-phone",
+        "confirm"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"code\": \"000000\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{access_token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('400', () => pm.response.to.have.status(400));",
+         "pm.test('OTP_INVALID', () => pm.expect(pm.response.json().error.code).to.eql('OTP_INVALID'));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "400 Bad Request",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "guardians",
+          "me",
+          "verify-phone",
+          "confirm"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"code\": \"000000\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "auth": {
+         "type": "bearer",
+         "bearer": [
+          {
+           "key": "token",
+           "value": "{{access_token}}",
+           "type": "string"
+          }
+         ]
+        },
+        "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+       },
+       "status": "Bad Request",
+       "code": 400,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": \"That code is incorrect or has expired.\",\n    \"details\": {}\n  }\n}"
+      }
+     ]
+    },
+    {
+     "name": "Wrong code 2 of 5 (expect 400)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-phone",
+        "confirm"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"code\": \"000000\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{access_token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('400', () => pm.response.to.have.status(400));",
+         "pm.test('OTP_INVALID', () => pm.expect(pm.response.json().error.code).to.eql('OTP_INVALID'));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "400 Bad Request",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "guardians",
+          "me",
+          "verify-phone",
+          "confirm"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"code\": \"000000\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "auth": {
+         "type": "bearer",
+         "bearer": [
+          {
+           "key": "token",
+           "value": "{{access_token}}",
+           "type": "string"
+          }
+         ]
+        },
+        "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+       },
+       "status": "Bad Request",
+       "code": 400,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": \"That code is incorrect or has expired.\",\n    \"details\": {}\n  }\n}"
+      }
+     ]
+    },
+    {
+     "name": "Wrong code 3 of 5 (expect 400)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-phone",
+        "confirm"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"code\": \"000000\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{access_token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('400', () => pm.response.to.have.status(400));",
+         "pm.test('OTP_INVALID', () => pm.expect(pm.response.json().error.code).to.eql('OTP_INVALID'));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "400 Bad Request",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "guardians",
+          "me",
+          "verify-phone",
+          "confirm"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"code\": \"000000\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "auth": {
+         "type": "bearer",
+         "bearer": [
+          {
+           "key": "token",
+           "value": "{{access_token}}",
+           "type": "string"
+          }
+         ]
+        },
+        "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+       },
+       "status": "Bad Request",
+       "code": 400,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": \"That code is incorrect or has expired.\",\n    \"details\": {}\n  }\n}"
+      }
+     ]
+    },
+    {
+     "name": "Wrong code 4 of 5 (expect 400)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-phone",
+        "confirm"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"code\": \"000000\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{access_token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('400', () => pm.response.to.have.status(400));",
+         "pm.test('OTP_INVALID', () => pm.expect(pm.response.json().error.code).to.eql('OTP_INVALID'));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "400 Bad Request",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "guardians",
+          "me",
+          "verify-phone",
+          "confirm"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"code\": \"000000\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "auth": {
+         "type": "bearer",
+         "bearer": [
+          {
+           "key": "token",
+           "value": "{{access_token}}",
+           "type": "string"
+          }
+         ]
+        },
+        "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+       },
+       "status": "Bad Request",
+       "code": 400,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": \"That code is incorrect or has expired.\",\n    \"details\": {}\n  }\n}"
+      }
+     ]
+    },
+    {
+     "name": "Wrong code 5 of 5 (expect 400)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-phone",
+        "confirm"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"code\": \"000000\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{access_token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('400', () => pm.response.to.have.status(400));",
+         "pm.test('OTP_INVALID', () => pm.expect(pm.response.json().error.code).to.eql('OTP_INVALID'));"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "400 Bad Request",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "guardians",
+          "me",
+          "verify-phone",
+          "confirm"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"code\": \"000000\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "auth": {
+         "type": "bearer",
+         "bearer": [
+          {
+           "key": "token",
+           "value": "{{access_token}}",
+           "type": "string"
+          }
+         ]
+        },
+        "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+       },
+       "status": "Bad Request",
+       "code": 400,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": \"That code is incorrect or has expired.\",\n    \"details\": {}\n  }\n}"
+      }
+     ]
+    },
+    {
+     "name": "6th wrong code is refused (S-09, expect 429)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "guardians",
+        "me",
+        "verify-phone",
+        "confirm"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"code\": \"000000\"\n}",
+       "options": {
+        "raw": {
+         "language": "json"
+        }
+       }
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{access_token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "type": "text/javascript",
+        "exec": [
+         "pm.test('S-09: 429 TOO_MANY_REQUESTS', () => pm.response.to.have.status(429));",
+         "pm.test('S-09: Retry-After header present', () => pm.expect(pm.response.headers.has('Retry-After')).to.be.true);"
+        ]
+       }
+      }
+     ],
+     "response": [
+      {
+       "name": "400 Bad Request",
+       "originalRequest": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/guardians/me/verify-phone/confirm",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "guardians",
+          "me",
+          "verify-phone",
+          "confirm"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"code\": \"000000\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "auth": {
+         "type": "bearer",
+         "bearer": [
+          {
+           "key": "token",
+           "value": "{{access_token}}",
+           "type": "string"
+          }
+         ]
+        },
+        "description": "Confirm the OTP. **Errors:** 400 OTP_INVALID (wrong or expired code).\n\n**Auth:** access token (Guardian).\n\n**This example:** 5. Confirm wrong OTP (expect 400)"
+       },
+       "status": "Bad Request",
+       "code": 400,
+       "_postman_previewlanguage": "json",
+       "header": [
+        {
+         "key": "content-type",
+         "value": "application/json"
+        }
+       ],
+       "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": \"That code is incorrect or has expired.\",\n    \"details\": {}\n  }\n}"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

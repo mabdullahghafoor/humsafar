@@ -14,7 +14,8 @@
 | `Humsafar_QA_4.10_Messaging_Calls_Test_Cases_v1.0.pdf` | 4.10 | Messaging, urgent voice and calls cases + ICP-4 live script |
 | `Humsafar_QA_5.10_Records_Vitals_Test_Cases_v0.4.pdf` | 5.10 | Records, record categories per Secondary, appointments, vitals and band (mock data) from the 5.1–5.4 contracts; two real-band cases wait for 5.5 |
 | `Humsafar_QA_6.12_Camera_Directory_Test_Cases_v0.4.pdf` | 6.12 | Camera live view and viewing notice (K-01–K-11) and emergency clips (K-12–K-17) from the 6.3 / 6.4 contract; directory (D-01–D-08) and requests / Activity Timeline (D-09–D-18) |
-| `Humsafar_QA_6.13_Security_Review_v0.2.pdf` | 6.13 | Security review checklist from SDS 17 and the 6.5 security guide: 29 checks (13 pass by code review, 3 more passed in the 7.7 run, 6 still to run), 5 findings (1 High: app privacy notice field names; 2 Medium: no end-to-end A/V, host disk encryption) |
+| `Humsafar_QA_6.13_Security_Review_v0.3.pdf` | 6.13 | Security review checklist from SDS 17 and the 6.5 security guide: 29 checks (14 pass by code review, 5 passed in Postman runs: 7.7 run 22 Oct + hand checks S-09 / S-12 on the hosted server 30 Oct, 4 still to run: S-04 device, S-16 4-viewer limit, S-15 / S-26 with Abdullah), 5 findings (1 High resolved: app privacy notice field names; 2 Medium: no end-to-end A/V, host disk encryption) |
+| `Humsafar_QA_6.13_Hand_Checks.postman_collection.json` | 6.13 | Postman collection for the hand checks S-09 (wrong phone codes → 429) and S-12 (camera stream token not cached); makes its own random test accounts. Run with base_url set to the hosted server or a local backend |
 | `Humsafar_QA_NFR-08_Contrast_Check_v1.0.pdf` | 3.16 (prep) | Colour contrast of the style guide, all hi-fi screens and the app's colours against WCAG AA; two token fixes |
 | `Humsafar_QA_8.1_E2E_Test_Plan_v0.3.pdf` | 8.1 | End-to-end test plan draft (v0.3: all 22 use cases now have their backend, Tasks 6.2–7.2) |
 
