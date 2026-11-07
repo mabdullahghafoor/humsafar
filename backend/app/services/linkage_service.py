@@ -229,6 +229,7 @@ def list_my_dependents(db: Session, user: User) -> list[DependentSummary]:
         out.append(
             DependentSummary(
                 dependent_id=link.dependent_id,
+                full_name=(dep_user.full_name or "").strip(),
                 email=dep_user.email,
                 phone=dep_user.phone,
                 my_role=link.role,
@@ -252,6 +253,7 @@ def list_guardians(db: Session, user: User, dependent_id: uuid.UUID) -> list[Gua
         out.append(
             GuardianSummary(
                 guardian_id=link.guardian_id,
+                full_name=(g_user.full_name or "").strip(),
                 email=g_user.email,
                 phone=g_user.phone,
                 guardian_role=link.role,

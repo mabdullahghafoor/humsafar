@@ -193,6 +193,17 @@ def test_primary_can_link_multiple_dependents(client):
     assert all(d["my_role"] == "primary" for d in r.json())
 
 
+def test_lists_carry_the_full_name(client):
+    """F-04: the Guardian app shows names, not emails."""
+    token, gid, _ = make_guardian(client, 1)
+    dep = make_dependent(client, 1)
+    assert link(client, token, dep).status_code == 201
+    mine = client.get("/guardians/me/dependents", headers=auth(token)).json()
+    assert mine[0]["full_name"] == "Test User"
+    guardians = client.get(f"/dependents/{dep}/guardians", headers=auth(token)).json()
+    assert guardians[0]["full_name"] == "Test User"
+
+
 # ------------------------------------------------------------------ invitations
 
 
