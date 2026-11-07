@@ -40,6 +40,7 @@ class AcceptInviteRequest(BaseModel):
 
 class DependentSummary(BaseModel):
     dependent_id: UUID
+    full_name: str  # F-04: the app shows the name, not the email ("" if the person never gave one)
     email: str
     phone: str
     my_role: Literal["primary", "secondary"]
@@ -50,6 +51,7 @@ class DependentSummary(BaseModel):
 
 class GuardianSummary(BaseModel):
     guardian_id: UUID
+    full_name: str
     email: str
     phone: str
     guardian_role: Literal["primary", "secondary"]
