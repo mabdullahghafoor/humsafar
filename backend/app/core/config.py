@@ -53,7 +53,10 @@ class Settings(BaseSettings):
 
     # Background jobs (the offline sweep now; missed doses and escalation timers in Phase 3).
     # Task 3.1: notifications. Only the mock push provider exists until Firebase is set up (Talha's 3.14).
-    PUSH_PROVIDER: str = "mock"
+    PUSH_PROVIDER: str = "mock"  # "mock" or "fcm" (real Firebase Cloud Messaging)
+    FIREBASE_CREDENTIALS_JSON: str = ""  # the whole service-account JSON as one text value (Render has no key file)
+    FCM_CRITICAL_CHANNEL_ID: str = "humsafar_critical"  # must match the channel id Talha creates in the app
+    FCM_STANDARD_CHANNEL_ID: str = "humsafar_standard"
     NOTIFY_RESOLVED_WINDOW_S: int = 86400  # "all clear" messages are sent for events resolved in the last day
 
     # Task 3.2: medication (FR-F1). Dose times are written in this local time zone.
