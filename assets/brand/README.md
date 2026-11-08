@@ -14,9 +14,8 @@
 | `logo/exports/logo/` | Full logo (symbol + Humsafar + slogan), horizontal: `colour` (on light backgrounds), `white` (on dark / teal, transparent), `on-teal` (with its teal background). SVG + PNG 2048 / 1024 / 512 |
 | `logo/exports/symbol/` | Symbol only: `colour`, `teal` (one colour), `white`, `white-amber`, `black`. SVG + PNG 1024 / 512 / 192 / 48 |
 | `logo/exports/wordmark/` | Humsafar + slogan, no symbol: `on-teal`, `white`, `colour` |
-| `logo/exports/alternatives/` | Slogans not chosen (ہر قدم، ساتھ ساتھ · دور رہ کر بھی قریب) and a near-identical second on-teal logo. Not for use; kept for the record |
 | `app-icon/` | Android launcher icon: `full` (1024, teal square), `foreground` (1024, transparent) + `background` (1024, teal) for the adaptive icon, `playstore_512`, and the designer's original rounded version |
-| `brief/` | Logo & Slogan Brief v1.0 and the Gemini prompts used |
+| `brief/` | Logo & Slogan Brief v1.0 |
 
 **File naming:** `Humsafar_<Logo|Symbol|Wordmark|AppIcon>_v<version>_<layout>_<colour>_<size>.<ext>`
 

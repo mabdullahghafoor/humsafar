@@ -98,7 +98,7 @@ Everything here lives in `docs/` (Sarim's folders) and in Figma. No setup is nee
 | Documentation drift register (where SRS / SDS no longer match the build) | `docs/reports/` | Task 7.6 and the final consistency check (10.1) |
 | Locked project documents and member handbooks | `docs/reference/` | Everyone |
 | Design handoff for integration: theme tokens, screen → app map, what is not built yet | `docs/design/handoff/` | Talha (theme and screens) |
-| Brand: logo sources and exports, app icon, slogan, logo brief and Gemini prompts | `assets/brand/` | Everyone; Talha exports the app icon from here |
+| Brand: logo exports, app icon and logo brief | `assets/brand/` | Everyone; Talha exports the app icon from here |
 
 **How Sarim works with the team:**
 - Designs and test cases are matched to Abdullah's API contracts in `docs/api/` as soon as each one is merged.
