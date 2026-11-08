@@ -15,6 +15,7 @@
 | `logo/exports/symbol/` | Symbol only: `colour`, `teal` (one colour), `white`, `white-amber`, `black`. SVG + PNG 1024 / 512 / 192 / 48 |
 | `logo/exports/wordmark/` | Humsafar + slogan, no symbol: `on-teal`, `white`, `colour` |
 | `app-icon/` | Android launcher icon: `full` (1024, teal square), `foreground` (1024, transparent) + `background` (1024, teal) for the adaptive icon, `playstore_512`, and the designer's original rounded version |
+| `splash/` | Android splash icon v0.1 (symbol white-amber, 1152 × 1152 transparent); see `docs/design/1.12_identity_access/README.md` → Splash and launch |
 | `brief/` | Logo & Slogan Brief v1.0 |
 
 **File naming:** `Humsafar_<Logo|Symbol|Wordmark|AppIcon>_v<version>_<layout>_<colour>_<size>.<ext>`
@@ -25,12 +26,13 @@
   flutter_launcher_icons:
     android: true
     ios: false
-    image_path: "assets/brand/Humsafar_AppIcon_v1.0_full_1024.png"
+    image_path: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_full_1024.png"
     adaptive_icon_background: "#0E7490"
-    adaptive_icon_foreground: "assets/brand/Humsafar_AppIcon_v1.0_foreground_1024.png"
+    adaptive_icon_foreground: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_foreground_1024.png"
   ```
   The figures sit inside the central 66 % safe zone, so circle and squircle masks do not cut them.
-- **Splash / Welcome screen (01):** `Humsafar_Symbol_v1.0_white-amber.svg` on teal, or `Humsafar_Logo_v1.0_horizontal_colour.svg` on white.
+- **Splash and launch:** designed (screens 00 / 00b, 8 Nov 2026); icon in `splash/`, details in `docs/design/1.12_identity_access/README.md`.
+- **Welcome screen (01):** `Humsafar_Logo_v1.0_horizontal_colour.svg` on white.
 - **In-app headers:** symbol `colour` at 32–48 px. Use the SVGs (e.g. `flutter_svg`) so they stay sharp.
 - App name stays **Humsafar**; keep the Aa and EN|UR rules from the design handoff.
 
