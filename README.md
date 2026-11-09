@@ -28,15 +28,15 @@ Bi-directional remote intervention and care coordination system for vulnerable i
 ```
 humsafar/
 ├── backend/        # FastAPI application
-├── frontend/        # Flutter application
+├── frontend/        # Flutter app (Task 0.4 skeleton; the app is built in Talha's repo and moved here later)
 ├── assets/          # project assets outside the app code
-│   └── brand/       #   logo, app icon, slogan, brand brief (Sarim)
+│   └── brand/       #   logo, app icon, splash icon, brand brief (Sarim)
 ├── docs/            # all documentation, organized in subfolders (see docs/README.md)
 │   ├── api/         #   API contracts (Abdullah)
 │   ├── backend/     #   progress, SDS clarifications, running guide (Abdullah)
 │   ├── reference/   #   SRS, SDS, Reference Guide, Roadmap, handbooks (Sarim)
 │   ├── design/      #   screen designs (Sarim)
-│   ├── qa/          #   QA checklists and results (Sarim)
+│   ├── qa/          #   test cases, and results in one folder per APK build (Sarim)
 │   ├── diagrams/    #   architecture/workflow diagrams (Sarim)
 │   └── reports/     #   final documents and presentation (Sarim)
 └── .github/         # PR template, CODEOWNERS
@@ -93,12 +93,12 @@ Everything here lives in `docs/` (Sarim's folders) and in Figma. No setup is nee
 |---|---|---|
 | Screen designs (wireframes + hi-fi mockups, style guide, one folder per task) | `docs/design/` and Figma *Humsafar – App Design* (link in `docs/design/README.md`) | Talha builds each screen from its mockup |
 | English–Urdu UI text with suggested `.arb` keys | `docs/design/ui_text/` | Talha (localisation, NFR-09) |
-| Test cases written ahead of each feature, test results, E2E test plan, accessibility and contrast checks | `docs/qa/` | Whole team; Sarim runs them once the screens exist |
+| Test cases written ahead of each feature, E2E test plan, and test results sorted by APK build (`results/debug-apk-<version>/`), plus backend and contrast checks | `docs/qa/` | Whole team; Sarim runs them once the screens exist |
 | Architecture and workflow diagrams (as built) | `docs/diagrams/` | Documentation and presentation |
 | Documentation drift register (where SRS / SDS no longer match the build) | `docs/reports/` | Task 7.6 and the final consistency check (10.1) |
 | Locked project documents and member handbooks | `docs/reference/` | Everyone |
 | Design handoff for integration: theme tokens, screen → app map, what is not built yet | `docs/design/handoff/` | Talha (theme and screens) |
-| Brand: logo exports, app icon and logo brief | `assets/brand/` | Everyone; Talha exports the app icon from here |
+| Brand: logo exports (v1; v2 in progress), app icon, splash icon and logo brief | `assets/brand/` | Everyone; Talha takes the app icon and splash icon from here |
 
 **How Sarim works with the team:**
 - Designs and test cases are matched to Abdullah's API contracts in `docs/api/` as soon as each one is merged.
@@ -116,4 +116,4 @@ Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual han
 
 ## Status
 
-🚧 Active development. Backend progress: `docs/backend/PROGRESS.md` · designs and coverage: `docs/design/README.md` · QA documents: `docs/qa/README.md`.
+🚧 Active development. **Where we are:** backend Phases 1–7 done, Phase 8 (testing) in progress; the Flutter app is built in Talha's repo and tested on debug APKs; ICP-1 passed, ICP-3 / 4 / 5 being tested on the phones. Backend progress: `docs/backend/PROGRESS.md` · designs and coverage: `docs/design/README.md` · QA documents: `docs/qa/README.md`.
