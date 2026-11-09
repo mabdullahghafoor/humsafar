@@ -77,6 +77,14 @@
 |---|---|---|
 | `Humsafar_QA_Retest_debug-apk-1.9_v0.1.pdf` | Retest of 1.8 findings | **Blocked** (8–9 Nov): the build cannot reach the server on either phone (F-22, Critical: most likely built without the hosted API_BASE_URL); raw error text shown (F-21, Low). No check could run; the full retest on the rebuilt APK becomes v1.0 |
 
+## debug-apk-1.9.1
+
+`results/debug-apk-1.9.1/`
+
+| File | Task | Status |
+|---|---|---|
+| `Humsafar_QA_Retest_debug-apk-1.9.1_v1.0.pdf` | Retest of Talha's 1.9 / 1.9.1 list | 9 Nov: **23 verified** (F-22, F-25, F-20, the 5.10 P- items, G-03, G-04, N-02/03/06/07/12/14, F-10, F-12, F-15, F-19 …); still open F-13, F-17, F-18, F-04 partly. **New: F-29 High** an incoming call can never be answered (ICP-4 calls blocked); **F-26 High (backend / hosting)** uploaded files lost on every redeploy; F-27, F-28 Medium; F-30, N-16 Low |
+
 **Versions:** v1.0 = matched to merged contracts and ready to run. v0.x = draft written ahead of time; it is updated when the matching backend contract lands, and the old version is removed from this folder.
 
 Working Word files are kept in Google Drive (`Humsafar/02_QA`); only PDFs are added here.
