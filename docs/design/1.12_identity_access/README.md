@@ -26,7 +26,7 @@
 - Field rules shown match the contracts: CNIC `12345-1234567-1`, Pakistani phone, password at least 8 characters.
 - Log in shows one message for wrong email and wrong password (by design, auth contract).
 - Screen 05/09: the Dependent's `user_id` is shared as QR or text (linkage contract §3).
-- The logo is a **placeholder** until the team picks one.
+- The logo on screen 01 Welcome is still the early **placeholder**; build with the brand files in `assets/brand/` (logo v1, final for now; v2 in progress). Splash and launch (00, 00b) already use v1.
 
 ## Colour update (30 Oct 2026)
 All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
