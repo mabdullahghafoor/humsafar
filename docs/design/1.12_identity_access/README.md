@@ -17,7 +17,7 @@
 | 10 | Permissions per Secondary Guardian | Primary Guardian | FR-A4 | Guardian App |
 
 ## Design direction (decided 2026-10-19)
-- **Colours:** calm teal-blue. Primary `#0E7490`, dark `#155E75`, tint `#ECFEFF`; text `#0F172A`, muted `#475569`, border `#CBD5E1`; success `#15803D`, warning `#B45309`. **Red `#B91C1C` is reserved for Panic and critical alerts only.** *(Style guide v0.2, 21 Oct 2026: danger `#DC2626` → `#B91C1C` and muted `#64748B` → `#475569` so all text meets WCAG AA contrast, NFR-08; see `docs/qa/Humsafar_QA_NFR-08_Contrast_Check_v1.0.pdf`. Since 30 Oct 2026 every mockup PNG uses these colours too, see "Colour update" below.)*
+- **Colours:** calm teal-blue. Primary `#0E7490`, dark `#155E75`, tint `#ECFEFF`; text `#0F172A`, muted `#475569`, border `#CBD5E1`; success `#15803D`, warning `#B45309`. **Red `#B91C1C` is reserved for Panic and critical alerts only.** *(Style guide v0.2, 21 Oct 2026: danger `#DC2626` → `#B91C1C` and muted `#64748B` → `#475569` so all text meets WCAG AA contrast, NFR-08; see `docs/qa/results/design/Humsafar_QA_NFR-08_Contrast_Check_v1.0.pdf`. Since 30 Oct 2026 every mockup PNG uses these colours too, see "Colour update" below.)*
 - **Type:** Inter — title 26 bold, heading 18 bold, body 15, caption 12.
 - **Components:** buttons 54 px tall, 14 px radius; inputs 50 px, 12 px radius; touch targets at least 48 × 48; text contrast at least 4.5 : 1 (WCAG 2.1 AA).
 - Every app bar keeps the **Aa** (large text / high contrast) toggle and the **EN|UR** language switch (team UI convention).
