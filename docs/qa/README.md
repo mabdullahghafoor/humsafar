@@ -37,6 +37,7 @@
 | `Humsafar_QA_Backend_Regression_Phases1-7_Results_v2.0.pdf` | 7.7 | QA regression pass of the whole backend, Phases 1–7 (Tasks 1.3–7.2): full Postman collection, 30 folders, 949 requests, 1501 / 1501 checks passed, 0 product bugs (22 Oct 2026, dev 7467459). Replaces v1.0 (Phases 1–6.1) |
 | `Humsafar_QA_6.13_Security_Review_v0.3.pdf` | 6.13 | Security review checklist from SDS 17 and the 6.5 security guide: 29 checks (14 pass by code review, 5 passed in Postman runs: 7.7 run 22 Oct + hand checks S-09 / S-12 on the hosted server 30 Oct, 4 still to run: S-04 device, S-16 4-viewer limit, S-15 / S-26 with Abdullah), 5 findings (1 High resolved: app privacy notice field names; 2 Medium: no end-to-end A/V, host disk encryption) |
 | `Humsafar_QA_6.13_Hand_Checks.postman_collection.json` | 6.13 | Postman collection for the hand checks S-09 (wrong phone codes → 429) and S-12 (camera stream token not cached); makes its own random test accounts. Run with base_url set to the hosted server or a local backend |
+| `Humsafar_QA_Permission_Checks_v1.0.pdf` | 5.10, 6.12, 4.10 | Secondary Guardian permission checks through /docs (9 Nov): **15 / 15 PASS, no new finding**. Sara / Bilal on vault, record categories, doctor links, vitals, visit requests, notices and messages; audit rows for hide / show. Second pass of the cases not run in the 5.10, 6.12 and 4.10 v1.0 reports |
 
 ## Design
 
@@ -66,6 +67,7 @@
 | `Humsafar_QA_Retest_debug-apk-1.8_v1.0.pdf` | ICP-1, 3.16, 6.12 | Retest of the open items on debug-apk-1.8 (30 Oct, 7 Nov): G-01, N-01, G-02, F-03, F-05, F-09 Verified; A-04, D-09–D-11, D-13, D-16, KYC resume, bottom sheets PASS; back swipe on the signed-in Home closes the app (F-19, Low); A-05 blocked by real push; D-12, D-14, D-17 not run. New Low findings F-19, N-15. Updates ICP-1 v1.1, 3.16 v1.0, 6.12 v1.0 |
 | `Humsafar_QA_5.10_Records_Vitals_Results_v1.0.pdf` | 5.10 / ICP-5 | First pass on two phones (debug-apk-1.8, 7 Nov): 12 / 18 PASS, 2 partial, 4 FAIL. Saving works everywhere; High P-01 doctor link shared without the server address, High P-02 Analytics crashes once there are vitals; Medium P-03 records export fails in the app, F-20 stuck on KYC after an interrupted sign-up; Low P-05–P-08. Band, Secondary-permission and Postman cases in a second pass |
 | `Humsafar_QA_4.10_Messaging_Results_v1.0.pdf` | 4.10 / ICP-4 | Messaging half on two phones (debug-apk-1.8, 7 Nov): 7 / 9 PASS, 2 partial (no notification, ICP-3 F-16), no new finding. Calls blocked until real push (F-16) |
+| `Humsafar_QA_Push_Check_debug-apk-1.8_v1.0.pdf` | ICP-3 F-16, 4.10 | Real push on debug-apk-1.8 (9 Nov): **F-16 fixed on the server** (Panic, closed notice, alarm and message arrive in 1–2 s with the app closed). App findings: **F-25 High** calls cannot start (`receiver_id` instead of `callee_id`), F-13 alarm does not ring, F-23 Panic plays the normal sound, F-24 notification tap lands on Home |
 
 ## debug-apk-1.9
 
