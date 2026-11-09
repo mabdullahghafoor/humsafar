@@ -1,8 +1,8 @@
-# UI text — English and Urdu (v0.7)
+# UI text — English and Urdu (v0.8)
 
 **Owner:** Sarim · **For:** Talha's Task 7.4 (full Urdu, NFR-09) and every screen built before it.
 
-`Humsafar_UI_Text_EN_UR_v0.7.xlsx` lists the fixed text of all high-fidelity screens (1.12, 2.8, 3.9, 4.9, 5.9 v0.2, 6.11 with 18c–18e v0.2, and the coverage screens 07b, 16, 30, 30b, 31, 32 with Home 20 v0.2) — 626 lines, one row per string, with:
+`Humsafar_UI_Text_EN_UR_v0.8.xlsx` lists the fixed text of all high-fidelity screens (1.12, 2.8, 3.9, 4.9, 5.9 v0.2, 6.11 with 18c–18e v0.2, and the coverage screens 07b, 16, 30, 30b, 31, 32 with Home 20 v0.2) — 626 lines, one row per string, with:
 
 | Column | Meaning |
 |---|---|
@@ -21,11 +21,12 @@ v0.4 (21 Oct 2026): Panic 21b v0.2 (5-minute SMS note, one shared Seen status); 
 v0.5 (21 Oct 2026): visit requests and Activity log matched to the 6.2 contract (18c, 18d v0.2, new 18e): statuses Pending / Confirmed / Completed / Cancelled, roles, filters. 578 lines.
 v0.6 (22 Oct 2026): camera 19–19d, 29, 29b (6.3 / 6.4), Analytics 16 and Summary reports 16b (7.1 / 7.2), Close my account 30b and Close Dependent 30c with the closed-account sign-in messages (6.7), Audit log 31 (6.6). 626 lines.
 v0.7 (9 Nov 2026): Urdu decisions after the app check (below): Guardian = سرپرست, Dependent = زیرِ نگہداشت فرد, Emergency = ایمرجنسی, Panic = مدد, Wellness check = خیریت کی جانچ; the 32 safety lines set to the final Urdu.
+v0.8 (9 Nov 2026): the other 48 differing lines decided too (review list v0.3); Fasting = نہار منہ (the app said روزہ, the religious fast).
 
 ## Urdu wording check, app vs. sheet (30 Oct 2026)
 
-`Humsafar_Urdu_Review_List_v0.2.xlsx` compares the Urdu in the app (`app_en.arb` / `app_ur.arb` on Talha's `main`, `5d1b3a2`) with this sheet, matched by English text. Of 597 app strings, 102 have the same Urdu, **80 differ** (32 of them on safety screens: Panic / HOLD, alarm, wellness check, alerts, emergency contact, calls) and 415 are not in the sheet. 458 sheet lines are not in the app (mostly design-only or worded differently).
+`Humsafar_Urdu_Review_List_v0.3.xlsx` compares the Urdu in the app (`app_en.arb` / `app_ur.arb` on Talha's `main`, `5d1b3a2`) with this sheet, matched by English text. Of 597 app strings, 102 have the same Urdu, **80 differ** (32 of them on safety screens: Panic / HOLD, alarm, wellness check, alerts, emergency contact, calls) and 415 are not in the sheet. 458 sheet lines are not in the app (mostly design-only or worded differently).
 
 The main pattern: the app uses English words in Urdu letters (گارڈین، ڈیپینڈنٹ، ایمرجنسی، ویلنیس چیک) where the sheet uses plain Urdu (سرپرست، زیرِ نگہداشت فرد، ہنگامی، خیریت). Yellow cells are for the reviewer; tab 1 asks Keep app / Use sheet / Other per line, safety rows first. After the review Talha updates `app_ur.arb` and the sheet goes to v0.7.
 
-**Decisions (9 Nov 2026, review list v0.2).** Three words for the whole app: **Guardian = سرپرست**, **Dependent = زیرِ نگہداشت فرد**, **Emergency = ایمرجنسی** (everyday word, not ہنگامی); plus **Panic = مدد** and **Wellness check = خیریت کی جانچ**. All 32 safety lines are decided (tab 1, Decision / Final Urdu). **For Talha:** tab **0 For Talha (v0.7)** lists the final Urdu per `app_ur.arb` key; apply the three words everywhere in `app_ur.arb`, not only in those rows. The other 48 differing lines follow the same words and are reviewed later.
+**Decisions (9 Nov 2026, review list v0.3).** Three words for the whole app: **Guardian = سرپرست**, **Dependent = زیرِ نگہداشت فرد**, **Emergency = ایمرجنسی** (everyday word, not ہنگامی); plus **Panic = مدد** and **Wellness check = خیریت کی جانچ**. All 32 safety lines are decided (tab 1, Decision / Final Urdu). **For Talha:** tab **0 For Talha (v0.8)** lists the final Urdu for all 80 differing `app_ur.arb` keys; apply the three words everywhere in `app_ur.arb`, not only in those rows.
