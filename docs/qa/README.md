@@ -9,9 +9,10 @@
 | `test-cases/` | Test cases, test plans and the checklist template (no build) |
 | `results/backend/` | Backend results: Postman runs, security review and its Postman collection |
 | `results/design/` | Design checks (contrast) |
+| `results/security/<build>/` | Security review run on that build (code review, scans, APK scan, live checks). **Every new build gets its own security folder** and a retest of the open findings |
 | `results/debug-apk-<version>/` | Every result run on that APK build. **A new build gets its own folder** (e.g. `debug-apk-1.9/`); a run that spanned several builds goes under the last one, and its row says which builds |
 
-**Finding codes:** F- ICP runs and general app findings, N- 3.16 accessibility, G- 6.12 directory, P- 5.10 records / vitals; numbers never repeat. Every finding and retest names the APK it was found or checked on.
+**Finding codes:** F- ICP runs and general app findings, N- 3.16 accessibility, G- 6.12 directory, P- 5.10 records / vitals, SEC- security review (SEC-01 to SEC-05 are the 6.13 v0.3 findings F-01 to F-05 renamed); numbers never repeat. Every finding and retest names the APK it was found or checked on.
 
 ## Test cases and plans
 
@@ -38,6 +39,14 @@
 | `Humsafar_QA_6.13_Security_Review_v0.3.pdf` | 6.13 | Security review checklist from SDS 17 and the 6.5 security guide: 29 checks (14 pass by code review, 5 passed in Postman runs: 7.7 run 22 Oct + hand checks S-09 / S-12 on the hosted server 30 Oct, 4 still to run: S-04 device, S-16 4-viewer limit, S-15 / S-26 with Abdullah), 5 findings (1 High resolved: app privacy notice field names; 2 Medium: no end-to-end A/V, host disk encryption) |
 | `Humsafar_QA_6.13_Hand_Checks.postman_collection.json` | 6.13 | Postman collection for the hand checks S-09 (wrong phone codes → 429) and S-12 (camera stream token not cached); makes its own random test accounts. Run with base_url set to the hosted server or a local backend |
 | `Humsafar_QA_Permission_Checks_v1.0.pdf` | 5.10, 6.12, 4.10 | Secondary Guardian permission checks through /docs (9 Nov): **15 / 15 PASS, no new finding**. Sara / Bilal on vault, record categories, doctor links, vitals, visit requests, notices and messages; audit rows for hide / show. Second pass of the cases not run in the 5.10, 6.12 and 4.10 v1.0 reports |
+
+## Security
+
+`results/security/`
+
+| Build | File | Task | Status |
+|---|---|---|---|
+| debug-apk-1.9.1 | `debug-apk-1.9.1/Humsafar_QA_Security_Review_debug-apk-1.9.1_v1.0.pdf` | 6.13 | Security review v1.0 (22 Nov), follows 6.13 v0.3: **67 checks** (SDS 17, OWASP API Top 10, OWASP MASVS): 32 pass, 20 with a finding, 7 notes, 7 still to run (S-04, S-67 device; S-15, S-26, S-38 Abdullah; S-16 4 viewers; S-52 app library scan). **0 Critical / High open; 9 Medium, 12 Low.** Medium: no server logout and reusable refresh token (SEC-06), no password change (SEC-07), cleartext allowed (SEC-08), mock phone code 123456 (SEC-09), public API docs (SEC-10), 141 known library vulnerabilities (SEC-20), debug APK with readable source (SEC-21), plus SEC-02 / SEC-03 from v0.3 |
 
 ## Design
 
