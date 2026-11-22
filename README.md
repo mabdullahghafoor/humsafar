@@ -116,4 +116,4 @@ Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual han
 
 ## Status
 
-🚧 Active development. **Where we are:** backend Phases 1–7 done, Phase 8 (testing) in progress; the Flutter app is built in Talha's repo and tested on debug APKs; ICP-1 passed, ICP-3 / 4 / 5 being tested on the phones. Backend progress: `docs/backend/PROGRESS.md` · designs and coverage: `docs/design/README.md` · QA documents: `docs/qa/README.md`.
+🚧 Active development. **Where we are:** backend Phases 1–7 done, Phase 8 (testing) in progress; the Flutter app is built in Talha's repo and tested on debug APKs; ICP-1 passed, ICP-3 / 4 / 5 being tested on the phones; security review and design-vs-app check done on debug-apk-1.9.1 (22 Nov); brand v2.0 (logo, app icon, splash icon) is in `assets/brand/` for the next APK. Backend progress: `docs/backend/PROGRESS.md` · designs and coverage: `docs/design/README.md` · QA documents: `docs/qa/README.md`.
