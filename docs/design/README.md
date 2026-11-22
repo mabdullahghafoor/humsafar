@@ -10,7 +10,7 @@ The working design lives in Figma (file: *Humsafar – App Design*). This folder
 |---|---|---|---|
 | `handoff/` | — | **Start here for integration.** Design handoff v1.0: theme tokens (also as `humsafar_design_tokens.dart`), rules, design → app screen map, theme fixes, screens not built yet | integration, 7.5 |
 | `0.7_wireframes/` | 0.7 | Low-fidelity wireframes, 24 screens (v0.1). **Superseded by the hi-fi screens; do not build from them** | history only |
-| `1.12_identity_access/` | 1.12 | Splash and launch (00, 00b, v0.1), welcome, log in, create account, KYC, share ID, verify account, link a Dependent, permissions + style guide (v0.2) | 1.8–1.11, 2.5 |
+| `1.12_identity_access/` | 1.12 | Splash and launch (00, 00b, v0.1), welcome (v0.2; these three still show the v1 logo, take the logo from `assets/brand/`), log in, create account, KYC, share ID, verify account, link a Dependent, permissions + style guide (v0.2) | 1.8–1.11, 2.5 |
 | `2.8_map_geofence/` | 2.8 | Live Map, location history, safe zones, edit safe zone (v0.2) | 2.6 |
 | `3.9_safety_screens/` | 3.9 | Dependent Mode (home, panic, wellness check, medicine time, alarm) + Guardian home, alerts, care schedules, emergency settings (v0.2; 24 Alarm v0.1) | 3.10–3.15 |
 | `4.9_communication/` | 4.9 | Messages, chat, urgent voice, calls (Guardian and Dependent) (v0.2) | 4.6–4.8 |
@@ -24,5 +24,7 @@ The working design lives in Figma (file: *Humsafar – App Design*). This folder
 **SVG sources:** each hi-fi folder has an `svg/` subfolder with the editable source of every screen (same file name, `.svg`). Figma imports these as editable layers; the PNGs are the exported snapshots.
 
 **File naming:** `Humsafar_Design_<number>_<Screen>_v<version>.png`, e.g. `Humsafar_Design_15f_Doctor_links_v0.2.png`. Screen numbers match the Figma frame names (page *02 · App Designs (Hi-Fi)*).
+
+**Design vs app:** the first comparison of built screens against these mockups is `docs/qa/results/debug-apk-1.9.1/Humsafar_QA_Design_vs_App_debug-apk-1.9.1_v1.0.pdf` (findings UI-01 to UI-13). Two points need a team decision before the mockups or the app change: the Home model (UI-03) and the top bar (UI-04).
 
 **Figma file:** https://www.figma.com/design/fpY8fd72McW3iVS0PydHtw/Humsafar-App-Design (view access: Abdullah, Talha). Page *02 · App Designs (Hi-Fi)* holds only the current screens; prototype flow *Splash → Launch* shows the start-up animation. Older versions are kept outside the repo.

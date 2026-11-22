@@ -12,7 +12,7 @@
 | `results/security/<build>/` | Security review run on that build (code review, scans, APK scan, live checks). **Every new build gets its own security folder** and a retest of the open findings |
 | `results/debug-apk-<version>/` | Every result run on that APK build. **A new build gets its own folder** (e.g. `debug-apk-1.9/`); a run that spanned several builds goes under the last one, and its row says which builds |
 
-**Finding codes:** F- ICP runs and general app findings, N- 3.16 accessibility, G- 6.12 directory, P- 5.10 records / vitals, SEC- security review (SEC-01 to SEC-05 are the 6.13 v0.3 findings F-01 to F-05 renamed); numbers never repeat. Every finding and retest names the APK it was found or checked on.
+**Finding codes:** F- ICP runs and general app findings, N- 3.16 accessibility, G- 6.12 directory, P- 5.10 records / vitals, SEC- security review (SEC-01 to SEC-05 are the 6.13 v0.3 findings F-01 to F-05 renamed), UI- design vs app (layout and detail of a built screen against its mockup); numbers never repeat. Every finding and retest names the APK it was found or checked on.
 
 ## Test cases and plans
 
@@ -93,6 +93,7 @@
 | File | Task | Status |
 |---|---|---|
 | `Humsafar_QA_Retest_debug-apk-1.9.1_v1.0.pdf` | Retest of Talha's 1.9 / 1.9.1 list | 9 Nov: **23 verified** (F-22, F-25, F-20, the 5.10 P- items, G-03, G-04, N-02/03/06/07/12/14, F-10, F-12, F-15, F-19 …); still open F-13, F-17, F-18, F-04 partly. **New: F-29 High** an incoming call can never be answered (ICP-4 calls blocked); **F-26 High (backend / hosting)** uploaded files lost on every redeploy; F-27, F-28 Medium; F-30, N-16 Low |
+| `Humsafar_QA_Design_vs_App_debug-apk-1.9.1_v1.0.pdf` | Design vs app | 22 Nov: 10 screens compared side by side with the mockups (screenshots from Sarim's phone): the app does what the design says, but the look is far from it. **13 findings UI-01 to UI-13: 4 High, 7 Medium, 2 Low.** High: app opens on the Dev Role Switcher, no splash / logo (UI-01); Home has no per-Dependent status, quick actions or bottom bar (UI-03, **team decision**); Live Map shows the email and raw minutes (UI-09); test data on every screen (UI-13). 2 team decisions (Home model, top bar), 1 design change (Notices tab). Remaining screens follow on the next build |
 
 **Versions:** v1.0 = matched to merged contracts and ready to run. v0.x = draft written ahead of time; it is updated when the matching backend contract lands, and the old version is removed from this folder.
 
