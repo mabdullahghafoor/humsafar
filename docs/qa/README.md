@@ -95,6 +95,14 @@
 | `Humsafar_QA_Retest_debug-apk-1.9.1_v1.0.pdf` | Retest of Talha's 1.9 / 1.9.1 list | 9 Nov: **23 verified** (F-22, F-25, F-20, the 5.10 P- items, G-03, G-04, N-02/03/06/07/12/14, F-10, F-12, F-15, F-19 …); still open F-13, F-17, F-18, F-04 partly. **New: F-29 High** an incoming call can never be answered (ICP-4 calls blocked); **F-26 High (backend / hosting)** uploaded files lost on every redeploy; F-27, F-28 Medium; F-30, N-16 Low |
 | `Humsafar_QA_Design_vs_App_debug-apk-1.9.1_v1.0.pdf` | Design vs app | 22 Nov: 10 screens compared side by side with the mockups (screenshots from Sarim's phone): the app does what the design says, but the look is far from it. **13 findings UI-01 to UI-13: 4 High, 7 Medium, 2 Low.** High: app opens on the Dev Role Switcher, no splash / logo (UI-01); Home has no per-Dependent status, quick actions or bottom bar (UI-03, **team decision**); Live Map shows the email and raw minutes (UI-09); test data on every screen (UI-13). 2 team decisions (Home model, top bar), 1 design change (Notices tab). Remaining screens follow on the next build |
 
+## debug-apk-1.9.2
+
+`results/debug-apk-1.9.2/`
+
+| File | Task | Status |
+|---|---|---|
+| `Humsafar_QA_Retest_debug-apk-1.9.2_v0.1.pdf` | Retest of Talha's 1.9.2 list | **Blocked** (23 Nov): Login fails on both phones with "Can't reach the server" while the hosted server answers in the browser (**F-31, Critical**, same symptom as F-22). Passed: Splash, Launch and Welcome open first (UI-01, F-07 look closed), app name "Humsafar" (F-30), v2.0 splash, friendly connection message (F-21). New: UI-14 (Low) Launch screen layout. Becomes v1.0 on the next build |
+
 **Versions:** v1.0 = matched to merged contracts and ready to run. v0.x = draft written ahead of time; it is updated when the matching backend contract lands, and the old version is removed from this folder.
 
 Working Word files are kept in Google Drive (`Humsafar/02_QA`); only PDFs are added here.
