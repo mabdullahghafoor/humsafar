@@ -75,3 +75,11 @@ All screens in this folder now use the **style guide v0.2 colours**: old red `#D
 | 28 | My health | v0.2 → **v0.3** |
 
 Overview rebuilt from the latest versions: v0.3 → **v0.4**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.
+
+## Loading states (skeleton screens, 22 Nov 2026)
+What the screen shows while its data loads, instead of a spinner. App bar, tabs, static labels / buttons and bottom nav stay real; only server data becomes grey shapes. Rules: see `handoff/README.md` → "Loading states".
+
+| # | Screen | Version | Based on |
+|---|---|---|---|
+| 26s | Vitals · loading | **v0.1** | 26 |
+| 15s | Medical Vault · loading | **v0.1** | 15 |
