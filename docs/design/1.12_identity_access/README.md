@@ -26,7 +26,7 @@
 - Field rules shown match the contracts: CNIC `12345-1234567-1`, Pakistani phone, password at least 8 characters.
 - Log in shows one message for wrong email and wrong password (by design, auth contract).
 - Screen 05/09: the Dependent's `user_id` is shared as QR or text (linkage contract §3).
-- The logo on screen 01 Welcome is still the early **placeholder**; build with the brand files in `assets/brand/` (logo v1, final for now; v2 in progress). Splash and launch (00, 00b) already use v1.
+- The logo on screen 01 Welcome is still the early **placeholder**; build with the brand files in `assets/brand/` (logo **v2.0 final**, 22 Nov 2026). The mockups 00, 00b and 01 in this folder still show the **old v1 logo**; build the logo, app icon and splash icon from `assets/brand/` (v2.0), not from the mockup pictures.
 
 ## Colour update (30 Oct 2026)
 All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
@@ -48,16 +48,16 @@ Overview rebuilt from the latest versions: v0.2 → **v0.3**. Editable SVG sourc
 Two screens shown before Welcome / Home, the same in both apps: **00 Splash** (`Humsafar_Design_00_Splash_v0.1`) and **00b Launch** (`Humsafar_Design_00b_Launch_v0.1`). Figma: section *Launch · Splash (both apps)*; prototype flow *Splash → Launch*.
 
 **For Talha:**
-- **00 Splash** is the Android system splash: teal `#0E7490` with the white-amber symbol only (Android 12+ allows one icon on one colour). Icon file: `assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png` (1152 × 1152 transparent = 288 dp; the symbol stays inside the 192 dp circle). With `flutter_native_splash`:
+- **00 Splash** is the Android system splash: teal `#0E7490` with the white-amber symbol only (Android 12+ allows one icon on one colour). Icon file: `assets/brand/splash/Humsafar_Splash_Icon_v2.0_1152.png` (1152 × 1152 transparent = 288 dp; the symbol stays inside the 192 dp circle). With `flutter_native_splash`:
   ```yaml
   flutter_native_splash:
     color: "#0E7490"
-    image: assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
+    image: assets/brand/splash/Humsafar_Splash_Icon_v2.0_1152.png
     android_12:
       color: "#0E7490"
-      image: assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
+      image: assets/brand/splash/Humsafar_Splash_Icon_v2.0_1152.png
   ```
-- **00b Launch** is the first Flutter screen while the app reads the saved login, then it goes straight to Welcome (signed out) or Home (signed in). Teal background, white status-bar icons; symbol 112 px wide centred at y 300; `Humsafar_Wordmark_v1.0_white.svg` with its visible part 230 px wide, top at y 384; white loader 28 px (30 % white track) at y 678, shown only if the check takes longer than about 300 ms. Screen-reader label: "Humsafar, loading".
+- **00b Launch** is the first Flutter screen while the app reads the saved login, then it goes straight to Welcome (signed out) or Home (signed in). Teal background, white status-bar icons; symbol 112 px wide centred at y 300; `Humsafar_Wordmark_v2.0_white.svg` with its visible part 230 px wide, top at y 384; white loader 28 px (30 % white track) at y 678, shown only if the check takes longer than about 300 ms. Screen-reader label: "Humsafar, loading".
 - **Animation:** symbol moves up and shrinks (128 → 112 px), wordmark and loader fade in; 0.6 s ease in-out. The 1 s before it in the prototype is only Figma's timer.
 - **Never wait for the internet** on either screen. The login check reads the token stored on the phone; refresh it in the background after Home opens. Offline: open Home with the offline banner. On the Dependent app PANIC must be on screen within a couple of seconds, signal or not. Do not hold the splash (`FlutterNativeSplash.preserve`) for network or data.
 - No red on either screen (red = Panic).
