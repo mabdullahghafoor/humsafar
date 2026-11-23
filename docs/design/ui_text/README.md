@@ -30,3 +30,7 @@ v0.8 (9 Nov 2026): the other 48 differing lines decided too (review list v0.3); 
 The main pattern: the app uses English words in Urdu letters (گارڈین، ڈیپینڈنٹ، ایمرجنسی، ویلنیس چیک) where the sheet uses plain Urdu (سرپرست، زیرِ نگہداشت فرد، ہنگامی، خیریت). Yellow cells are for the reviewer; tab 1 asks Keep app / Use sheet / Other per line, safety rows first. After the review Talha updates `app_ur.arb` and the sheet goes to v0.7.
 
 **Decisions (9 Nov 2026, review list v0.3).** Three words for the whole app: **Guardian = سرپرست**, **Dependent = زیرِ نگہداشت فرد**, **Emergency = ایمرجنسی** (everyday word, not ہنگامی); plus **Panic = مدد** and **Wellness check = خیریت کی جانچ**. All 32 safety lines are decided (tab 1, Decision / Final Urdu). **For Talha:** tab **0 For Talha (v0.8)** lists the final Urdu for all 80 differing `app_ur.arb` keys; apply the three words everywhere in `app_ur.arb`, not only in those rows.
+
+## Privacy Policy and Terms (23 Nov 2026)
+
+`Humsafar_Privacy_and_Terms_v0.1.pdf` (draft, English and Urdu): the Register line "By registering you agree to the Privacy Policy and Terms." with two links, plus the text of the two pages they open. Not legal advice; supervisor read needed. Open: photo deletion wording (Abdullah) and the contact email.
