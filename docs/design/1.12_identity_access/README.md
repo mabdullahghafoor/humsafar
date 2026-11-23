@@ -9,7 +9,9 @@
 | 00b | Launch (first app screen, login check) — **v0.1** | both | NFR-07 | Launch · Splash |
 | 01 | Welcome (role choice) | both | FR-A1 | Guardian App |
 | 02 | Log in (incl. error state) | both | FR-A1 | Guardian App |
-| 03 | Create account (incl. field validation states) | both | FR-A1 | Guardian App |
+| 03 | Create account (incl. field validation states) — **v0.3** (consent line) | both | FR-A1 | Guardian App |
+| 03b | Privacy Policy (text screen) — **v0.1** | both | FR-A1 | Guardian App |
+| 03c | Terms (text screen) — **v0.1** | both | FR-A1 | Guardian App |
 | 04 | Verify identity — CNIC + live photo | Dependent | FR-A2 | Dependent App |
 | 05 | Share my ID (QR + copy/share) | Dependent | FR-B1 | Dependent App |
 | 06 | Verify your account — phone OTP + CNIC | Guardian | FR-A3 | Guardian App |
@@ -62,3 +64,5 @@ Two screens shown before Welcome / Home, the same in both apps: **00 Splash** (`
 - **Never wait for the internet** on either screen. The login check reads the token stored on the phone; refresh it in the background after Home opens. Offline: open Home with the offline banner. On the Dependent app PANIC must be on screen within a couple of seconds, signal or not. Do not hold the splash (`FlutterNativeSplash.preserve`) for network or data.
 - No red on either screen (red = Panic).
 
+## Consent line, Privacy Policy and Terms (23 Nov 2026)
+**03 Create account v0.3** adds one line under the button: "By creating an account you agree to the **Privacy Policy** and **Terms**." (links in teal 600, underlined; 12 px muted text). The two links open **03b Privacy Policy v0.1** and **03c Terms v0.1**: plain scrolling text screens with the usual app bar (back, title, Aa, EN|UR) and a version line. Everything else on 03 is unchanged from v0.2. The text of both pages (English and Urdu) and the string keys are in `../ui_text/Humsafar_Privacy_and_Terms_v0.2.pdf`. No tick box (tapping Create account counts as agreeing); the draft needs a supervisor read. The overview picture (v0.3) still shows 03 v0.2 and is not rebuilt for this.
