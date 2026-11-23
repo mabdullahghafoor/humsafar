@@ -130,6 +130,7 @@ class Settings(BaseSettings):
     CLIPS_MAX_PER_DEPENDENT: int = 100  # stored clips per Dependent; no new request when full (FR-O1 deletes old ones, Task 6.7)
     # Task 6.5: transport security and hardening (FR-N1, SDS 17).
     ENFORCE_HTTPS: bool = False  # true in production: plain http requests are refused (400 HTTPS_REQUIRED), HSTS is sent
+    DOCS_ENABLED: bool = True  # false hides /docs, /redoc and /openapi.json (SEC-10); they are also always hidden when ENVIRONMENT=production
     TRUST_PROXY_HEADERS: bool = False  # true only behind a trusted proxy (Render, nginx): read X-Forwarded-Proto / X-Forwarded-For
     HSTS_MAX_AGE_S: int = 31536000  # one year
     RATE_LIMIT_ENABLED: bool = True  # SDS 17: rate limiting on authentication and KYC endpoints

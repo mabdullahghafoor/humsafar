@@ -54,11 +54,17 @@ async def lifespan(_: FastAPI):
             task.cancel()
 
 
+# SEC-10: the public API map is hidden on the live server (DOCS_ENABLED=false) and always in production.
+_docs_on = settings.DOCS_ENABLED and settings.ENVIRONMENT != "production"
+
 app = FastAPI(
     title=settings.APP_NAME,
     description="Bi-directional remote intervention and care coordination system.",
     version="0.1.0",
     lifespan=lifespan,
+    docs_url="/docs" if _docs_on else None,
+    redoc_url="/redoc" if _docs_on else None,
+    openapi_url="/openapi.json" if _docs_on else None,
 )
 
 app.add_middleware(transport.TransportSecurityMiddleware)  # Task 6.5: https-only option, HSTS, hardening headers
