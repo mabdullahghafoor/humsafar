@@ -33,4 +33,4 @@ The main pattern: the app uses English words in Urdu letters (گارڈین، ڈ�
 
 ## Privacy Policy and Terms (23 Nov 2026)
 
-`Humsafar_Privacy_and_Terms_v0.1.pdf` (draft, English and Urdu): the Register line "By registering you agree to the Privacy Policy and Terms." with two links, plus the text of the two pages they open. Not legal advice; supervisor read needed. Open: photo deletion wording (Abdullah) and the contact email.
+`Humsafar_Privacy_and_Terms_v0.2.pdf` (draft, English and Urdu): the line under the Create account button, "By creating an account you agree to the Privacy Policy and Terms.", with two links, plus the text of the two pages they open (designs 03, 03b, 03c in `../1.12_identity_access/`). v0.2 changes "registering" to "creating an account" to match the button. Not legal advice; supervisor read needed. Open: photo deletion wording (Abdullah) and the contact email.
