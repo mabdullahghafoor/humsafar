@@ -48,7 +48,7 @@ All screens in this folder now use the **style guide v0.2 colours**: old red `#D
 | 23 | Medicine time | v0.1 → **v0.2** |
 | 23b | Confirm medicine | v0.1 → **v0.2** |
 
-Overview rebuilt from the latest versions: v0.2 → **v0.3**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.
+Overview rebuilt from the latest versions: v0.2 → v0.3 → **v0.4** (27 Nov: 14 screens, with Alerts v0.3 and the new 08c Notices tab). Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.
 
 ## Loading states (skeleton screens, 22 Nov 2026)
 What the screen shows while its data loads, instead of a spinner. App bar, tabs, static labels / buttons and bottom nav stay real; only server data becomes grey shapes. Rules: see `handoff/README.md` → "Loading states".
@@ -59,4 +59,4 @@ What the screen shows while its data loads, instead of a spinner. App bar, tabs,
 | 08s | Alerts · loading | v0.1 → **v0.2** (Notices tab) | 08 |
 
 
-**27 Nov 2026 — Alerts.** Screen 08 now has three tabs (Open, Seen, Notices) to match the app; 08c shows the Notices tab (standard notices, no answer needed). The overview image above (v0.3) was not rebuilt and still shows the earlier 08.
+**27 Nov 2026 — Alerts.** Screen 08 now has three tabs (Open, Seen, Notices) to match the app; 08c shows the Notices tab (standard notices, no answer needed). The overview image (v0.4) shows all three.
