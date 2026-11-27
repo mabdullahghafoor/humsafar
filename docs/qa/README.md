@@ -131,6 +131,7 @@
 | File | Task | Status |
 |---|---|---|
 | `Humsafar_QA_Retest_debug-apk-1.9.5_v1.0.pdf` | Retest of Talha's 1.9.5 list | 26 Nov, two phones: **12 verified, 4 partly fixed, 3 open, 4 new Low.** Verified: UI-01, UI-15, F-27, N-13, N-16, Privacy wording, consent line, skeleton screens, wrong-password message, back button, medicine flow, F-17. Partly fixed: UI-14, F-28, F-13, F-24. Open: F-29 (a call cannot be answered), N-17, F-18. New: UI-16, N-18, N-19, N-20. Security items are in `results/security/debug-apk-1.9.5/` |
+| `Humsafar_QA_Design_vs_App_debug-apk-1.9.5_v1.1.pdf` | Design vs app | 26 Nov: second pass, 9 sets of screens not compared on 1.9.1 (splash, launch, Welcome, Dependent Home, Help is coming, medicine confirm, alarm, Guardian Home and Alerts, calling, Care schedules, Create account, Privacy). The Dependent's safety screens are close to the design. **New: UI-17, UI-18 (Medium), UI-19 to UI-22 (Low).** Screens still to compare are listed in the report |
 
 **Versions:** v1.0 = matched to merged contracts and ready to run. v0.x = draft written ahead of time; it is updated when the matching backend contract lands, and the old version is removed from this folder.
 
