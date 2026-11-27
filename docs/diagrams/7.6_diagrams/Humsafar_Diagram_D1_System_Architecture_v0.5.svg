@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9CA3AF"/></marker></defs>
 <rect x="0" y="0" width="1600" height="1000" fill="#FFFFFF"/>
-<text x="40" y="52" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#1F2937" text-anchor="start">Humsafar — System Architecture (as built, Phases 1–7)</text>
-<text x="40" y="82" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="start">v0.4 of D1. Layered modular monolith (SDS 6.2). Flutter apps, FastAPI backend, PostgreSQL, in-process scheduler. All eight modules built; analytics and reports added.</text>
+<text x="40" y="52" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#1F2937" text-anchor="start">Humsafar — System Architecture (as built, Phases 1–7, Nov 2026)</text>
+<text x="40" y="82" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="400" fill="#6B7280" text-anchor="start">v0.5 of D1. Layered modular monolith (SDS 6.2). Same eight modules; real push, Bluetooth app side and the hosted staging server added.</text>
 <text x="60" y="150" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#6B7280" text-anchor="start">PRESENTATION</text>
 <rect x="250" y="115" width="380" height="90" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
 <text x="440.0" y="154.8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937" text-anchor="middle">Guardian App</text>
 <text x="440.0" y="177.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">Flutter + Riverpod · Android (API 26+)</text>
 <rect x="700" y="115" width="380" height="90" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.6"/>
 <text x="890.0" y="154.8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937" text-anchor="middle">Dependent App</text>
-<text x="890.0" y="177.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">Flutter · Dependent Mode (3 safety actions)</text>
+<text x="890.0" y="177.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">Flutter · Dependent Mode (4 safety actions)</text>
 <rect x="1150" y="105" width="410" height="115" rx="14" fill="#EDE9FE" fill-opacity="0.35" stroke="#5B21B6" stroke-width="1.2" stroke-dasharray="5 4"/>
 <text x="1164" y="127" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#5B21B6" text-anchor="start">DEVICES NEAR THE DEPENDENT</text>
 <rect x="1170" y="140" width="180" height="66" rx="10" fill="#EDE9FE" stroke="#5B21B6" stroke-width="1.6" stroke-dasharray="6 4"/>
 <text x="1260.0" y="168.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Wearable band</text>
-<text x="1260.0" y="187.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">BLE · ESP32 · mock data now</text>
+<text x="1260.0" y="187.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">BLE · not tested yet</text>
 <rect x="1365" y="140" width="180" height="66" rx="10" fill="#EDE9FE" stroke="#5B21B6" stroke-width="1.6" stroke-dasharray="6 4"/>
 <text x="1455.0" y="168.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Spare phone camera</text>
 <text x="1455.0" y="187.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">camera mode · video room</text>
@@ -50,7 +50,7 @@
 <text x="375.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">vault · vitals · band · analytics · reports</text>
 <rect x="518" y="525" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
 <text x="643.0" y="575.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Communication</text>
-<text x="643.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">text · urgent voice · calls (Phase 4)</text>
+<text x="643.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">text · urgent voice · calls</text>
 <rect x="786" y="525" width="250" height="110" rx="10" fill="#DCFCE7" stroke="#166534" stroke-width="1.6"/>
 <text x="911.0" y="575.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">Directory &amp; Marketplace</text>
 <text x="911.0" y="595.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">directory · requests · activity timeline</text>
@@ -78,9 +78,9 @@
 <text x="665.0" y="779.8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937" text-anchor="middle">PostgreSQL</text>
 <text x="665.0" y="802.8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="400" fill="#6B7280" text-anchor="middle">33 tables (27 SDS + 6) · SQLAlchemy · Alembic 0001–0022</text>
 <rect x="960" y="735" width="330" height="100" rx="10" fill="#FEE2E2" stroke="#991B1B" stroke-width="1.6"/>
-<text x="1125.0" y="770.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">File storage (server folder)</text>
+<text x="1125.0" y="770.25" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">File storage (server disk)</text>
 <text x="1125.0" y="790.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">voice · records · clips · reports</text>
-<text x="1125.0" y="810.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">records, clips, reports: AES-256-GCM</text>
+<text x="1125.0" y="810.25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7280" text-anchor="middle">AES-256-GCM · lost on redeploy (F-26)</text>
 <line x1="665" y1="682" x2="665" y2="733" stroke="#9CA3AF" stroke-width="1.8" marker-end="url(#ah)"/>
 <rect x="666.0" y="688.5" width="29.799999999999997" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
 <text x="671.0" y="701.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">SQL</text>
@@ -88,16 +88,16 @@
 <rect x="1101.0" y="688.5" width="43.0" height="18" rx="4" fill="#FFFFFF" fill-opacity="0.9"/>
 <text x="1106.0" y="701.5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="start">files</text>
 <rect x="40" y="880" width="1520" height="95" rx="14" fill="#FEF3C7" fill-opacity="0.35" stroke="#92400E" stroke-width="1.2" stroke-dasharray="5 4"/>
-<text x="54" y="902" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#92400E" text-anchor="start">EXTERNAL SERVICES (behind one adapter each; mocked today, swapped for real providers later)</text>
+<text x="54" y="902" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#92400E" text-anchor="start">EXTERNAL SERVICES (behind one adapter each; push and calls are real, SMS and KYC still mock)</text>
 <rect x="70" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
 <text x="240.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Push — Firebase FCM</text>
-<text x="240.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">mock on server · Firebase project ready</text>
+<text x="240.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">real push since 9 Nov</text>
 <rect x="440" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
 <text x="610.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">KYC / liveness</text>
 <text x="610.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">mock provider</text>
 <rect x="810" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
 <text x="980.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">SMS gateway</text>
-<text x="980.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">mock · external contact</text>
+<text x="980.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">mock · code 123456 (D-44)</text>
 <rect x="1180" y="912" width="340" height="52" rx="10" fill="#FEF3C7" stroke="#92400E" stroke-width="1.6"/>
 <text x="1350.0" y="933.4" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">ZegoCloud (calls + camera)</text>
 <text x="1350.0" y="952.4" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7280" text-anchor="middle">real token · in-transit encryption</text>
@@ -106,5 +106,5 @@
 <rect x="60" y="690" width="26" height="16" rx="4" fill="#DCFCE7" stroke="#166534"/>
 <text x="96" y="703" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#1F2937" text-anchor="start">Built and merged (dev)</text>
 <rect x="60" y="716" width="26" height="16" rx="4" fill="#FEF3C7" stroke="#92400E"/>
-<text x="96" y="729" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#1F2937" text-anchor="start">External / mocked</text>
+<text x="96" y="729" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="400" fill="#1F2937" text-anchor="start">External (mocked or real, see box)</text>
 </svg>

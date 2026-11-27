@@ -4,7 +4,7 @@
 
 | # | Diagram | Version | Based on |
 |---|---|---|---|
-| D1 | System Architecture (as built, Phases 1–7) | **v0.4** (replaces v0.3; v0.1 in 1.14) | code on `dev` up to PR #80, migrations 0001–0022 |
+| D1 | System Architecture (as built, Phases 1–7) | v0.4, **replaced by v0.5 in `../7.6_diagrams/`** | code on `dev` up to PR #80, migrations 0001–0022 |
 | D6 | Workflow — Panic Mode and Remote alarm | v0.1 | `panic_contract.md`, `alarm_contract.md` |
 | D7 | Workflow — Wellness check "Are you OK?" | v0.1 | `wellness_contract.md` |
 | D8 | Workflow — Location, safe zones and device health | v0.1 | `location_contract.md`, `geofence_contract.md`, `device_health_contract.md` |
@@ -14,6 +14,7 @@
 D3 (onboarding), D4 (escalation chain) and D5 (medication) in `../1.14_diagrams/` are still correct and are not repeated here.
 
 ## What changed in D1 (v0.3 → v0.4)
+*(v0.4 itself is replaced by v0.5, see `../7.6_diagrams/README.md`.)*
 - All eight modules are built: **Directory & Marketplace** (requests, Activity Timeline, 6.2) and **Security & Surveillance** (camera, clips, audit log, retention, 6.3–6.7).
 - **Medication & Records** also holds analytics and summary reports (7.1, 7.2).
 - Interface: HSTS / https-only option and rate limits (429) from 6.5.
