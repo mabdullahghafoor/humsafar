@@ -37,8 +37,9 @@ All screens in this folder now use the **style guide v0.2 colours**: old red `#D
 | # | Screen | Version |
 |---|---|---|
 | 07 | Home | v0.1 → **v0.2** |
-| 08 | Alerts | v0.1 → **v0.2** |
+| 08 | Alerts | v0.1 → v0.2 → **v0.3** (27 Nov: third tab **Notices** added, as built to fix F-28; design vs app finding UI-08) |
 | 08b | Missed dose | v0.1 → **v0.2** |
+| 08c | Alerts · Notices tab (standard notices: emergency contact messaged, phone offline, home-care request, band not sending) | **v0.1** (new, 27 Nov) |
 | 13 | Care schedules | v0.1 → **v0.2** |
 | 13b | Wellness checks | v0.1 → **v0.2** |
 | 14 | Emergency settings | v0.1 → **v0.2** |
@@ -55,4 +56,7 @@ What the screen shows while its data loads, instead of a spinner. App bar, tabs,
 | # | Screen | Version | Based on |
 |---|---|---|---|
 | 07s | Home · loading | **v0.1** | 07 |
-| 08s | Alerts · loading | **v0.1** | 08 |
+| 08s | Alerts · loading | v0.1 → **v0.2** (Notices tab) | 08 |
+
+
+**27 Nov 2026 — Alerts.** Screen 08 now has three tabs (Open, Seen, Notices) to match the app; 08c shows the Notices tab (standard notices, no answer needed). The overview image above (v0.3) was not rebuilt and still shows the earlier 08.
