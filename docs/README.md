@@ -10,8 +10,8 @@ If you are not sure where a new file belongs, ask its folder owner first.
 | `reference/` | Sarim | Locked project documents: SRS, SDS, Reference Guide, Feature Set, Hardware doc, Master Roadmap |
 | `reference/handbooks/` | Sarim | Individual member handbooks |
 | `design/` | Sarim | Exported screen designs (wireframes, mockups) from Figma |
-| `qa/` | Sarim | Test cases and plans (`test-cases/`); results by backend, design and APK build (`results/debug-apk-<version>/`) |
+| `qa/` | Sarim | Test cases and plans (`test-cases/`); results by backend, design, security and APK build (`results/debug-apk-<version>/`) |
 | `diagrams/` | Sarim | Architecture and workflow diagrams |
-| `reports/` | Sarim | Final documentation PDFs and presentation material |
+| `reports/` | Sarim | Drift register (locked documents vs what is built), design history, and the final documentation and presentation material |
 
 Each owner changes only their own folders. Changes to another member's folder go through that member's review on the pull request.
