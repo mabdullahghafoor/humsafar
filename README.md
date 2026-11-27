@@ -110,10 +110,10 @@ Everything here lives in `docs/` (Sarim's folders) and in Figma. No setup is nee
 
 ## Project Documentation
 
-Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual handbooks) is maintained in `/docs/reference` (see `docs/README.md` for the full folder map) and in the team's Claude Project Knowledge base as the single source of truth.
+Full documentation (SRS, SDS, Hardware Selection, Master Roadmap, individual handbooks) is maintained in `/docs/reference` (see `docs/README.md` for the full folder map) and in the team's shared project knowledge base as the single source of truth.
 
 ---
 
 ## Status
 
-🚧 Active development. **Where we are:** backend Phases 1–7 done, Phase 8 (testing) in progress; the Flutter app is built in Talha's repo and tested on debug APKs; ICP-1 passed, ICP-3 / 4 / 5 being tested on the phones; security review and design-vs-app check done on debug-apk-1.9.1 (22 Nov); brand v2.0 (logo, app icon, splash icon) is in `assets/brand/` for the next APK. Backend progress: `docs/backend/PROGRESS.md` · designs and coverage: `docs/design/README.md` · QA documents: `docs/qa/README.md`.
+🚧 Active development. **Where we are:** backend Phases 1–7 done, Phase 8 (testing) in progress; the Flutter app is built in Talha's repo and tested on debug APKs; ICP-1 passed, ICP-3 / 4 / 5 being tested on the phones; latest retest on `debug-apk-1.9.5` (26 Nov) with a separate security retest; open: incoming calls (F-29), alarm when the phone is locked (F-13), a signed release build; brand v2.0 is in `assets/brand/`. Backend progress: `docs/backend/PROGRESS.md` · designs and coverage: `docs/design/README.md` · QA documents: `docs/qa/README.md`.

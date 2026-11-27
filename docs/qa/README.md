@@ -47,6 +47,11 @@
 | Build | File | Task | Status |
 |---|---|---|---|
 | debug-apk-1.9.1 | `debug-apk-1.9.1/Humsafar_QA_Security_Review_debug-apk-1.9.1_v1.0.pdf` | 6.13 | Security review v1.0 (22 Nov), follows 6.13 v0.3: **67 checks** (SDS 17, OWASP API Top 10, OWASP MASVS): 32 pass, 20 with a finding, 7 notes, 7 still to run (S-04, S-67 device; S-15, S-26, S-38 Abdullah; S-16 4 viewers; S-52 app library scan). **0 Critical / High open; 9 Medium, 12 Low.** Medium: no server logout and reusable refresh token (SEC-06), no password change (SEC-07), cleartext allowed (SEC-08), mock phone code 123456 (SEC-09), public API docs (SEC-10), 141 known library vulnerabilities (SEC-20), debug APK with readable source (SEC-21), plus SEC-02 / SEC-03 from v0.3 |
+| (code audit) | `code-audit-2026-11-23/Humsafar_QA_Security_Code_Audit_2026-11-23_v1.0.pdf` | 6.13 | Source-code audit of the backend and the Flutter app, no APK tested (23 Nov): 14 backend checks, 10 Flutter checks, cross-check and one priority list. Proposed new findings SEC-23 to SEC-31. See the README in that folder |
+| debug-apk-1.9.4 | `debug-apk-1.9.4/Humsafar_QA_Security_Retest_debug-apk-1.9.4_v1.0.pdf` | 6.13 | Security retest (25 Nov), code review plus phone checks, not an APK scan: SEC-10 verified, SEC-14 fixed in code, SEC-15 verified on Medical Vault and Vitals, SEC-08 holds in release builds only, SEC-19 and SEC-21 not done. **New F-32 (Medium):** developer role-switch icon visible on both Home screens. SEC-23 noted |
+| debug-apk-1.9.5 | `debug-apk-1.9.5/Humsafar_QA_Security_Retest_debug-apk-1.9.5_v1.0.pdf` | 6.13 | Security retest (26 Nov): 2 verified or fixed, 4 partly fixed, 1 not verifiable on a debug APK (F-32: fixed in code with `kDebugMode`), 1 still open (SEC-22). A signed release APK is needed to check F-32, SEC-08, SEC-19 and SEC-21 |
+
+**Security folders by build.** The security review started on `debug-apk-1.9.1` (22 Nov), so earlier builds (1.7 to 1.9) have no security report. `debug-apk-1.9.2` could not log in and `debug-apk-1.9.3` only had its SEC-10 check done inside the functional retest, so neither has a security folder.
 
 ## Design
 
@@ -102,6 +107,30 @@
 | File | Task | Status |
 |---|---|---|
 | `Humsafar_QA_Retest_debug-apk-1.9.2_v0.1.pdf` | Retest of Talha's 1.9.2 list | **Blocked** (23 Nov): Login fails on both phones with "Can't reach the server" while the hosted server answers in the browser (**F-31, Critical**, same symptom as F-22). Passed: Splash, Launch and Welcome open first (UI-01, F-07 look closed), app name "Humsafar" (F-30), v2.0 splash, friendly connection message (F-21). New: UI-14 (Low) Launch screen layout. Becomes v1.0 on the next build |
+
+## debug-apk-1.9.3
+
+`results/debug-apk-1.9.3/`
+
+| File | Task | Status |
+|---|---|---|
+| `Humsafar_QA_Retest_debug-apk-1.9.3_v1.0.pdf` | Retest of Talha's 1.9.3 list | 23 to 25 Nov: F-31 fixed (login works on the hosted server; the fix was the build command only), database move to `humsafar-db-2` confirmed, SEC-10 verified (`/docs`, `/redoc`, `/openapi.json` not found). New UI-15 (no logo in the Welcome hero) |
+
+## debug-apk-1.9.4
+
+`results/debug-apk-1.9.4/`
+
+| File | Task | Status |
+|---|---|---|
+| `Humsafar_QA_Retest_debug-apk-1.9.4_v1.0.pdf` | Retest of Talha's 1.9.4 list | 25 Nov, two phones (Ali and Ammi): **7 verified, 1 partly fixed, 9 still open, 1 new.** Verified: login, icon and name, native splash, consent line with Privacy and Terms, skeleton screens, F-17, the missed-medicine flow. Open: UI-15, F-13, F-29, F-24, F-28, F-18, F-27, N-13, N-16. New N-17 (notices pile up). Process note R-02: tags do not always match the built APK. Security items are in `results/security/debug-apk-1.9.4/` |
+
+## debug-apk-1.9.5
+
+`results/debug-apk-1.9.5/`
+
+| File | Task | Status |
+|---|---|---|
+| `Humsafar_QA_Retest_debug-apk-1.9.5_v1.0.pdf` | Retest of Talha's 1.9.5 list | 26 Nov, two phones: **12 verified, 4 partly fixed, 3 open, 4 new Low.** Verified: UI-01, UI-15, F-27, N-13, N-16, Privacy wording, consent line, skeleton screens, wrong-password message, back button, medicine flow, F-17. Partly fixed: UI-14, F-28, F-13, F-24. Open: F-29 (a call cannot be answered), N-17, F-18. New: UI-16, N-18, N-19, N-20. Security items are in `results/security/debug-apk-1.9.5/` |
 
 **Versions:** v1.0 = matched to merged contracts and ready to run. v0.x = draft written ahead of time; it is updated when the matching backend contract lands, and the old version is removed from this folder.
 
