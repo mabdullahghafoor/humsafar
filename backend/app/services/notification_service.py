@@ -361,6 +361,23 @@ def list_for_user(
         next_before=rows[-1].sent_at if more and rows else None,
     )
 
+def _mark_event_opened(db: Session, n: Notification) -> None:
+    """
+    Opening a critical 'open' alert of an escalation event marks the EVENT as seen right away. It stops the chain and
+    the Dependent's Panic screen shows it, the same as POST /escalations/{event_id}/acknowledge. Without this the
+    event was only marked by the sweep after its timer ran out (F-18).
+    """
+    payload = n.payload or {}
+    event_id, key = payload.get("event_id"), str(payload.get("dedupe_key") or "")
+    if not event_id or not key.endswith(":open"):
+        return
+    try:
+        eid = uuid.UUID(str(event_id))
+    except ValueError:
+        return
+    ev = db.scalar(select(EscalationEvent).where(EscalationEvent.event_id == eid).with_for_update())
+    if ev is not None and ev.acknowledged_at is None:
+        ev.acknowledged_at, ev.acknowledged_by = n.acknowledged_at, n.user_id
 
 def acknowledge(db: Session, user: User, notification_id: uuid.UUID) -> NotificationOut:
     """FR-M2. Idempotent: the FIRST acknowledgment time is kept. Someone else's notification looks like 'not found'."""
@@ -371,6 +388,7 @@ def acknowledge(db: Session, user: User, notification_id: uuid.UUID) -> Notifica
         raise AppError(404, "NOTIFICATION_NOT_FOUND", "Notification not found.")
     if n.acknowledged_at is None:
         n.acknowledged_at = datetime.now(timezone.utc)
+        _mark_event_opened(db, n)
         db.commit()
         db.refresh(n)
     return _out(n)
