@@ -189,10 +189,13 @@ def test_opening_the_all_clear_does_not_count(client, db):
 
 
 def test_late_acknowledgment_found_by_the_sweep_wins(client, db):
+    """An alert marked as opened WITHOUT the API (so the event itself was not marked) is still found by the sweep."""
     t, e = open_alert(client, db)
     n = alerts(client, t["pt"])[0]
-    client.post(f"/notifications/{n['notification_id']}/acknowledge", headers=auth(t["pt"]))
-    assert ev(db).acknowledged_at is None  # tapped the notification, event not yet marked
+    row = db.scalar(select(Notification).where(Notification.notification_id == uuid.UUID(n["notification_id"])))
+    row.acknowledged_at = datetime.now(timezone.utc)
+    db.commit()
+    assert ev(db).acknowledged_at is None  # opened, but the event itself is not marked yet
     assert es.sweep(db, now=e.tier_changed_at + P + EPS) == 0
     assert ev(db).acknowledged_at is not None
 
@@ -263,3 +266,13 @@ def test_job_is_registered_before_the_dispatch():
     assert names.index("escalation_sweep") < names.index("notification_dispatch")
     assert names.index("medication_missed_sweep") < names.index("escalation_sweep")
     assert names.index("wellness_sweep") < names.index("escalation_sweep")
+
+
+def test_opening_the_alert_marks_the_event_at_once(client, db):
+    """F-18: tapping the notification marks the event as seen straight away, with no sweep needed."""
+    t, e = open_alert(client, db)
+    n = alerts(client, t["pt"])[0]
+    assert client.post(f"/notifications/{n['notification_id']}/acknowledge", headers=auth(t["pt"])).status_code == 200
+    db.expire_all()
+    x = ev(db)
+    assert x.acknowledged_at is not None and x.acknowledged_by is not None
