@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="780" viewBox="0 0 360 780"><title>08c Alerts · Notices</title>
+<rect x="0" y="0" width="360" height="780" rx="0" fill="#F8FAFC"/>
+<text x="20" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="start">9:41</text>
+<text x="340" y="22" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" fill="#0F172A" text-anchor="end">100%</text>
+<rect x="0" y="30" width="360" height="56" rx="0" fill="#FFFFFF"/>
+<line x1="0" y1="86" x2="360" y2="86" stroke="#CBD5E1" stroke-width="1"/>
+<path d="M 30 52 L 22 58 L 30 64" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="46" y="64" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A" text-anchor="start">Alerts</text>
+<rect x="256" y="44" width="40" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="276" y="63" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#0E7490" text-anchor="middle">Aa</text>
+<rect x="302" y="44" width="44" height="28" rx="14" fill="#ECFEFF" stroke="#0E7490" stroke-width="1"/>
+<text x="324" y="62" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0E7490" text-anchor="middle">EN|UR</text>
+<rect x="20" y="96" width="320" height="44" rx="12" fill="#E2E8F0"/>
+<text x="74" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#475569" text-anchor="middle">Open (3)</text>
+<text x="178" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600" fill="#475569" text-anchor="middle">Seen</text>
+<rect x="232" y="100" width="100" height="36" rx="10" fill="#FFFFFF"/><text x="282" y="124" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">Notices</text>
+<rect x="20" y="154" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="20" y="154" width="5" height="76" rx="2" fill="#94A3B8"/>
+<text x="38" y="186" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Emergency contact messaged</text>
+<text x="38" y="208" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">8:26 PM · Ammi's Panic was not opened in time</text>
+<rect x="20" y="240" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="20" y="240" width="5" height="76" rx="2" fill="#94A3B8"/>
+<text x="38" y="272" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Phone offline — Ammi</text>
+<text x="38" y="294" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Yesterday · last seen 6:10 PM</text>
+<rect x="20" y="326" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="20" y="326" width="5" height="76" rx="2" fill="#94A3B8"/>
+<text x="38" y="358" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Home-care request confirmed</text>
+<text x="38" y="380" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Yesterday · Nurse Ayesha, Tue 10:00 AM</text>
+<rect x="20" y="412" width="320" height="76" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+<rect x="20" y="412" width="5" height="76" rx="2" fill="#94A3B8"/>
+<text x="38" y="444" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Band not sending — Ammi</text>
+<text x="38" y="466" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#475569" text-anchor="start">Mon · no reading for 30 minutes</text>
+<rect x="20" y="502" width="320" height="64" rx="12" fill="#ECFEFF"/>
+<circle cx="42" cy="525" r="9.0" fill="none" stroke="#0E7490" stroke-width="1.8"/><line x1="42" y1="524" x2="42" y2="529" stroke="#0E7490" stroke-width="2"/><circle cx="42" cy="520.5" r="1.2" fill="#0E7490"/>
+<text x="62" y="530" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0E7490" text-anchor="start">Notices need no answer</text>
+<text x="62" y="550" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#0F172A" text-anchor="start">Alerts that need you stay under Open</text>
+</svg>
