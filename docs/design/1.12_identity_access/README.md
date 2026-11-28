@@ -28,14 +28,14 @@
 - Field rules shown match the contracts: CNIC `12345-1234567-1`, Pakistani phone, password at least 8 characters.
 - Log in shows one message for wrong email and wrong password (by design, auth contract).
 - Screen 05/09: the Dependent's `user_id` is shared as QR or text (linkage contract §3).
-- The logo on screen 01 Welcome is still the early **placeholder**; build with the brand files in `assets/brand/` (logo **v2.0 final**, 22 Nov 2026). The mockups 00, 00b and 01 in this folder still show the **old v1 logo**; build the logo, app icon and splash icon from `assets/brand/` (v2.0), not from the mockup pictures.
+- Screen 01 Welcome (v0.3, 28 Nov 2026) now shows the **v2.0 logo** on a teal hero, without the tagline line under the logo (decided 28 Nov: in Urdu the slogan showed twice); build with the brand files in `assets/brand/` (logo **v2.0 final**, 22 Nov 2026). The mockups 00 and 00b in this folder still show the **old v1 logo**; build the logo, app icon and splash icon from `assets/brand/` (v2.0), not from the mockup pictures.
 
 ## Colour update (30 Oct 2026)
 All screens in this folder now use the **style guide v0.2 colours**: old red `#DC2626` → `#B91C1C` and old grey `#64748B` → `#475569` (NFR-08 contrast fix). **Colours only, no layout or text change.** Updated screens:
 
 | # | Screen | Version |
 |---|---|---|
-| 01 | Welcome | v0.1 → **v0.2** |
+| 01 | Welcome | v0.1 → v0.2 → **v0.3** |
 | 02 | Log in | v0.1 → **v0.2** |
 | 03 | Create account | v0.1 → **v0.2** |
 | 04 | Verify identity | v0.1 → **v0.2** |
