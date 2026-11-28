@@ -10,7 +10,7 @@ The working design lives in Figma (file: *Humsafar – App Design*). This folder
 |---|---|---|---|
 | `handoff/` | — | **Start here for integration.** Design handoff v1.0: theme tokens (also as `humsafar_design_tokens.dart`), rules, design → app screen map, theme fixes, screens not built yet | integration, 7.5 |
 | `0.7_wireframes/` | 0.7 | Low-fidelity wireframes, 24 screens (v0.1). **Superseded by the hi-fi screens; do not build from them** | history only |
-| `1.12_identity_access/` | 1.12 | Splash and launch (00, 00b, v0.1), welcome (v0.3, v2.0 logo, no tagline line; 00 and 00b still show the v1 logo, take the logo from `assets/brand/`), log in, create account, KYC, share ID, verify account, link a Dependent, permissions + style guide (v0.2) | 1.8–1.11, 2.5 |
+| `1.12_identity_access/` | 1.12 | Splash and launch (00, 00b, v0.1), welcome (v0.4, v2.0 logo, no tagline line; 00 and 00b still show the v1 logo, take the logo from `assets/brand/`), log in, create account, KYC, share ID, verify account, link a Dependent, permissions + style guide (v0.2) | 1.8–1.11, 2.5 |
 | `2.8_map_geofence/` | 2.8 | Live Map, location history, safe zones, edit safe zone (v0.2) | 2.6 |
 | `3.9_safety_screens/` | 3.9 | Dependent Mode (home, panic, wellness check, medicine time, alarm) + Guardian home, alerts, care schedules, emergency settings (v0.2; 08 Alerts v0.3 with the Notices tab, new 08c; 24 Alarm v0.1) | 3.10–3.15 |
 | `4.9_communication/` | 4.9 | Messages, chat, urgent voice, calls (Guardian and Dependent) (v0.2) | 4.6–4.8 |
