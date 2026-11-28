@@ -44,7 +44,7 @@ All screens in this folder now use the **style guide v0.2 colours**: old red `#D
 | 09 | Link a Dependent | v0.1 → **v0.2** |
 | 10 | Permissions | v0.1 → **v0.2** |
 
-Overview rebuilt from the latest versions: v0.2 → **v0.3**. Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.
+Overview rebuilt from the latest versions: v0.2 → v0.3 → **v0.4** (28 Nov: Welcome v0.4 and Create account v0.3; Splash, Launch, Privacy Policy and Terms are not in the overview). Editable SVG sources of every screen in this folder are in `svg/` (same names as the PNGs, `.svg`); use them for Figma import.
 
 ## Splash and launch (8 Nov 2026)
 Two screens shown before Welcome / Home, the same in both apps: **00 Splash** (`Humsafar_Design_00_Splash_v0.1`) and **00b Launch** (`Humsafar_Design_00b_Launch_v0.1`). Figma: section *Launch · Splash (both apps)*; prototype flow *Splash → Launch*.
