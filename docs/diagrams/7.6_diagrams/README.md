@@ -5,7 +5,7 @@
 | # | Diagram | Version | Based on |
 |---|---|---|---|
 | D1 | System Architecture (as built, Phases 1–7) | **v0.5** (replaces v0.4) | code on `dev`, migrations 0001–0022, QA results up to `debug-apk-1.9.5` |
-| D2 | Deployment (as deployed) | **v0.2** (replaces the Phase 9 target, v0.1 in 1.14) | staging server on Render, QA retests, Drift Register v0.9 |
+| D2 | Deployment (as deployed) | **v0.2** (replaces the Phase 9 target, v0.1 in 1.14) | staging server on Render, QA retests, Drift Register v0.10 |
 
 ## What changed in D1 (v0.4 → v0.5)
 - Push is **real** since 9 Nov (Firebase FCM; F-16 fixed on the server). SMS (code 123456, D-44) and KYC are still mock; ZegoCloud carries calls and camera video with a real token.
